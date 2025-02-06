@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 
 export const Login = () => {
     const [email, setEmail] = useState("")
@@ -25,7 +25,7 @@ export const Login = () => {
                 onChange = {e => setPassword(e.target.value)}
                 </input>
             </label>
-            <input> type = "submit </input>
+            <input> type = "submit" </input>
         </form>
     )
 }
