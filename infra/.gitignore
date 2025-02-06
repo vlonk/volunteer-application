@@ -1,0 +1,23 @@
+# Terraform state files (sensitive data like credentials may be stored here)
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate
+*.tfstate.*
+
+# Terraform CLI crash logs
+crash.log
+crash.*
+
+# Ignore Terraform variable files with secrets
+*.tfvars
+*.tfvars.json
+
+# Terraform provider plugins (can be large binaries)
+.terraform/
+.terraform.lock.hcl
+
+# Ignore generated plan files
+*.tfplan
+
+# Ignore logs and cache
+*.log
