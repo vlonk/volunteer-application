@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/home';
 import Login from './pages/login';
+import Event from './pages/events';
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <Route path="/" element={<Navigate replace to="/home" />} />
       <Route path="/home" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/events" element={<Event />} />
 
       </Routes>
     </div>

@@ -9,6 +9,9 @@ const Home = () => {
             <button onClick={() => navigate("/login")}>
                 Login
             </button>
+            <button onClick={() => navigate("/events")}>
+                Events
+            </button>
         </>
     );
 };
