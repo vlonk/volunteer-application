@@ -39,7 +39,7 @@ form {
   }
   
   /* Style for the submit button */
-  button {
+  button.login-button {
     width: 20%;
     padding: 12px;
     background-color: #99cc66; /* Green background */
@@ -51,7 +51,7 @@ form {
     transition: background-color 0.3s;
   }
   
-  button:hover {
+  button.login-button:hover {
     background-color: #7dbf55; /* Darker green on hover */
   }
   
