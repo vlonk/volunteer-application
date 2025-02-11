@@ -1,31 +1,43 @@
-import React from "react";
+import React, { useState } from 'react';
+import '../styles/signup.css';
 
-export const Signup = () => {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+const Signup = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(email);
-    }
-    return (
-        <form onSubmit={handleSubmit}>
-            <label> Enter email:
-                <input>
-                type = "email"
-                value = {email}
-                onChange = {e => setEmail(e.target.value)}
-                </input>
-            </label>
-            <br />
-            <label> Enter password:
-                <input>
-                type = "password"
-                value = {password}
-                onChange = {e => setPassword(e.target.value)}
-                </input>
-            </label>
-            <input> type = "submit </input>
-        </form>
-    )
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle login logic here, e.g., send data to an API
+    console.log('Logging in with:', username, password);
+  };
+
+  return (
+
+    <form onSubmit={handleSubmit}>
+      <div>
+      <h1> Sign up: </h1>
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <button type="submit" className="signup-button">Signup</button>
+    </form>
+  );
 }
+
+export default Signup;
