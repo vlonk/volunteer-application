@@ -2,19 +2,45 @@ import React, { useState } from 'react';
 import '../styles/signup.css';
 
 const Signup = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPopup, setShowPopup] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Show the popup when the form is submitted
-    setShowPopup(true);
+    try {
+      // Initialize error message
+      let errorMessage = '';
 
-    // Simulate submitting the signup form
-    console.log('Signing up with:', username, password);
-  };
+      // Check if the email is valid
+      if (!emailRegex.test(email)) {
+        errorMessage += 'Your email is invalid. ';
+      }
+
+      // Check if the passwords match
+      if (password !== confirmPassword) {
+        errorMessage += 'Your passwords do not match. ';
+      }
+
+      // If there's any error, throw an error with the combined message
+      if (errorMessage) {
+        throw new Error(errorMessage);
+      }
+
+      // If everything is valid, simulate form submission
+      console.log('Signed up with:', email, password);
+
+    } catch (err) {
+      // Show an alert with the combined error message
+      window.alert(err.message);
+      return;
+    }
+    setShowPopup(true)
+  }
 
   const closePopup = () => {
     setShowPopup(false); // Close the popup when the user clicks 'Close'
@@ -26,15 +52,16 @@ const Signup = () => {
         <h1>Sign up:</h1>
 
         <div>
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="email">Email:</label>
           <input
             type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
+    
 
         <div>
           <label htmlFor="password">Password:</label>
@@ -46,9 +73,19 @@ const Signup = () => {
             required
           />
         </div>
+        <div>
+          <label htmlFor="password">Confirm Password:</label>
+          <input
+            type="text"
+            id="confirmPassword"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </div>
 
         <button type="submit" className="signup-button">
-          Sign Up
+          Sign up
         </button>
       </form>
 
