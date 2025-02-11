@@ -37,8 +37,13 @@ const ExpandBox = ({title, content}) => {
 
     return(
         <div className = {`expandable-box ${isExpanded ? "expanded" : ""}`} onClick = {handleClick}>
+            <div className = "sign-up">
+                <button>sign up</button>
+            </div>
             <h3>{title}</h3>
+            
             {isExpanded && <p>{content}</p>}
+            
         </div>
     )
 }
@@ -57,14 +62,13 @@ const Event = () => {
         <div>
             <div className = "events-header">
                 <div className = "events-header-circle">
-                <div className = "events-header-logo">
-                    <img src = {kiWe}/>
-                </div>
+                    <div className = "events-header-logo">
+                        <img src = {kiWe} alt = ""/>
+                    </div>
                 </div>
             </div>
 
-            <div style={{ display: "grid", justifyContent: "left", alignItems: "center", height: "30vh"}}>
-            </div>
+            <div className = "events-search-spacer"></div>
 
             <div className = "events-searchbar">
                     <SearchBar onSearch = {handleSearch}/>
