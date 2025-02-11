@@ -6,12 +6,16 @@ const Home = () => {
 
     return (
         <>
+          <button onClick={() => navigate("/signup")}>
+                Signup
+            </button>
             <button onClick={() => navigate("/login")}>
                 Login
             </button>
             <button onClick={() => navigate("/events")}>
                 Events
             </button>
+           
         </>
     );
 };
