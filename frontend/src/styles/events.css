@@ -1,4 +1,4 @@
-.image-carousel {
+.image-carousel { /* dont know if I will use this yet, temporary for now */
     width: 100%;
     height: 200px;
     display: flex;
@@ -10,25 +10,45 @@
 }
 
 .events-searchbar {
-    width: 100%;
+    width: auto; /* auto let the searchbar be centered */
     height: 30px;
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-top: -50px;
     border-radius: 10px;
     padding: 10px;
+}
+.events-searchbar input {
+    height: 100%;             /*input takes full height of parent container */
+    padding: 0 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    flex: 1;                  /* input takes remaining space */
+}
+
+.events-searchbar button {
+    height: 100%;             /*button also takes full height of its container */
+    padding: 0 15px;
+    border: none;
+    background-color: darkgreen;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
 .events-home-button {
     display:grid;
     justify-content: center;
     align-items: center;
+    border-radius: 5px;
+    padding: 10px;
 }
 
 .events-listing {
     width: auto;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* flex only makes div items horizontal, have to use flex-direction to make it vertical */
     justify-content: center;
     align-items: center;
     background-color: darkgreen;
@@ -42,7 +62,8 @@
     cursor: pointer;
     transition: height 0.3s ease;
     border: 2px solid black;
-background-color: darkseagreen;}
+background-color: darkseagreen;
+}
 
 .expandable-box.expanded {
     background-color: #f0f0f0;
@@ -64,16 +85,18 @@ background-color: darkseagreen;}
     width: 100%;
     height: 60px;
     background-color: darkgreen;
-    position: fixed;
+    position: fixed;    /* keeps header up top */
     top: 0;
     left: 0;
     z-index: 0;
 }
 
 .events-header-logo {
-    display:flex;
-    justify-content: center; 
+    display: flex;
+    justify-content: center;
     margin-left: 5px;
+    width: 100%;    /* width and height made to 100%, image was too small otherwise */
+    height: 100%;
 }
 
 .events-header-circle {
@@ -84,8 +107,7 @@ background-color: darkseagreen;}
     width: 50px;
     height: 50px;
     background-color: white;
-    border-radius: 50%;
-
+    border-radius: 50%; /* this makes the div a circel */
 }
 
 .events-search-spacer {
@@ -98,5 +120,4 @@ background-color: darkseagreen;}
 .sign-up {
     display: flex;
     justify-content: right;
-    top: 0;
 }
