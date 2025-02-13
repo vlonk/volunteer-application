@@ -4,11 +4,13 @@ import Home from './pages/home';
 import Login from './pages/login';
 import Signup from './pages/signup'
 import Event from './pages/events';
+import NavBar from './pages/navbar';
 
 
 function App() {
   return (
     <BrowserRouter>
+    <NavBar />
     <div className="App">
       <Routes>
       <Route path="/" element={<Navigate replace to="/home" />} />
