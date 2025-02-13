@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/events.css";
-import kiWe from "../assets/kiWe.png";
 
 const SearchBar = ({onSearch}) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -60,25 +59,21 @@ const Event = () => {
 
     return (
         <div>
-            <div className = "events-header">
-                <div className = "events-header-circle">
-                    <div className = "events-header-logo">
-                        <img src = {kiWe} alt = ""/>
-                    </div>
-                </div>
-            </div>
+            
 
-            <div className = "events-search-spacer"></div>
-
+            <div className = "events-search-spacer">
             <div className = "events-searchbar">
                     <SearchBar onSearch = {handleSearch}/>
             </div>
+            </div>
+
+            
             <div className = "events-listing">
                 <ExpandBox title = "Event: Blood Drive Volunteers" content = "Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals."/>
                 <ExpandBox title = "Event: Food Bank Non-Profit" content = "Info: Local non-profit in need of people willing to help in moving food boxes and handing out food items to people in need."/>
             </div>
 
-            <div className="events-home-button">   
+            <div className="events-return-home">   
 
                 <button onClick={() => navigate("/home")}>
                     Home
