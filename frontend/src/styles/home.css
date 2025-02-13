@@ -135,6 +135,7 @@ html, body {
 }
 
 .join-hero-button {
+    margin-top: 1.25rem;
     background-color:#254222;
     color: #fff;
     border: none;
@@ -162,4 +163,73 @@ html, body {
     display: block;
     border-radius: 20px;
     margin: 0;
+}
+
+.upcoming-section {
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.upcoming-section h2 {
+    font-size: 2rem;
+    margin: 0 0 3rem 0;
+}
+
+.cards-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.event-card {
+    background-color: #fffdfa;
+    width: 260px;
+    padding: 1.7rem;
+    padding-left: 2.5rem;
+    border-radius: 20px;
+    text-align: left;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.event-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    margin-top: .7rem;
+}
+
+.event-card p {
+    margin: 0 0 1rem 0;
+    line-height: 1.1;    
+}
+
+.event-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 1rem;
+}
+
+.event-date {
+    background-color: #99cc66;
+    padding: 0.4rem 0.75rem;
+    border-radius: 20px;
+}
+
+.event-join-button {
+    background-color: #254222;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    /* text-transform: uppercase; */
+}
+
+.event-join-button:hover {
+    background-color: #1c3419;
 }
