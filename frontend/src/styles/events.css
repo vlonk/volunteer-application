@@ -15,7 +15,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: -50px;
     border-radius: 10px;
     padding: 10px;
 }
@@ -31,18 +30,32 @@
     height: 100%;             /*button also takes full height of its container */
     padding: 0 15px;
     border: none;
-    background-color: darkgreen;
+    background-color: #254222;
     color: white;
     cursor: pointer;
     border-radius: 5px;
 }
 
-.events-home-button {
+.events-return-home {
     display:grid;
     justify-content: center;
     align-items: center;
     border-radius: 5px;
     padding: 10px;
+}
+
+.events-return-home button {
+    background-color: #254222;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.events-return-home button:hover {
+    background-color: #1c3419;
 }
 
 .events-listing {
@@ -51,25 +64,27 @@
     flex-direction: column; /* flex only makes div items horizontal, have to use flex-direction to make it vertical */
     justify-content: center;
     align-items: center;
-    background-color: darkgreen;
-    margin: 10px;
+    background-color: #fffdfa;
+    border-radius: 20px;
+    margin: 0 150px;
 }
 
 .expandable-box {
     margin: 10px 0;
-    width: 500px;
+    width: 650px;
     padding: 10px;
     cursor: pointer;
     transition: height 0.3s ease;
     border: 2px solid black;
-background-color: darkseagreen;
+    border-radius: 20px;
+    background-color: darkseagreen;
 }
 
 .expandable-box.expanded {
-    background-color: #f0f0f0;
+    background-color: #EAF1E9;
     height: auto; /*expands box*/
     box-sizing: border-box;
-    width: 550px;
+    width: 700px;
 }
 
 .expandable-box p {
@@ -80,44 +95,29 @@ background-color: darkseagreen;
     display: block;
 }
 
-.events-header {
-    display: flex;
-    width: 100%;
-    height: 60px;
-    background-color: darkgreen;
-    position: fixed;    /* keeps header up top */
-    top: 0;
-    left: 0;
-    z-index: 0;
-}
-
-.events-header-logo {
-    display: flex;
-    justify-content: center;
-    margin-left: 5px;
-    width: 100%;    /* width and height made to 100%, image was too small otherwise */
-    height: 100%;
-}
-
-.events-header-circle {
-    display: flex;
-    justify-content: center;
-    margin-left: 5px;
-    margin-top: 5px;
-    width: 50px;
-    height: 50px;
-    background-color: white;
-    border-radius: 50%; /* this makes the div a circel */
-}
-
 .events-search-spacer {
-    display: grid;
-    justify-content: left;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    height: 30vh;
+    padding: 10px;
+    margin-top: 70px;
 }
 
 .sign-up {
     display: flex;
     justify-content: right;
+}
+
+.sign-up button {
+    background-color: #254222;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.sign-up button:hover {
+    background-color: #1c3419;
 }
