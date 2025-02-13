@@ -5,7 +5,9 @@ import Login from './pages/login';
 import Signup from './pages/signup'
 import Event from './pages/events';
 import NavBar from './pages/navbar';
-
+import Profile from './pages/profile'
+import History from './pages/history'
+import Notifications from './pages/notifications'
 
 function App() {
   return (
@@ -16,7 +18,9 @@ function App() {
       <Route path="/" element={<Navigate replace to="/home" />} />
       <Route path="/home" element={<Home />} />
       <Route path="/login" element={<Login />} />
-      
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/history" element={<History />} />
+      <Route path="/notifications" element={<Notifications />} />
       <Route path="/events" element={<Event />} />
 
       <Route path="/signup" element={<Signup />} />

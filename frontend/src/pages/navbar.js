@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/home.css";
 import kiWe from "../assets/kiWe.png";
-import {FaBell } from "react-icons/fa";
+import {FaBell, FaUserCircle } from "react-icons/fa";
 
 const NavBar = () => {
     const navigate = useNavigate();
@@ -67,6 +67,12 @@ const NavBar = () => {
                 )}
             </div>
 
+            <button
+                className="profile-button"
+                onClick={() => navigate("/profile")}
+            >
+                <FaUserCircle className="profile-icon" />
+            </button>
         
             <button
                 className="nav-button-signin"

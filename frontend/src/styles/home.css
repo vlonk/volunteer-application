@@ -289,3 +289,19 @@ html, body {
 .event-join-button:hover {
     background-color: #1c3419;
 }
+
+.profile-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.profile-icon {
+    font-size: 24px;
+    color: #333;
+}
+
+.profile-button:hover .profile-icon {
+    color: #555;
+}
