@@ -7,9 +7,9 @@ const Event_Management = () => {
     const navigate = useNavigate();
 
     return(
-        
-        <div>
 
+        <div>
+            HELLO
         </div>
 
     );
