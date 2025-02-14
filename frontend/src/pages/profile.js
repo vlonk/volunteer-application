@@ -29,6 +29,7 @@ const ProfileManagement = () => {
   //States for profile information
   const [fullName, setFullName] = useState("");
   const [address, setAddress] = useState("");
+  const [address2, setAddress2] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState("");
@@ -68,8 +69,6 @@ const ProfileManagement = () => {
   //For dealing with updating profile info
   const handleProfileSubmit = (e) => {
     e.preventDefault();
-    console.log("Profile updated:", { fullName, address, city, state, zipCode, phoneNumber, emergencyContact, email, availability });
-    console.log("Is editing info?", isEditingInfo);
     setIsEditingInfo(false);
   };
 
@@ -104,6 +103,8 @@ const ProfileManagement = () => {
               value={fullName}
               onChange={e => setFullName(e.target.value)}
               readOnly={!isEditingInfo}
+              maxlength="50"
+              required
             />
             <input
               type="text"
@@ -111,6 +112,16 @@ const ProfileManagement = () => {
               value={address}
               onChange={e => setAddress(e.target.value)}
               readOnly={!isEditingInfo}
+              maxlength="100"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Address 2"
+              value={address2}
+              onChange={e => setAddress2(e.target.value)}
+              readOnly={!isEditingInfo}
+              maxlength="100"
             />
             <input
               type="text"
@@ -118,6 +129,8 @@ const ProfileManagement = () => {
               value={city}
               onChange={e => setCity(e.target.value)}
               readOnly={!isEditingInfo}
+              maxlength="100"
+              required
             />
             <input
               type="text"
@@ -132,6 +145,9 @@ const ProfileManagement = () => {
               value={zipCode}
               onChange={e => setZipCode(e.target.value)}
               readOnly={!isEditingInfo}
+              maxlength="9"
+              pattern="\d{5}(-\d{4})?"
+              required
             />
             <input
               type="text"

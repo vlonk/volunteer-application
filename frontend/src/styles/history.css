@@ -1,0 +1,26 @@
+/*container for all history contents*/
+.history-container {
+    max-width: 50%;
+    margin: 20px auto;
+    background: var(--white);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 75px;
+  }
+ 
+  /*place where all historyEventBox components go*/
+  .event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+  
+  
+  h2 {
+    color: var(--dark-green);
+    text-align: center;
+    font-size: 40px;
+  }
+  

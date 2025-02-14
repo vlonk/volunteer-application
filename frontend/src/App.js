@@ -22,7 +22,6 @@ function App() {
       <Route path="/history" element={<History />} />
       <Route path="/notifications" element={<Notifications />} />
       <Route path="/events" element={<Event />} />
-
       <Route path="/signup" element={<Signup />} />
 
       </Routes>
