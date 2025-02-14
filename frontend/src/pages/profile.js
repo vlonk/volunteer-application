@@ -68,8 +68,6 @@ const ProfileManagement = () => {
   //For dealing with updating profile info
   const handleProfileSubmit = (e) => {
     e.preventDefault();
-    console.log("Profile updated:", { fullName, address, city, state, zipCode, phoneNumber, emergencyContact, email, availability });
-    console.log("Is editing info?", isEditingInfo);
     setIsEditingInfo(false);
   };
 
