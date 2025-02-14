@@ -61,6 +61,7 @@
 
 .expandable-box-em p {
     display: none;
+    flex:4;
 }
 
 .expandable-box-em.expanded p {
@@ -68,7 +69,17 @@
     flex: 4;
 }
 
-.expandable-box-em h {
+.expandable-box-em-left {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+    font-size: 18px;
+    margin-left: 5px;
+}
+
+.expandable-box-em hm {
     flex: 4;
     display: flex;
     justify-content: left;
@@ -76,18 +87,20 @@
     height: 100%;
     font-size: 18px;
     margin-left: 5px;
+
 }
 
-.expandable-box-em-side {
+.expandable-box-em-right {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100%;
+    box-sizing:border-box;
 }
 
-.expandable-box-em-side button {
+.expandable-box-em-right button {
     background-color: #254222;
     color: #fff;
     border: none;
@@ -97,5 +110,4 @@
     width: 60%;
     cursor: pointer;  
     margin: 1px;
-
 }

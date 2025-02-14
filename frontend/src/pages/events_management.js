@@ -25,9 +25,11 @@ const ExpandBoxEm = ({title, content}) => {
 
     return(
         <div className = {`expandable-box-em ${isExpanded ? "expanded" : ""}`} onClick = {handleClick}>
-            <h>{title}</h>   
+            <div className = "expandable-box-em-left">
+            <hm>{title}</hm>   
             {isExpanded && <p>{content}</p>}
-            <div className = "expandable-box-em-side">
+            </div>
+            <div className = "expandable-box-em-right">
                 <button onClick={stopPropagation}>Edit</button>
                 <button onClick={handleDelete}>Delete</button>
             </div>
