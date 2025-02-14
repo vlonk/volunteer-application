@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import "../styles/events_management.css";
 //import {ExpandBox} from "../pages/events.js";
 
@@ -40,7 +40,7 @@ const ExpandBoxEm = ({title, content}) => {
 
 const EventsManagement = () => {
 
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
     return(
 
