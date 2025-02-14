@@ -1,0 +1,18 @@
+/*for all notifcations page contents*/
+.notifications-container {
+    max-width: 50%;
+    margin: 20px auto;
+    background: var(--soft-green);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 75px;
+  }
+  
+  /*for all the boxes*/
+  .notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
