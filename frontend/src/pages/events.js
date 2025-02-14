@@ -36,10 +36,10 @@ const ExpandBox = ({title, content}) => {
 
     return(
         <div className = {`expandable-box ${isExpanded ? "expanded" : ""}`} onClick = {handleClick}>
+            <h3>{title}</h3>
             <div className = "sign-up">
                 <button>sign up</button>
             </div>
-            <h3>{title}</h3>
             
             {isExpanded && <p>{content}</p>}
             
