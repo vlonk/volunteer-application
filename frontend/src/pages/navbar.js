@@ -43,6 +43,12 @@ const NavBar = () => {
         >
             Events
         </button>
+        <button
+            className="nav-link"
+            onClick={() => navigate("/events_management")}
+        >
+            Events Management
+        </button>
         </div>
 
         <div className="nav-right">
