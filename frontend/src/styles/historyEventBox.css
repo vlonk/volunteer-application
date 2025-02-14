@@ -1,0 +1,64 @@
+/*entire box*/
+.event-box {
+    width: 100%;
+    max-width: 600px;
+    background: var(--white);
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid var(--primary-green);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /*name, location, and date*/
+  .event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--primary-green);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+  }
+  
+  /*name*/
+  .event-header h3 {
+    color: var(--dark-green);
+    font-size: 25px;
+    margin: 0;
+  }
+  
+  /*date and location*/
+  .event-header p {
+    color: var(--dark-green);
+    font-size: 20px;
+  }
+  
+  /*button for expanding*/
+  .toggle-button {
+    background-color: var(--primary-green);
+    color: var(--white);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  /*bover effect for button*/
+  .toggle-button:hover {
+    background-color: var(--dark-green);
+  }
+  
+  /*section for expanded area*/
+  .event-details {
+    margin-top: 12px;
+    color: var(--dark-green);
+  }
+  
+  /*text in the expadned area*/
+  .event-details p {
+    font-size: 16px;
+    margin: 8px 0;
+    
+  }
+  

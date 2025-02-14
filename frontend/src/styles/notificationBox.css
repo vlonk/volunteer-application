@@ -1,0 +1,87 @@
+/*Each notification box*/
+.notification-box {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /*for title of each notifcation*/
+  .notification-header h3 {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+  }
+  
+  .notification-header p {
+    margin: 5px 0;
+  }
+  
+  /*button for deleting the event*/
+  .delete-button {
+    background-color: #ff5c5c;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .delete-button:hover {
+    background-color: #ff3b3b;
+  }
+  
+  /*stuff in pop-up box for deleting a notif*/
+  .confirmation-popup {
+    background-color: rgba(0, 0, 0, 0.6); /**/
+    position: fixed; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /*box for confirmation itself */
+  .confirmation-popup .popup-box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+  }
+  
+  /*text in popup*/
+  .confirmation-popup .popup-box p {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+  
+  /*yes button*/
+  .confirmation-popup .popup-box button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /*hover over yes button*/
+  .confirmation-popup .popup-box button:hover {
+    background-color: #2980b9;
+  }
+  
+  /*no button*/
+  .confirmation-popup .popup-box button.cancel {
+    background-color: #e74c3c;
+  }
+  
+  /*hover over no button*/
+  .confirmation-popup .popup-box button.cancel:hover {
+    background-color: #c0392b;
+  }
+  

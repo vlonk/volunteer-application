@@ -24,7 +24,6 @@ function App() {
       <Route path="/notifications" element={<Notifications />} />
       <Route path="/events" element={<Event />} />
       <Route path="/events_management" element={<EventsManagement/>} />
-
       <Route path="/signup" element={<Signup />} />
 
       </Routes>
