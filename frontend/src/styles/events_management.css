@@ -1,5 +1,16 @@
 .central-container {
+    display: flex;
+    width: 95%;
+    height: auto;
+    margin: 20px auto;
+    background: var(--white);
+    border-radius: 10px;
+}
+
+.half-container {
+    flex:1;
     width: 50%;
+    height: auto;
     margin: 20px auto;
     background: var(--white);
     border-radius: 10px;
@@ -197,8 +208,93 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-  }
+}
   
-  .close-button:hover {
+.close-button:hover {
     background-color: #45a049;
-  }
+}
+
+.volunteer-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    height: auto;
+}
+
+/* styles for the dropdown menu */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    align-self: center;
+}
+  
+.dropdown-button {
+    padding: 10px 20px;
+    background-color: darkseagreen;
+    color: black;
+    font-size: 16px;
+    border: 2px solid black;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 300px;   /* made menu sizes equal */
+}
+  
+.dropdown-button:hover {
+    background-color: #3e8e41;
+}
+  
+.dropdown-content {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 25%;  /* this let the drop down values stay centered based on the button */
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+}
+  
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+  
+.dropdown-content a:hover {
+    background-color: #ddd; 
+}
+
+.dropdown-match-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+    width: 300px;
+    min-height: 100px;
+    padding: 20px;
+    background-color: darkseagreen;
+    border-radius: 20px;
+    border: 2px solid black;
+}
+.dropdown-match-message {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.dropdown-match-box button {
+    background-color: #254222;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.9rem;
+    width: 60%;
+    cursor: pointer;  
+    margin: 1px;
+} 
