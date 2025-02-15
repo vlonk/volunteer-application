@@ -8,6 +8,7 @@ import NavBar from './pages/navbar';
 import Profile from './pages/profile'
 import History from './pages/history'
 import Notifications from './pages/notifications'
+import EventsManagement from './pages/events_management';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Route path="/history" element={<History />} />
       <Route path="/notifications" element={<Notifications />} />
       <Route path="/events" element={<Event />} />
+      <Route path="/events_management" element={<EventsManagement/>} />
       <Route path="/signup" element={<Signup />} />
 
       </Routes>
