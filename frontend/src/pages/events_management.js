@@ -221,6 +221,14 @@ const EventsManagement = () => {
         <div className = "volunteer-menu">           
             <DropdownMenu title = "Choose a Volunteer"/>
             <DropdownMenu title = "Choose From Matching Events"/>
+            <div className = "dropdown-match-box">
+                <div className = "dropdown-match-message">
+                    <h3>Assigning Volunteer to Event</h3>
+                </div>
+                <button>
+                Confirm
+                </button>
+            </div>
         </div>
 
 
