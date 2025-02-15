@@ -174,9 +174,9 @@ const DropdownMenu = ({title}) => {
         </button>
         {isOpen && (
           <div className="dropdown-content">
-            <a href="#">Option 1</a>
-            <a href="#">Option 2</a>
-            <a href="#">Option 3</a>
+            <button>Option 1</button>
+            <button>Option 2</button>
+            <button>Option 3</button>
           </div>
         )}
       </div>

@@ -246,7 +246,8 @@
 }
   
 .dropdown-content {
-    display: block;
+    display: flex;
+    flex-direction: column;
     position: absolute;
     left: 25%;  /* this let the drop down values stay centered based on the button */
     background-color: white;
