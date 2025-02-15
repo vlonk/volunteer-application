@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "../styles/events_management.css";
 
-// ExpandBoxEm Component
+//////  EXPANDING BOXES
+
 const ExpandBoxEm = ({ title, content }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -35,7 +36,8 @@ const ExpandBoxEm = ({ title, content }) => {
   );
 };
 
-// EventCreation Component
+//////// EVENTS CREATION
+
 const EventCreation = ({ closeEventCreation }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -156,32 +158,76 @@ const EventCreation = ({ closeEventCreation }) => {
   );
 };
 
-// EventsManagement Component
+/////// DROP DOWN MENU FOR VOLUNTEERS
+
+const DropdownMenu = ({title}) => {
+    const [isOpen, setIsOpen] = useState(false);
+  
+    const toggleDropdown = () => {
+      setIsOpen(!isOpen); // toggles the dropdown open and closed
+    };
+  
+    return (
+      <div className="dropdown">
+        <button className="dropdown-button" onClick={toggleDropdown}>
+          {title}
+        </button>
+        {isOpen && (
+          <div className="dropdown-content">
+            <a href="#">Option 1</a>
+            <a href="#">Option 2</a>
+            <a href="#">Option 3</a>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+///// EVENTS MANAGEMENT
+
 const EventsManagement = () => {
   const [showEventCreation, setShowEventCreation] = useState(false);
 
   return (
-    <div className="central-container">
-      <div className="create-box">
-        <button onClick={() => setShowEventCreation(true)}>
-          Create Event
-        </button>
-      </div>
+    <div className = "central-container">
+        <div className="half-container">
+            <div className="create-box">
+                <button onClick={() => setShowEventCreation(true)}>
+                    Create Event
+                </button>
+            </div>  
 
-      {showEventCreation && (
-        <div className="popup-overlay">
-          <EventCreation closeEventCreation={() => setShowEventCreation(false)} />
+            {showEventCreation && (
+            <div className="popup-overlay">
+                <EventCreation closeEventCreation={() => setShowEventCreation(false)} />
+            </div>
+        )}
+
+        <div className="em-listing">
+            <ExpandBoxEm title="Event: Blood Drive Volunteers" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
+            <ExpandBoxEm title="Event: Food Bank" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
+            <ExpandBoxEm title="Event: Animal Search and Rescue" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
+            <ExpandBoxEm title="Event: School Safety and Awareness" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
+            <ExpandBoxEm title="Event: Soup Kitchen Volunteers" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
         </div>
-      )}
-
-      <div className="em-listing">
-        <ExpandBoxEm title="Event: Blood Drive Volunteers" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
-        <ExpandBoxEm title="Event: Food Bank" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
-        <ExpandBoxEm title="Event: Animal Search and Rescue" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
-        <ExpandBoxEm title="Event: School Safety and Awareness" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
-        <ExpandBoxEm title="Event: Soup Kitchen Volunteers" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
-      </div>
     </div>
+
+{/* VOLUNTEER MATCHING STARTS HERE*/}
+
+    <div className = "half-container"> 
+        <div className="create-box">
+            <button> Volunteer Matching</button>
+        </div>
+        <div className = "volunteer-menu">           
+            <DropdownMenu title = "Choose a Volunteer"/>
+            <DropdownMenu title = "Choose From Matching Events"/>
+        </div>
+
+
+
+    </div>
+
+</div>
   );
 };
 
