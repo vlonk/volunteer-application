@@ -35,12 +35,6 @@ function LoginForm() {
         />
       </div>
       <button type="submit" className="login-button">Login</button>
-      <link>
-      <a href="/register">Don't have an account? Register here!</a>
-      </link>
-      <link>
-      <a href="/register">Don't have an account? Register here!</a>
-      </link>
     </form>
   );
 }
