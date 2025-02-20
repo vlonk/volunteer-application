@@ -1,0 +1,90 @@
+{
+  "1": {
+    "id": 1,
+    "name": "Gort Mangilit",
+    "address": "kiwiheaven st.",
+    "city": "League City",
+    "state": "TX",
+    "zip": "77573",
+    "number": "281-908-4100",
+    "emergency": "123-456-222",
+    "email": "gort@example.com",
+    "skills": [
+      "First Aid",
+      "Disaster Relief"
+    ],
+    "preferences": [
+      "Day",
+      "Indoor",
+      "Social"
+    ],
+    "role": "admin",
+    "profilePicture": "",
+    "password": ""
+  },
+  "2": {
+    "id": 2,
+    "name": "Yla rmed",
+    "address": "rivals rd.",
+    "city": "Houston",
+    "state": "TX",
+    "zip": "48212",
+    "number": "111-111-111",
+    "emergency": "",
+    "email": "tehee@example.com",
+    "skills": [
+      "Teamwork",
+      "Project Management"
+    ],
+    "preferences": [
+      "Night",
+      "Indoor"
+    ],
+    "role": "user",
+    "profilePicture": ""
+  },
+  "3": {
+    "id": 3,
+    "name": "Bees Ny",
+    "address": "silver st.",
+    "city": "Albany",
+    "state": "NY",
+    "zip": "31323",
+    "number": "222-222-222",
+    "emergency": "123-456-322",
+    "email": "nypain@example.com",
+    "skills": [
+      "Art",
+      "IT literacy",
+      "Organization"
+    ],
+    "preferences": [
+      "Day",
+      "Outdoor",
+      "Small Team Size"
+    ],
+    "role": "admin",
+    "profilePicture": ""
+  },
+  "4": {
+    "id": 4,
+    "name": "Guzzy Wuzzy",
+    "address": "ranoutofpunslol blvd",
+    "city": "Santa Fe",
+    "state": "New Mexico",
+    "zip": "38292",
+    "number": "333-333-3333",
+    "emergency": "123-456-123",
+    "email": "gman@example.com",
+    "skills": [
+      "Cooking",
+      "Cleaning"
+    ],
+    "preferences": [
+      "Night",
+      "Indoor"
+    ],
+    "role": "user",
+    "profilePicture": ""
+  }
+}
