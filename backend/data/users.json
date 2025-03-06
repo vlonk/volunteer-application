@@ -3,6 +3,7 @@
     "id": 1,
     "name": "Gort Mangilit",
     "address": "kiwiheaven st.",
+    "addess2": "",
     "city": "League City",
     "state": "TX",
     "zip": "77573",
@@ -10,13 +11,14 @@
     "emergency": "123-456-222",
     "email": "gort@example.com",
     "skills": [
-      "First Aid",
-      "Disaster Relief"
+      "Teamwork",
+      "Organization",
+      "Animal Care"
     ],
     "preferences": [
-      "Day",
-      "Indoor",
-      "Social"
+      "Individual",
+      "Small Team Size",
+      "Indoor"
     ],
     "role": "admin",
     "profilePicture": "",
@@ -26,6 +28,7 @@
     "id": 2,
     "name": "Yla rmed",
     "address": "rivals rd.",
+    "addess2": "",
     "city": "Houston",
     "state": "TX",
     "zip": "48212",
@@ -47,6 +50,7 @@
     "id": 3,
     "name": "Bees Ny",
     "address": "silver st.",
+    "addess2": "",
     "city": "Albany",
     "state": "NY",
     "zip": "31323",
@@ -70,6 +74,7 @@
     "id": 4,
     "name": "Guzzy Wuzzy",
     "address": "ranoutofpunslol blvd",
+    "addess2": "",
     "city": "Santa Fe",
     "state": "New Mexico",
     "zip": "38292",

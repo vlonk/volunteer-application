@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/profileStyles.css";
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 //list of skills for skills dropdown section
 const skillsList = [
@@ -18,6 +18,10 @@ const preferencesList = [
 ];
 
 const ProfileManagement = () => {
+  //what id are we looking at?
+  const { id } = useParams();
+  const [profile, setProfile] = useState(null);
+
   //for useStates
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedPreferences, setSelectedPreferences] = useState([]);
@@ -26,17 +30,6 @@ const ProfileManagement = () => {
   const [isEditingPreferences, setIsEditingPreferences] = useState(false);
   const [isEditingInfo, setIsEditingInfo] = useState(false);
 
-  //States for profile information
-  const [fullName, setFullName] = useState("");
-  const [address, setAddress] = useState("");
-  const [address2, setAddress2] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [emergencyContact, setEmergencyContact] = useState("");
-  const [email, setEmail] = useState("");
-  const [availability, setAvailability] = useState("");
 
   //function for adding skills to your profile
   const handleSkillChange = (event) => {
@@ -54,6 +47,37 @@ const ProfileManagement = () => {
     );    
   }
 
+  const handleConfirmChanges = async () => {  
+    const updatedData = {
+      skills: selectedSkills,
+      preferences: selectedPreferences,
+    };
+
+    try {
+      // Send the updated data to the backend using PUT request
+      const response = await fetch(`http://localhost:4000/api/profile/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData), // Send updated skills and preferences
+      });
+
+      if (response.ok) {
+        // Handle success (e.g., update the state, show a success message)
+        const updatedProfile = await response.json();
+        setProfile(updatedProfile);
+        setIsEditingSkills(false);
+        setIsEditingPreferences(false);
+      } else {
+        // Handle failure (e.g., show an error message)
+        console.error('Error updating profile:', await response.text());
+      }
+    } catch (error) {
+      console.error('Error in PUT request:', error);
+    }
+  };
+
   //logic for uploading image to profile
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -67,10 +91,28 @@ const ProfileManagement = () => {
   };
 
   //For dealing with updating profile info
-  const handleProfileSubmit = (e) => {
-    e.preventDefault();
-    setIsEditingInfo(false);
-  };
+   const handleProfileSubmit = (e) => {
+     e.preventDefault();
+     setIsEditingInfo(false);
+   };
+
+  
+
+  useEffect(() => {
+    fetch(`http://localhost:4000/api/profile/${id}`)
+      .then(response => response.json())
+      .then(data => {
+        setProfile(data);
+        setSelectedSkills(data.skills || []);
+        setSelectedPreferences(data.preferences || []);
+      })
+      .catch(error => console.error("Error fetching profile:", error));
+  }, [id]);
+
+  //gives app time to fetch data (async). Needed bc there is small window when loading page that the attributes are null which will return an error
+  if (!profile) {
+    return <div> Loading... </div>;
+  }
 
   return (
  
@@ -96,96 +138,101 @@ const ProfileManagement = () => {
             <input type="file" accept="image/*" className="profile-upload" onChange={handleImageUpload} />
         </div>
 
-          <form className="profile-details" onSubmit={handleProfileSubmit}>
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={fullName}
-              onChange={e => setFullName(e.target.value)}
-              readOnly={!isEditingInfo}
-              maxlength="50"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Address"
-              value={address}
-              onChange={e => setAddress(e.target.value)}
-              readOnly={!isEditingInfo}
-              maxlength="100"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Address 2"
-              value={address2}
-              onChange={e => setAddress2(e.target.value)}
-              readOnly={!isEditingInfo}
-              maxlength="100"
-            />
-            <input
-              type="text"
-              placeholder="City"
-              value={city}
-              onChange={e => setCity(e.target.value)}
-              readOnly={!isEditingInfo}
-              maxlength="100"
-              required
-            />
-            <input
-              type="text"
-              placeholder="State"
-              value={state}
-              onChange={e => setState(e.target.value)}
-              readOnly={!isEditingInfo}
-            />
-            <input
-              type="text"
-              placeholder="Zip Code"
-              value={zipCode}
-              onChange={e => setZipCode(e.target.value)}
-              readOnly={!isEditingInfo}
-              maxlength="9"
-              pattern="\d{5}(-\d{4})?"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Phone Number"
-              value={phoneNumber}
-              onChange={e => setPhoneNumber(e.target.value)}
-              readOnly={!isEditingInfo}
-            />
-            <input
-              type="text"
-              placeholder="Emergency Contact"
-              value={emergencyContact}
-              onChange={e => setEmergencyContact(e.target.value)}
-              readOnly={!isEditingInfo}
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              readOnly={!isEditingInfo}
-            />
-            <input
-              type="date"
-              placeholder="Availability"
-              value={availability}
-              onChange={e => setAvailability(e.target.value)}
-              readOnly={!isEditingInfo}
-            />
+        <form className="profile-details" onSubmit={handleProfileSubmit}>
+      <input
+        type="text"
+        placeholder="Full Name"
+        value={profile.name}
+        onChange={e => setProfile({ ...profile, name: e.target.value })}
+        readOnly={!isEditingInfo}
+        maxLength="50"
+        required
+      />
+      <input
+        type="text"
+        placeholder="Address"
+        value={profile.address}
+        onChange={e => setProfile({ ...profile, address: e.target.value })}
+        readOnly={!isEditingInfo}
+        maxLength="100"
+        required
+      />
+      <input
+        type="text"
+        placeholder="Address 2"
+        value={profile.address2}
+        onChange={e => setProfile({ ...profile, address2: e.target.value })}
+        readOnly={!isEditingInfo}
+        maxLength="100"
+      />
+      <input
+        type="text"
+        placeholder="City"
+        value={profile.city}
+        onChange={e => setProfile({ ...profile, city: e.target.value })}
+        readOnly={!isEditingInfo}
+        maxLength="100"
+        required
+      />
+      <input
+        type="text"
+        placeholder="State"
+        value={profile.state}
+        onChange={e => setProfile({ ...profile, state: e.target.value })}
+        readOnly={!isEditingInfo}
+      />
+      <input
+        type="text"
+        placeholder="Zip Code"
+        value={profile.zip}
+        onChange={e => setProfile({ ...profile, zip: e.target.value })}
+        readOnly={!isEditingInfo}
+        maxLength="9"
+        required
+      />
+      <input
+        type="text"
+        placeholder="Phone Number"
+        value={profile.number}
+        onChange={e => setProfile({ ...profile, number: e.target.value })}
+        readOnly={!isEditingInfo}
+      />
+      <input
+        type="text"
+        placeholder="Emergency Contact"
+        value={profile.emergencyContact}
+        onChange={e => setProfile({ ...profile, emergencyContact: e.target.value })}
+        readOnly={!isEditingInfo}
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={profile.email}
+        onChange={e => setProfile({ ...profile, email: e.target.value })}
+        readOnly={!isEditingInfo}
+      />
+      <input
+        type="date"
+        placeholder="Availability"
+        value={profile.availability}
+        onChange={e => setProfile({ ...profile, availability: e.target.value })}
+        readOnly={!isEditingInfo}
+      />
 
-
-            <button 
-              type="button" 
-              onClick={() => setIsEditingInfo(prevState => !prevState)} 
-              className="profile-edit-button">
-              {isEditingInfo ? "Confirm" : "Edit"}
-            </button>
-          </form>
+      {/* Toggle Edit Mode */}
+      {isEditingInfo ? (
+        <button type="submit" className="profile-edit-button">
+          Save Changes
+        </button>
+      ) : (
+        <button 
+          type="button" 
+          onClick={() => setIsEditingInfo(true)} 
+          className="profile-edit-button">
+          Edit
+        </button>
+      )}
+    </form>
         </div>
 
       <div className="profile-body">
@@ -198,7 +245,16 @@ const ProfileManagement = () => {
               readOnly 
               className="skills-textbox"
             />
-          <button onClick={() => setIsEditingSkills(!isEditingSkills)} className="skills-edit-button">
+          <button 
+            onClick={() => {
+              if (isEditingSkills) {
+                handleConfirmChanges(); // Confirm changes when editing
+              } else {
+                setIsEditingSkills(true); // Toggle to editing state
+              }
+            }} 
+            className="skills-edit-button"
+          >
             {isEditingSkills ? "Confirm" : "Edit"}
           </button>
           </div>
@@ -231,9 +287,18 @@ const ProfileManagement = () => {
               readOnly 
               className="preferences-textbox"
             />
-            <button onClick={() => setIsEditingPreferences(!isEditingPreferences)} className="preferences-edit-button">
-              {isEditingPreferences ? "Confirm" : "Edit"}
-            </button>
+          <button 
+            onClick={() => {
+              if (isEditingPreferences) {
+                handleConfirmChanges(); // Confirm changes when editing
+              } else {
+                setIsEditingPreferences(true); // Toggle to editing state
+              }
+            }} 
+            className="preferences-edit-button"
+          >
+            {isEditingPreferences ? "Confirm" : "Edit"}
+          </button>
           </div>
 
           {isEditingPreferences && (
@@ -253,6 +318,7 @@ const ProfileManagement = () => {
               </div>
             </div>
           )}
+          
         </div>
 
 
