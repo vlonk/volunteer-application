@@ -1,27 +1,42 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import HistoryEventBox from "../components/historyEventBox";
 import "../styles/history.css";
 
-//Temporary dummy events
-const eventHistory = [
-  { name: "Beach Cleanup", date: "Jan 20, 2024", location: "Houston, TX", description: "Help clean up the beach.", urgency: "Medium", skills: ["Teamwork", "Physical Work"], status: "Participated" },
-  { name: "Food Drive", date: "Feb 15, 2024", location: "Community Center", description: "Assist in food distribution.", urgency: "High", skills: ["Organizing", "Customer Service"], status: "No Show" },
-  { name: "Nico's Kiwi Rescue Event", date: "Feb 20, 2024", location: "Nico's house, TX", description: "save the kiwis at the expense of your life", urgency: "High", skills:["Heavy lifting", "Teamwork"], status: "pending"}
-];
-
-//use .map() function to iterate through all eventHistory list
 const History = () => {
-  return (
-    <div className="history-container">
-      <h2>Event History</h2>
-      <div className="event-list">
-        {eventHistory.map((event, index) => (
-          <HistoryEventBox key={index} event={event} />
-        ))}
-      </div>
-    </div>
-  );
+    const { id } = useParams(); // Get user ID from URL
+    const [eventHistory, setEventHistory] = useState([]);
+
+    useEffect(() => {
+      fetch(`http://localhost:4000/api/user/${id}/events`) 
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Fetched event history:", data);
+          // If the data is just an array, no need for the `historyKey`
+          setEventHistory(data || []); // Use the direct array
+        })
+        .catch((error) => console.error("Error fetching event history:", error));
+    }, [id]);
+  
+
+    return (
+        <div className="history-container">
+            <h2>Event History</h2>
+            <div className="event-list">
+                {eventHistory.length > 0 ? (
+                    eventHistory.map((event, index) => (
+                        <HistoryEventBox key={index} event={event} />
+                    ))
+                ) : (
+                    <p>No event history available.</p>
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default History;
+
+
 
 

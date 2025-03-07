@@ -10,9 +10,11 @@ import History from './pages/history'
 import Notifications from './pages/notifications'
 import EventsManagement from './pages/events_management';
 
+
 function App() {
   return (
     <BrowserRouter>
+    
     <NavBar />
     <div className="App">
       <Routes>
@@ -20,7 +22,7 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/profile/:id" element={<Profile />} />
-      <Route path="/history/:id" element={<History />} />
+      <Route path="/user/:id/events" element={<History />} />
       <Route path="/notifications/:id" element={<Notifications />} />
       <Route path="/events" element={<Event />} />
       <Route path="/events_management" element={<EventsManagement/>} />

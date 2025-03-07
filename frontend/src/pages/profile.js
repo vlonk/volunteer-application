@@ -128,14 +128,20 @@ const ProfileManagement = () => {
         );
     };
 
-    //when concfirming changes from skills or preferences
     const handleConfirmChangesSkillsPrefs = async () => {
         const updatedData = {
             skills: selectedSkills,
             preferences: selectedPreferences,
         };
+    
+        // Ensure id is available
+        if (!id) {
+            console.error("User ID is missing");
+            return;
+        }
+    
         try {
-            //Use PUT request api call to update, body is skills and preferences
+            // PUT request to update the profile
             const response = await fetch(
                 `http://localhost:4000/api/profile/${id}`,
                 {
@@ -146,22 +152,37 @@ const ProfileManagement = () => {
                     body: JSON.stringify(updatedData),
                 }
             );
+    
             if (response.ok) {
-                //
-                const updatedProfile = await response.json(); //update everything when response is gotten
-                setProfile(updatedProfile);
+                // Get updated profile after the PUT request is successful
+                const updatedProfile = await response.json();
+    
+                // Merge the updated skills and preferences with the current profile
+                const mergedProfile = {
+                    ...profile,  // Keep existing profile data
+                    skills: updatedProfile.skills,  // Update skills
+                    preferences: updatedProfile.preferences,  // Update preferences
+                };
+    
+                // Update the profile state with the merged data
+                setProfile(mergedProfile);
+    
+                // Exit editing mode after a successful update
                 setIsEditingSkills(false);
                 setIsEditingPreferences(false);
+    
+                console.log("Profile updated successfully:", mergedProfile);
             } else {
-                console.error(
-                    "Error with updating profile:",
-                    await response.text()
-                );
+                // Handle API response failure
+                const errorMessage = await response.text();
+                console.error("Error with updating profile:", errorMessage);
             }
         } catch (error) {
+            // Handle network or other errors
             console.error("Error in PUT request:", error);
         }
     };
+    
 
     const handleProfileChange = (e) => {
         const { name, value } = e.target; //Get the name of the input and its value
@@ -236,10 +257,10 @@ const ProfileManagement = () => {
         <div className="profile-container">
             <h1 className="profile-header">Profile Information</h1>
             <div className="profile-routing-buttons">
-                <Link to="/history">
-                    <button className="profile-to-history-button">
-                        History
-                    </button>
+            <Link to={`/user/${id}/events`}>
+                <button className="profile-to-history-button">
+                    History
+                </button>
                 </Link>
                 <Link to="/notifications">
                     <button className="profile-to-notifications-button">

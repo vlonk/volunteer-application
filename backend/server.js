@@ -12,10 +12,11 @@ app.use(cors());
 //routes
 const profileRoutes = require("./routes/profileRoutes")
 const notificationRoutes = require("./routes/notificationRoutes")
-
+const historyRoutes = require("./routes/historyRoutes")
 //Use the routes here
 app.use(profileRoutes)
 app.use(notificationRoutes)
+app.use(historyRoutes)
 
 //listen for requests
 app.listen(process.env.PORT,() =>{
