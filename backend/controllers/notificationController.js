@@ -46,14 +46,41 @@ const getNotification = async (req, res) => {
 const deleteNotification = async (req, res) => {
     try {
         let notifications = await getNotifications();
+        console.log("Fetched notifications:", notifications);  // Debugging step
+
+        // Ensure notifications is a valid object or array
+        if (!notifications) {
+            return res.status(500).json({ message: "Error: notifications data is null or undefined" });
+        }
+
         const notificationId = parseInt(req.params.id);
+        if (isNaN(notificationId)) {
+            return res.status(400).json({ message: "Invalid notification ID" });
+        }
 
-        notifications = notifications.filter(n => n.id !== notificationId);
+        // Convert object to array if needed
+        if (!(notifications instanceof Array)) {
+            notifications = Object.values(notifications);
+        }
+        console.log("Notifications array before deletion:", notifications);
 
-        await saveNotifications(notifications);
+        // Filter out the deleted notification
+        const updatedNotifications = notifications.filter(n => n.id !== notificationId);
+        console.log("Notifications array after deletion:", updatedNotifications);
+
+        // Convert array back to object for saving
+        const notificationsObject = updatedNotifications.reduce((acc, notification) => {
+            acc[notification.id] = notification;
+            return acc;
+        }, {});
+
+        console.log("Saving notifications:", JSON.stringify(notificationsObject, null, 2));
+
+        await saveNotifications(notificationsObject);
         res.json({ message: "Notification deleted successfully" });
     } catch (error) {
-        res.status(500).json({ message: "Error deleting notification", error });
+        console.error("Error deleting notification:", error);
+        res.status(500).json({ message: "Error deleting notification", error: error.message });
     }
 };
 
