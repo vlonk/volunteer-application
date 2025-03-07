@@ -12,17 +12,17 @@
     "email": "gort@gmail.com",
     "skills": [
       "Teamwork",
-      "Organization",
-      "Animal Care",
       "Lifting Heavy",
-      "Medical Assistance"
+      "Medical Assistance",
+      "Organization"
     ],
     "preferences": [
       "Individual",
       "Small Team Size",
       "Indoor",
       "Night",
-      "Day"
+      "Day",
+      "Social"
     ],
     "role": "admin",
     "profilePicture": "",
@@ -36,7 +36,8 @@
       "2025-03-27T05:00:00.000Z",
       "2025-03-29T05:00:00.000Z",
       "2025-04-05T05:00:00.000Z"
-    ]
+    ],
+    "eventhistoryId": "history_1"
   },
   "2": {
     "id": 2,
@@ -67,7 +68,8 @@
       "2025-03-27T05:00:00.000Z",
       "2025-03-28T05:00:00.000Z"
     ],
-    "password": ""
+    "password": "",
+    "eventhistoryId": "history_2"
   },
   "3": {
     "id": 3,
@@ -92,7 +94,8 @@
     ],
     "role": "admin",
     "profilePicture": "",
-    "availability": []
+    "availability": [],
+    "eventhistoryId": "history_3"
   },
   "4": {
     "id": 4,
@@ -100,21 +103,45 @@
     "address": "ranoutofpunslol blvd",
     "address2": "",
     "city": "Santa Fe",
-    "state": "New Mexico",
+    "state": "ME",
     "zip": "38292",
-    "number": "333-333-3333",
+    "number": "333-333-3334",
     "emergency": "123-456-123",
     "email": "gman@example.com",
     "skills": [
       "Cooking",
-      "Cleaning"
+      "Cleaning",
+      "Organization",
+      "Lifting Heavy",
+      "Medical Assistance",
+      "Animal Care",
+      "Teamwork"
     ],
     "preferences": [
       "Night",
-      "Indoor"
+      "Indoor",
+      "Individual",
+      "Small Team Size",
+      "Social",
+      "Day"
     ],
     "role": "user",
     "profilePicture": "",
-    "availability": []
+    "availability": [
+      "2025-03-05T06:00:00.000Z",
+      "2025-03-12T05:00:00.000Z",
+      "2025-03-15T05:00:00.000Z",
+      "2025-03-17T05:00:00.000Z",
+      "2025-03-18T05:00:00.000Z",
+      "2025-03-21T05:00:00.000Z",
+      "2025-03-24T05:00:00.000Z",
+      "2025-03-25T05:00:00.000Z",
+      "2025-03-27T05:00:00.000Z",
+      "2025-03-28T05:00:00.000Z",
+      "2025-03-31T05:00:00.000Z",
+      "2025-04-05T05:00:00.000Z"
+    ],
+    "eventhistoryId": "history_4",
+    "password": ""
   }
 }
