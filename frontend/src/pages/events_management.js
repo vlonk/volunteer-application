@@ -10,9 +10,6 @@ const ExpandBoxEm = ({ title, content, id, onDelete, onEdit }) => { // id, onEdi
     setIsExpanded(!isExpanded);
   };
 
-  const stopPropagation = (event) => {
-    event.stopPropagation(); // prevents box expansion when clicking the buttons
-  };
 
   const handleDelete = (event) => {
     event.stopPropagation();
