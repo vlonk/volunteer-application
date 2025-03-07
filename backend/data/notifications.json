@@ -1,20 +1,68 @@
 {
-    "1": {
-        "id": 1,
-        "title": "Test",
-        "description": "Food Drive coming up in 2 weeks!",
-        "time": "Feb 1, 2024, 2:00 PM"
+  "notifications": [
+    {
+      "notificationId": 1,
+      "eventId": "event1",
+      "userId": "1",
+      "message": "You participated in the Beach Cleanup event. Thank you for your contribution!",
+      "status": "Unread",
+      "timestamp": "2024-01-20T08:00:00.000Z"
     },
-  "2": {
-    "id": 2,
-    "title": "Upcoming Event",
-    "description": "Food Drive coming up in 2 weeks!",
-    "time": "Feb 1, 2024, 2:00 PM"
-  },
-  "3": {
-    "id": 3,
-    "title": "Event Update",
-    "description": "Nico's Kiwi Rescue Event updated.",
-    "time": "Feb 15, 2024, 3:00 PM"
-  }
+    {
+      "notificationId": 2,
+      "eventId": "event2",
+      "userId": "1",
+      "message": "You missed the Food Drive event. Please try to attend next time.",
+      "status": "Unread",
+      "timestamp": "2024-02-15T08:00:00.000Z"
+    },
+    {
+      "notificationId": 3,
+      "eventId": "event3",
+      "userId": "1",
+      "message": "Your participation in Nico's Kiwi Rescue Event is pending. Make sure to check the details!",
+      "status": "Unread",
+      "timestamp": "2024-02-20T08:00:00.000Z"
+    },
+    {
+      "notificationId": 4,
+      "eventId": "event4",
+      "userId": "2",
+      "message": "You completed the Charity Run! Great job on your endurance.",
+      "status": "Unread",
+      "timestamp": "2024-03-10T08:00:00.000Z"
+    },
+    {
+      "notificationId": 5,
+      "eventId": "event5",
+      "userId": "2",
+      "message": "Your participation in the Marvel Rivals Tournament is pending.",
+      "status": "Unread",
+      "timestamp": "2024-03-22T08:00:00.000Z"
+    },
+    {
+      "notificationId": 6,
+      "eventId": "event6",
+      "userId": "3",
+      "message": "You completed the Belaying event. Keep up the great teamwork!",
+      "status": "Unread",
+      "timestamp": "2024-04-05T08:00:00.000Z"
+    },
+    {
+      "notificationId": 7,
+      "eventId": "event7",
+      "userId": "4",
+      "message": "Thank you for volunteering at the Taco Kitchen Volunteer event. The homeless appreciated your help!",
+      "status": "Unread",
+      "timestamp": "2024-05-15T08:00:00.000Z"
+    },
+    {
+      "notificationId": 8,
+      "eventId": "event8",
+      "userId": "4",
+      "message": "You missed the Clothing Drive event. Please try to attend next time.",
+      "status": "Unread",
+      "timestamp": "2024-06-01T08:00:00.000Z"
+    }
+  ]
 }
