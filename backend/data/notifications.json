@@ -1,20 +1,20 @@
 {
-    "1": {  
-        "id": 1, 
-        "title" : "Event Signup", 
-        "description" : "You signed up for Beach Cleanup.", 
-        "time": "Jan 10, 2024, 10:00 AM" 
+    "1": {
+        "id": 1,
+        "title": "Test",
+        "description": "Food Drive coming up in 2 weeks!",
+        "time": "Feb 1, 2024, 2:00 PM"
     },
-    "2": { 
-        "id":  2, 
-        "title": "Upcoming Event", 
-        "description": "Food Drive coming up in 2 weeks!", 
-        "time": "Feb 1, 2024, 2:00 PM" 
-    },
-    "3": { 
-        "id": 3, 
-        "title": "Event Update", 
-        "description": "Nico's Kiwi Rescue Event updated.", 
-        "time": "Feb 15, 2024, 3:00 PM" 
-    }
+  "2": {
+    "id": 2,
+    "title": "Upcoming Event",
+    "description": "Food Drive coming up in 2 weeks!",
+    "time": "Feb 1, 2024, 2:00 PM"
+  },
+  "3": {
+    "id": 3,
+    "title": "Event Update",
+    "description": "Nico's Kiwi Rescue Event updated.",
+    "time": "Feb 15, 2024, 3:00 PM"
+  }
 }

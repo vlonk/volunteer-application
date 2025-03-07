@@ -1,22 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NotificationBox from "../components/notificationBox";
 import "../styles/notifications.css";
 
-//dummy data, replace when implenting backend. all data gets passed into array of notifcation ovjects
-const initialNotifications = [
-  { id: 1, title: "Event Signup", description: "You signed up for Beach Cleanup.", time: "Jan 10, 2024, 10:00 AM" },
-  { id: 2, title: "Upcoming Event", description: "Food Drive coming up in 2 weeks!", time: "Feb 1, 2024, 2:00 PM" },
-  { id: 3, title: "Event Update", description: "Nico's Kiwi Rescue Event updated.", time: "Feb 15, 2024, 3:00 PM" }
-];
-
-
 const Notifications = () => {
-  //initialNotfications is to store the inital number of notifs
-  const [notifications, setNotifications] = useState(initialNotifications);
+  const [notifications, setNotifications] = useState([]);
 
-  //function for actually deleting a notifcation by id. set state of notifications to inital state minus notif with current id
+  // Fetch notifications from backend
+  useEffect(() => {
+    fetch("http://localhost:4000/api/notifications") // Adjust URL based on your backend setup
+      .then(response => response.json())
+      .then(data => setNotifications(data))
+      .catch(error => console.error("Error fetching notifications:", error));
+  }, []);
+
+  // Function to delete a notification via backend
   const deleteNotification = (id) => {
-    setNotifications(notifications.filter((notification) => notification.id !== id)); //how we find the exact notif to delete
+    fetch(`http://localhost:4000/api/notification/${id}`, {
+      method: "DELETE",
+    })
+      .then(response => {
+        if (response.ok) {
+          setNotifications(notifications.filter(notification => notification.id !== id));
+        } else {
+          console.error("Failed to delete notification");
+        }
+      })
+      .catch(error => console.error("Error deleting notification:", error));
   };
 
   return (

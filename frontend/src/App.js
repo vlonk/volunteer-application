@@ -10,18 +10,20 @@ import History from './pages/history'
 import Notifications from './pages/notifications'
 import EventsManagement from './pages/events_management';
 
+
 function App() {
   return (
     <BrowserRouter>
+    
     <NavBar />
     <div className="App">
       <Routes>
       <Route path="/" element={<Navigate replace to="/home" />} />
       <Route path="/home" element={<Home />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/history" element={<History />} />
-      <Route path="/notifications" element={<Notifications />} />
+      <Route path="/profile/:id" element={<Profile />} />
+      <Route path="/user/:id/events" element={<History />} />
+      <Route path="/notifications/:id" element={<Notifications />} />
       <Route path="/events" element={<Event />} />
       <Route path="/events_management" element={<EventsManagement/>} />
       <Route path="/signup" element={<Signup />} />
