@@ -18,6 +18,7 @@ const saveUsers = async (users) => {
 
 //get list of all users and attributes
 const getAllUsers = async (req, res) => {
+    console.log("called get all users")
     try{
         const users = await getUsers();
         res.json(users); //Respond with users data as JSON
@@ -28,6 +29,7 @@ const getAllUsers = async (req, res) => {
 
 //get a single user profile
 const getProfile = async (req, res) => {
+    console.log("called get 1 profile")
     try {
         const users = await getUsers();
         const user = users[req.params.id]; //Find user with 'id' from URL params
@@ -45,6 +47,7 @@ const getProfile = async (req, res) => {
 
 //when updating profile
 const updateProfile = async (req, res) => {
+    console.log("called update profile")
     try {
         const users = await getUsers();
         const userId = req.params.id;
