@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/events_management.css";
 
 //////  EXPANDING BOXES
 
-const ExpandBoxEm = ({ title, content }) => {
+const ExpandBoxEm = ({ title, content, id, onDelete }) => { // id and onDelete have been added here as part of the backend for event deletion using the button
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleClick = () => {
@@ -19,6 +19,7 @@ const ExpandBoxEm = ({ title, content }) => {
     const confirm = window.confirm("Are you sure you want to delete this event? This cannot be undone.");
     if (confirm) {
       console.log("Event deleted.");
+      onDelete(id);
     }
   };
 
@@ -38,7 +39,7 @@ const ExpandBoxEm = ({ title, content }) => {
 
 //////// EVENTS CREATION
 
-const EventCreation = ({ closeEventCreation }) => {
+const EventCreation = ({ closeEventCreation, onCreateEvent }) => {  // onCreateEvent added for the backend integration
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
@@ -55,6 +56,17 @@ const EventCreation = ({ closeEventCreation }) => {
         throw new Error("Please fill in all sections to create event.");
       }
 
+      const newEvent = {
+        title,
+        description,
+        date,
+        urgency,
+        skills,
+        contactInfo
+      }
+      // we pass this to the Events Management to do backend work
+      onCreateEvent(newEvent);
+
       // If everything is valid, simulate form submission
       console.log("Event created successfully.");
 
@@ -70,15 +82,21 @@ const EventCreation = ({ closeEventCreation }) => {
     }
   };
 
-  const closePopup = () => {
-    setShowPopup(false); // close the popup when the user clicks 'Close'
+  const closeForm = (e) => {  // added this to close out form without submit
+    e.preventDefault(); // prevents form submission
+    closeEventCreation();
   };
 
   return (
     <div className="creation-container">
+
       <form onSubmit={handleSubmit}>
+      <button className="close-button" onClick={closeForm}>Close</button>
+
         <h1>Event creation:</h1>
+
         <div>
+          
           <label htmlFor="title">Title:</label>
           <input
             type="text"
@@ -145,12 +163,11 @@ const EventCreation = ({ closeEventCreation }) => {
       {/* popup for event creation confirmation */}
       {showPopup && (
         <div className="popup">
+          
           <div className="popup-content">
-          <button className="close-button-top" onClick={closePopup}> × </button>
 
             <h2>Confirmed!</h2>
             <p>Your event has been successfully created.</p>
-            <button className="close-button" onClick={closePopup}>Close</button>
           </div>
         </div>
       )}
@@ -187,6 +204,55 @@ const DropdownMenu = ({title}) => {
 
 const EventsManagement = () => {
   const [showEventCreation, setShowEventCreation] = useState(false);
+  const [events, setEvents] = useState([]);
+
+  // fetch events from backend
+  useEffect(() => {
+    fetch("http://localhost:4000/api/events") // Adjust URL based on your backend setup
+      .then(response => response.json())
+      .then(data => {
+        console.log("Fetched events:", data); // Log the data to check its structure
+        // Convert the object to an array of event objects
+        const eventsArray = Object.keys(data).map(key => ({
+          id: key,
+          ...data[key]
+        }));
+      setEvents(eventsArray); // Set the state with the events array
+      })
+      .catch(error => console.error("Error fetching events:", error));
+  }, []);
+
+  const handleCreateEvent = (newEvent) => {
+    fetch("http://localhost:4000/api/events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newEvent), // sending the event data without `id`
+    })
+      .then(response => response.json())
+      .then(data => {
+        // backend should have generated `id`
+        setEvents(prevEvents => [...prevEvents, data]); // adding new event to the list
+        setShowEventCreation(false);
+      })
+      .catch(error => console.error("Error creating event:", error));
+  };
+
+  // function to delete event via backend
+  const handleDeleteEvent = (id) => {
+    fetch(`http://localhost:4000/api/events/${id}`, {
+      method: "DELETE",
+    })
+      .then(response => {
+        if (response.ok) {
+          setEvents(prevEvents => prevEvents.filter(event => event.id !== id));
+        } else {
+          console.error("Failed to delete event");
+        }
+      })
+      .catch(error => console.error("Error deleting event:", error));
+  };
 
   return (
     <div className = "central-container">
@@ -199,16 +265,29 @@ const EventsManagement = () => {
 
             {showEventCreation && (
             <div className="popup-overlay">
-                <EventCreation closeEventCreation={() => setShowEventCreation(false)} />
+                <EventCreation closeEventCreation={() => setShowEventCreation(false)}
+                onCreateEvent = {handleCreateEvent} // passing function to EventCreation
+                />
             </div>
         )}
 
         <div className="em-listing">
+          {events.map((event) => (
+            <ExpandBoxEm
+            key = {event.id}
+            title = {event.title}
+            content = {`Info: ${event.description}`}
+            id = {event.id} // after fetching events from backend we get the id to work with the edit and delete buttons
+            onDelete = {handleDeleteEvent}  // passing delete functionality to the box component
+            />
+          ))}
+          {/*
             <ExpandBoxEm title="Event: Blood Drive Volunteers" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
             <ExpandBoxEm title="Event: Food Bank" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
             <ExpandBoxEm title="Event: Animal Search and Rescue" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
             <ExpandBoxEm title="Event: School Safety and Awareness" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
             <ExpandBoxEm title="Event: Soup Kitchen Volunteers" content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals." />
+            */}
         </div>
     </div>
 
