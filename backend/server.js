@@ -9,6 +9,11 @@ const app = express()
 app.use(express.json());
 app.use(cors());
 
+//auth route
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);
+
+
 //routes
 const profileRoutes = require("./routes/profileRoutes")
 const notificationRoutes = require("./routes/notificationRoutes")

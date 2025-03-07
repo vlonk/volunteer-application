@@ -143,5 +143,12 @@
     ],
     "eventhistoryId": "history_4",
     "password": ""
+  },
+  "1741388780779": {
+    "id": 1741388780779,
+    "name": "Test User",
+    "email": "test@example.com",
+    "password": "$2b$10$Y0Use65Ik0oSEbaXxmQ2bO2w4QRFcZROFLP5.CAifcLabLy33fTgW",
+    "role": "user"
   }
 }
