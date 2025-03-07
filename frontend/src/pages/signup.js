@@ -9,7 +9,11 @@ const Signup = () => {
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  const handleSubmit = (e) => {
+  const closePopup = () => {
+    setShowPopup(false);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -32,18 +36,29 @@ const Signup = () => {
       }
 
       // If everything is valid, simulate form submission
-      console.log('Signed up with:', email, password);
+      const response = await fetch('http://localhost:4000/api/auth/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name: '', email, password })
+    });
 
-    } catch (err) {
-      // Show an alert with the combined error message
-      window.alert(err.message);
-      return;
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log('Signup success:', data);
+      // data.token is your JWT if you want to store it
+      // localStorage.setItem('token', data.token);
+
+      setShowPopup(true);
+    } else {
+      console.error('Signup failed:', data.msg);
+      alert(`Signup failed: ${data.msg}`);
     }
-    setShowPopup(true)
+  } catch (err) {
+    alert(err.message);
   }
-
-  const closePopup = () => {
-    setShowPopup(false); // Close the popup when the user clicks 'Close'
   };
 
   return (
@@ -76,7 +91,7 @@ const Signup = () => {
         <div>
           <label htmlFor="password">Confirm Password:</label>
           <input
-            type="text"
+            type="password"
             id="confirmPassword"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}

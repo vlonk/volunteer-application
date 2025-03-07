@@ -26,7 +26,7 @@ function writeUsers(usersObj) {
 }
 
 exports.signup = async (req, res) => {
-    const { name, email, password, role } = req.body;
+    const { email, password, role } = req.body;
     if (!email || !password) {
         return res.status(400).json({ msg: 'Email and password are required.' });
     }
@@ -47,7 +47,6 @@ exports.signup = async (req, res) => {
         const newId = Date.now();
         const newUser = {
             id: newId,
-            name: name || '',
             email,
             password: hashedPassword,
             role: role || 'user'
@@ -79,7 +78,7 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
-        return res.status(400).json({ msg: 'Email and password are required.' });
+        return res.status(400).json({ msg: 'Username and password are required.' });
     }
 
     // read users

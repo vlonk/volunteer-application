@@ -5,10 +5,32 @@ function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here, e.g., send data to an API
-    console.log('Logging in with:', username, password);
+    try {
+      // make a POST request to your backend
+      const response = await fetch('http://localhost:4000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({username , password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log('Login successful:', data);
+        // data.token has the JWT if you want to store it
+        // localStorage.setItem('token', data.token);
+      } else {
+        console.error('Login failed:', data.msg);
+        alert(`Login failed: ${data.msg}`);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      alert('Something went wrong. Please try again.');
+    }
   };
 
   return (
