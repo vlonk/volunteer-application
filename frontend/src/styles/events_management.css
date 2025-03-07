@@ -67,7 +67,7 @@
     background-color: #EAF1E9;
     height: auto; /*expands box*/
     box-sizing: border-box;
-    width: 650px;
+    width: 625px;
 }
 
 .expandable-box-em p {
@@ -177,6 +177,7 @@
 .creation-container form {
     display: flex;
     flex-direction: column;
+    position: relative;
     width: 80vw;              
     max-width: 700px;         
     height: auto;             
@@ -208,6 +209,9 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
   
 .close-button:hover {
