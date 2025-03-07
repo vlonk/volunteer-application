@@ -39,46 +39,9 @@
   /* Profile Header (includes profile picture and info) */
   .profile-header {
     display: flex;
-    align-items: center;
-    border-bottom: 2px solid var(--primary-green);
-  }
-  
-  /* Profile picture section */
-  .profile-pic-section {
-    width: 200px;
-    height: 200px;
-    border: 3px solid var(--dark-green);
-    border-radius: 50%;
-    display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
-    position: relative;
-    background: var(--soft-green);
-  }
-  
-  /* Profile picture */
-  .profile-pic {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-  
-  /* Upload placeholder text */
-  .upload-placeholder {
-    font-size: 12px;
-    text-align: center;
-    color: var(--dark-green);
-  }
-  
-  /* Profile upload input */
-  .profile-upload {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
+    border-bottom: 2px solid var(--primary-green);
   }
   
   /* Profile details form */
@@ -94,6 +57,7 @@
     padding-top: 0;
   }
   
+  .profile-details select,
   .profile-details input,
   .profile-details button {
     font-family: Arial, sans-serif;
@@ -104,7 +68,8 @@
     width: 90%;
     box-sizing: border-box;
   }
-  
+
+  .profile-details select,
   .profile-details input {
     border: 1px solid #ccc;
     height: 60px;
@@ -128,9 +93,34 @@
   }
   
   /* Read-only input styling */
+  .profile-details select[disabled],
   .profile-details input[readonly] {
     background-color: #f0f0f0;
     opacity: 0.6;
+  }
+  
+  .availability-container {
+    display: flex;
+    flex-direction: column;     
+    justify-content: center;    
+    align-items: center;       
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .date-range-display {
+    margin-top: 15px; 
+    text-align: center; 
+  }
+  
+    form input.date-range-display {
+      width: 400px;
+      font-size: 14px;  
+      padding: 5px;  
+      border: 1px solid #ccc; 
+      border-radius: 4px;  
+      text-align: center;  
+      background-color: #f5f5f5;
   }
   
   /* Profile Body */
@@ -240,3 +230,5 @@
     margin-top: 30px;
   }
   
+
+

@@ -3,32 +3,46 @@
     "id": 1,
     "name": "Gort Mangilit",
     "address": "kiwiheaven st.",
-    "addess2": "",
+    "address2": "malcolmtodd blvd",
     "city": "League City",
-    "state": "TX",
+    "state": "AR",
     "zip": "77573",
-    "number": "281-908-4100",
-    "emergency": "123-456-222",
-    "email": "gort@example.com",
+    "number": "281-908-4101",
+    "emergency": "123-456-2222",
+    "email": "gort@gmail.com",
     "skills": [
       "Teamwork",
       "Organization",
-      "Animal Care"
+      "Animal Care",
+      "Lifting Heavy",
+      "Medical Assistance"
     ],
     "preferences": [
       "Individual",
       "Small Team Size",
-      "Indoor"
+      "Indoor",
+      "Night",
+      "Day"
     ],
     "role": "admin",
     "profilePicture": "",
-    "password": ""
+    "password": "",
+    "availability": [
+      "2025-03-11T05:00:00.000Z",
+      "2025-03-19T05:00:00.000Z",
+      "2025-03-21T05:00:00.000Z",
+      "2025-03-23T05:00:00.000Z",
+      "2025-03-26T05:00:00.000Z",
+      "2025-03-27T05:00:00.000Z",
+      "2025-03-29T05:00:00.000Z",
+      "2025-04-05T05:00:00.000Z"
+    ]
   },
   "2": {
     "id": 2,
     "name": "Yla rmed",
     "address": "rivals rd.",
-    "addess2": "",
+    "address2": "",
     "city": "Houston",
     "state": "TX",
     "zip": "48212",
@@ -41,16 +55,25 @@
     ],
     "preferences": [
       "Night",
-      "Indoor"
+      "Indoor",
+      "Individual",
+      "Social"
     ],
     "role": "user",
-    "profilePicture": ""
+    "profilePicture": "",
+    "availability": [
+      "2025-03-18T05:00:00.000Z",
+      "2025-03-21T05:00:00.000Z",
+      "2025-03-27T05:00:00.000Z",
+      "2025-03-28T05:00:00.000Z"
+    ],
+    "password": ""
   },
   "3": {
     "id": 3,
     "name": "Bees Ny",
     "address": "silver st.",
-    "addess2": "",
+    "address2": "",
     "city": "Albany",
     "state": "NY",
     "zip": "31323",
@@ -68,13 +91,14 @@
       "Small Team Size"
     ],
     "role": "admin",
-    "profilePicture": ""
+    "profilePicture": "",
+    "availability": []
   },
   "4": {
     "id": 4,
     "name": "Guzzy Wuzzy",
     "address": "ranoutofpunslol blvd",
-    "addess2": "",
+    "address2": "",
     "city": "Santa Fe",
     "state": "New Mexico",
     "zip": "38292",
@@ -90,6 +114,7 @@
       "Indoor"
     ],
     "role": "user",
-    "profilePicture": ""
+    "profilePicture": "",
+    "availability": []
   }
 }
