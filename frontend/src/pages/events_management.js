@@ -365,6 +365,7 @@ const EventsManagement = () => {
   const [matchingEvents, setMatchingEvents] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [history, setHistory] = useState([]);
 
 
   // fetch events from backend
@@ -382,6 +383,55 @@ const EventsManagement = () => {
       })
       .catch(error => console.error("Error fetching events:", error));
   }, []);
+
+    // fetch users from backend, we need to get their name and skills for the volunteer matching
+    useEffect(() => {
+      fetch("http://localhost:4000/api/profiles")
+        .then(response => response.json())
+        .then(data => {
+          console.log("Fetched users:", data); // checking data struct
+          // since we are using json its an object, we need an array
+          const usersArray = Object.keys(data).map(key => ({
+            id: key,
+            ...data[key]
+          }));
+        setUsers(usersArray); // set the state with the events array
+        })
+        .catch(error => console.error("Error fetching users:", error));
+    }, []);  
+  
+    // fetch matching events based on the user's skills
+    useEffect(() => {
+      if (selectedUser) {
+        // Assuming `selectedUser.skills` contains the skills to match with events
+        const matching = events.filter(event => 
+          event.skills.split(",").some(skill => selectedUser.skills.includes(skill))
+        );
+        setMatchingEvents(matching);
+      }
+    }, [selectedUser, events]);
+  
+    // reset selectedEvent when selectedUser changes
+    useEffect(() => {
+    setSelectedEvent(null); // clear the selected event when user changes
+    }, [selectedUser]);  // runs when selectedUser changes
+
+    // fetching history to find match with user
+    useEffect(() => {
+      if (selectedUser) { 
+        fetch(`http://localhost:4000/api/user/${selectedUser.id}/events`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Failed to fetch event history");
+            }
+            return response.json();
+          })
+          .then(data => {
+            setHistory(data);
+          })
+          .catch(error => console.error("Error fetching event history:", error));
+      }
+    }, [selectedUser]);
 
   const handleCreateEvent = (newEvent) => {
     fetch("http://localhost:4000/api/events", {
@@ -434,37 +484,76 @@ const EventsManagement = () => {
       .catch(error => console.error("Error deleting event:", error));
   };
 
-  // fetch users from backend, we need to get their name and skills for the volunteer matching
-  useEffect(() => {
-    fetch("http://localhost:4000/api/profiles")
-      .then(response => response.json())
-      .then(data => {
-        console.log("Fetched users:", data); // checking data struct
-        // since we are using json its an object, we need an array
-        const usersArray = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key]
-        }));
-      setUsers(usersArray); // set the state with the events array
-      })
-      .catch(error => console.error("Error fetching users:", error));
-  }, []);  
-
-  // fetch matching events based on the user's skills
-  useEffect(() => {
-    if (selectedUser) {
-      // Assuming `selectedUser.skills` contains the skills to match with events
-      const matching = events.filter(event => 
-        event.skills.split(",").some(skill => selectedUser.skills.includes(skill))
-      );
-      setMatchingEvents(matching);
+  const confirmVolunteer = () => {
+    if (!selectedUser || !selectedEvent) {
+      alert("Please select a user and event.");
+      return;
     }
-  }, [selectedUser, events]);
+  
+    const updatedHistory = [
+      ...(history[`history_${selectedUser.id}`] || []),
+      {
+        eventId: selectedEvent.id,
+        name: selectedEvent.title,
+        dateAttended: new Date().toISOString(),
+        location: selectedEvent.location,
+        description: selectedEvent.description,
+        urgency: selectedEvent.urgency,
+        skills: selectedEvent.skills,
+        status: "Pending",
+      },
+    ];
+  
+    // 1️⃣ Updating user's event history
+    fetch(`http://localhost:4000/api/user/${selectedUser.id}/events`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedHistory),
+    })
+      .then((response) => response.json())
+      .then((updatedUserHistory) => {
+        console.log("User's history updated:", updatedUserHistory);
+        setHistory((prevHistory) => ({
+          ...prevHistory,
+          [`history_${selectedUser.id}`]: updatedUserHistory,
+        }));
+      })
+      .catch((error) => {
+        console.error("Error updating user history:", error);
+      });
+  
+    // 2️⃣ Updating the event to track the volunteer
+    fetch(`http://localhost:4000/api/events/${selectedEvent.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...selectedEvent,
+        volunteerId: selectedUser.id, // Assigning user to event
+      }),
+    })
+      .then((response) => response.json())
+      .then((updatedEvent) => {
+        console.log("Event updated:", updatedEvent);
+        setSelectedEvent(updatedEvent); // Update state
+        alert("Volunteer confirmed!");
+  
+        setTimeout(() => {
+          window.alert(""); // Clear alert after 2 seconds
+        }, 2000);
+  
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error updating event:", error);
+      });
+  };
+  
 
-  // reset selectedEvent when selectedUser changes
-  useEffect(() => {
-  setSelectedEvent(null); // clear the selected event when user changes
-  }, [selectedUser]);  // runs when selectedUser changes
+
 
   return (
     <div className = "central-container">
@@ -508,7 +597,7 @@ const EventsManagement = () => {
         </div>
     </div>
 
-{/* VOLUNTEER MATCHING STARTS HERE*/}
+  {/* VOLUNTEER MATCHING STARTS HERE*/}
 
     <div className = "half-container"> 
         <div className="create-box">
@@ -533,7 +622,7 @@ const EventsManagement = () => {
                 <div className = "dropdown-match-message">
                     <h3>Assigning Volunteer to Event</h3>
                 </div>
-                <button>
+                <button onClick={confirmVolunteer}>
                 Confirm
                 </button>
             </div>
@@ -543,7 +632,7 @@ const EventsManagement = () => {
 
     </div>
 
-</div>
+  </div>
   );
 };
 
