@@ -8,13 +8,27 @@ const NavBar = () => {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [notifications, setNotifications] = useState([]);
+    const userId = localStorage.getItem("userId"); // Get user ID after login/signup
+    
+    useEffect(() => {
+        if (userId) {
+            fetch(`http://localhost:4000/api/user/${userId}/notifications`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Fetched notifications:", data);
+                    setNotifications(data || []);
+                })
+                .catch(error => console.error("Error fetching notifications:", error));
+        }
+    }, [userId]); // Fetch notifications when userId is available
 
-    const [notifications] = useState([
-        "not #1",
-        "not #2",
-        "not #3",
-        "not #4"
-    ]);
+    // const [notifications] = useState([
+    //     "not #1",
+    //     "not #2",
+    //     "not #3",
+    //     "not #4"
+    // ]);
 
     useEffect(() => {
         const checkAuth = () => {
