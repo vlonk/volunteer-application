@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1741393939023" clover="3.2.0">
+  <project timestamp="1741393939023" name="All files">
+    <metrics statements="48" coveredstatements="41" conditionals="20" coveredconditionals="20" methods="6" coveredmethods="6" elements="74" coveredelements="67" complexity="0" loc="48" ncloc="48" packages="1" files="1" classes="1"/>
+    <file name="authController.js" path="/Users/ny/cosc 4353/kiwecare/volunteer-application/backend/controllers/authController.js">
+      <metrics statements="48" coveredstatements="41" conditionals="20" coveredconditionals="20" methods="6" coveredmethods="6"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="2" count="1" type="stmt"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="4" count="1" type="stmt"/>
+      <line num="6" count="1" type="stmt"/>
+      <line num="9" count="5" type="stmt"/>
+      <line num="10" count="5" type="stmt"/>
+      <line num="11" count="5" type="stmt"/>
+      <line num="14" count="0" type="stmt"/>
+      <line num="15" count="0" type="stmt"/>
+      <line num="20" count="1" type="stmt"/>
+      <line num="21" count="1" type="stmt"/>
+      <line num="24" count="0" type="stmt"/>
+      <line num="28" count="1" type="stmt"/>
+      <line num="29" count="3" type="stmt"/>
+      <line num="30" count="3" type="cond" truecount="4" falsecount="0"/>
+      <line num="31" count="1" type="stmt"/>
+      <line num="35" count="2" type="stmt"/>
+      <line num="38" count="2" type="stmt"/>
+      <line num="39" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="40" count="1" type="stmt"/>
+      <line num="43" count="1" type="stmt"/>
+      <line num="44" count="1" type="stmt"/>
+      <line num="45" count="1" type="stmt"/>
+      <line num="47" count="1" type="stmt"/>
+      <line num="48" count="1" type="stmt"/>
+      <line num="55" count="1" type="stmt"/>
+      <line num="58" count="1" type="stmt"/>
+      <line num="61" count="1" type="stmt"/>
+      <line num="67" count="1" type="stmt"/>
+      <line num="73" count="0" type="stmt"/>
+      <line num="74" count="0" type="stmt"/>
+      <line num="78" count="1" type="stmt"/>
+      <line num="79" count="4" type="stmt"/>
+      <line num="80" count="4" type="cond" truecount="4" falsecount="0"/>
+      <line num="81" count="1" type="stmt"/>
+      <line num="85" count="3" type="stmt"/>
+      <line num="88" count="3" type="stmt"/>
+      <line num="89" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="90" count="1" type="stmt"/>
+      <line num="93" count="2" type="stmt"/>
+      <line num="94" count="2" type="stmt"/>
+      <line num="95" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="96" count="1" type="stmt"/>
+      <line num="100" count="1" type="stmt"/>
+      <line num="106" count="1" type="stmt"/>
+      <line num="112" count="0" type="stmt"/>
+      <line num="113" count="0" type="stmt"/>
+    </file>
+  </project>
+</coverage>
