@@ -92,13 +92,13 @@ const NavBar = () => {
             {isLoggedIn ? (
                     <>
                         <button
-                            className="profile-button"
-                            onClick={() => {
-                                const userId = localStorage.getItem('id');
-                                navigate(`/profile/${userId}`);
-                            }}
+                        className="profile-button"
+                        onClick={() => {
+                            const userId = localStorage.getItem('userId');  // Get the correct user ID
+                            navigate(`/profile/${userId}`);  // Use the stored userId in the URL
+                        }}
                         >
-                            <FaUserCircle className="profile-icon" />
+                        <FaUserCircle className="profile-icon" />
                         </button>
                         <button className="logout-button" onClick={handleLogout}>
                             Logout

@@ -164,20 +164,33 @@
   },
   "1741400154744": {
     "id": "1741400154744",
-    "name": "",
-    "address": "",
+    "name": "tehee",
+    "address": "293 place street",
     "address2": "",
-    "city": "",
-    "state": "",
-    "zip": "",
-    "number": "",
-    "emergency": "",
+    "city": "Dallas",
+    "state": "IA",
+    "zip": "77573",
+    "number": "333-333-3334",
+    "emergency": "123-456-2222",
     "email": "test@example.com",
-    "skills": [],
-    "preferences": [],
+    "skills": [
+      "Medical Assistance",
+      "Lifting Heavy",
+      "Organization"
+    ],
+    "preferences": [
+      "Social",
+      "Indoor"
+    ],
     "role": "user",
     "password": "$2b$10$ZEUSAp2Tr7FaZ29ULdifdOXMspYeTYDKT5CHV7cTLDEX6OqPqm6kO",
-    "availability": [],
-    "eventhistoryId": "history_1741400154744"
+    "availability": [
+      "2025-03-12T05:00:00.000Z",
+      "2025-03-21T05:00:00.000Z",
+      "2025-03-28T05:00:00.000Z",
+      "2025-03-29T05:00:00.000Z"
+    ],
+    "eventhistoryId": "history_1741400154744",
+    "profilePicture": ""
   }
 }

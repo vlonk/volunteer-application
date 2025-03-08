@@ -30,7 +30,7 @@ exports.signup = async (req, res) => {
     if (!email || !password) {
         return res.status(400).json({ msg: 'Email and password are required.' });
     }
-    
+
     // read user data
     const usersObj = readUsers();
 
@@ -117,7 +117,8 @@ exports.login = async (req, res) => {
 
         return res.status(200).json({
             msg: 'Login successful',
-            token
+            token,
+            id: user.id
         });
     } 
         catch (err) {
