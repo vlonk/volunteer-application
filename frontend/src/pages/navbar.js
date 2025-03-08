@@ -12,19 +12,38 @@ const NavBar = () => {
     const userId = localStorage.getItem("userId"); // Get user ID after login/signup
 
     useEffect(() => {
-        if (userId) {
-            fetch(`http://localhost:4000/api/user/${userId}/notifications`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Fetched notifications:", JSON.stringify(data, null, 2));
-                    setNotifications(Array.isArray(data) ? data : Array.isArray(data.notifications) ? data.notifications : []);
-                })
-                .catch(error => {
+        const fetchNotifications = async () => {
+            if (userId) {
+                try {
+                    const response = await fetch(`http://localhost:4000/api/user/${userId}/notifications`);
+                    const data = await response.json();
+                    console.log("Fetched notifications:", data);
+                    setNotifications(data || []);
+                } catch (error) {
                     console.error("Error fetching notifications:", error);
-                    setNotifications([]); // Ensure it's always an array
-                });
-        }
-    }, [userId]);
+                }
+            } else {
+                setNotifications([]); // Clear notifications if no user is logged in
+            }
+        };
+
+        fetchNotifications();
+    }, [userId]); // Run when `userId` changes, i.e., after login or logout
+
+    // Check if the user is logged in on mount and handle login state
+    useEffect(() => {
+        const checkAuth = () => {
+            const token = localStorage.getItem("authToken");
+            setIsLoggedIn(!!token); // Convert to boolean
+        };
+
+        checkAuth(); // Run once on mount
+        window.addEventListener("storage", checkAuth); // Listen for changes in localStorage
+
+        return () => {
+            window.removeEventListener("storage", checkAuth); // Cleanup listener
+        };
+    }, []); // Only run this effect once on mount
 
     // const [notifications] = useState([
     //     "not #1",
@@ -49,8 +68,6 @@ const NavBar = () => {
     }, []);
     
     
-      
-    
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
@@ -59,6 +76,7 @@ const NavBar = () => {
         localStorage.removeItem('authToken');  // Remove auth token
         localStorage.removeItem('id');  // Remove user id
         setIsLoggedIn(false);  // Update login status
+        setNotifications([]); // Clear notifications on logout
         navigate('/login');  // Redirect to login page after logout
     };
     return (
