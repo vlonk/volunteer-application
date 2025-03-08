@@ -17,11 +17,20 @@ const NavBar = () => {
     ]);
 
     useEffect(() => {
-        const token = localStorage.getItem("authToken");
-        if (token) {
-            setIsLoggedIn(true);
-        }
+        const checkAuth = () => {
+            const token = localStorage.getItem("authToken");
+            setIsLoggedIn(!!token); // Convert to boolean
+        };
+    
+        checkAuth(); // Run once on mount
+    
+        window.addEventListener("storage", checkAuth);
+    
+        return () => {
+            window.removeEventListener("storage", checkAuth); // Cleanup listener
+        };
     }, []);
+    
     
       
     
