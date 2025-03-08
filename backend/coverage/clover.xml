@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1741398482200" clover="3.2.0">
-  <project timestamp="1741398482200" name="All files">
+<coverage generated="1741399474431" clover="3.2.0">
+  <project timestamp="1741399474431" name="All files">
     <metrics statements="94" coveredstatements="86" conditionals="32" coveredconditionals="31" methods="14" coveredmethods="14" elements="140" coveredelements="131" complexity="0" loc="94" ncloc="94" packages="1" files="2" classes="2"/>
     <file name="authController.js" path="/Users/yla/volunteer/volunteer-application/backend/controllers/authController.js">
       <metrics statements="48" coveredstatements="41" conditionals="20" coveredconditionals="20" methods="6" coveredmethods="6"/>
