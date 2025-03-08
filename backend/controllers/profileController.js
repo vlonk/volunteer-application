@@ -29,21 +29,20 @@ const getAllUsers = async (req, res) => {
 
 //get a single user profile
 const getProfile = async (req, res) => {
-    console.log("called get 1 profile")
+    console.log("called get 1 profile");
     try {
-        const users = await getUsers();
-        const user = users[req.params.id]; //Find user with 'id' from URL params
+      const users = await getUsers();
+      const user = users[req.params.id]; // Use req.params.id here to fetch the user
   
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
   
-        res.json(user);
-    } 
-    catch (error) {
-        res.status(500).json({ message: "Error reading user data", error });
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ message: "Error reading user data", error });
     }
-}
+  };
 
 //when updating profile
 const updateProfile = async (req, res) => {

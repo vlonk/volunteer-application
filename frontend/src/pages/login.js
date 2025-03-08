@@ -1,28 +1,31 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 
 function LoginForm() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // make a POST request to your backend
       const response = await fetch('http://localhost:4000/api/auth/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({username , password })
+        body: JSON.stringify({ email, password }),
       });
-
+      
       const data = await response.json();
-
+  
       if (response.ok) {
         console.log('Login successful:', data);
-        // data.token has the JWT if you want to store it
-        // localStorage.setItem('token', data.token);
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('userId', data.id); // Store the ID from the backend
+        console.log('Token and ID stored:', localStorage.getItem('authToken'), localStorage.getItem('userId'));
+        navigate('/home');
       } else {
         console.error('Login failed:', data.msg);
         alert(`Login failed: ${data.msg}`);
@@ -32,17 +35,18 @@ function LoginForm() {
       alert('Something went wrong. Please try again.');
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit}>
       <h1>Login:</h1>
       <div>
-        <label htmlFor="username">Username:</label>
+        <label htmlFor="email">Email:</label>
         <input
           type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
       </div>

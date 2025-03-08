@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/home.css";
 import kiWe from "../assets/kiWe.png";
@@ -7,6 +7,7 @@ import {FaBell, FaUserCircle } from "react-icons/fa";
 const NavBar = () => {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const [notifications] = useState([
         "not #1",
@@ -15,10 +16,25 @@ const NavBar = () => {
         "not #4"
     ]);
 
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (token) {
+            setIsLoggedIn(true);
+        }
+    }, []);
+    
+      
+    
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');  // Remove auth token
+        localStorage.removeItem('id');  // Remove user id
+        setIsLoggedIn(false);  // Update login status
+        navigate('/login');  // Redirect to login page after logout
+    };
     return (
     <nav className="navbar">
         <div className="nav-left">
@@ -73,25 +89,37 @@ const NavBar = () => {
                 )}
             </div>
 
-            <button
-                className="profile-button"
-                onClick={() => navigate("/profile")}
-            >
-                <FaUserCircle className="profile-icon" />
-            </button>
-        
-            <button
-                className="nav-button-signin"
-                onClick={() => navigate("/login")}
-            >
-                Sign In
-            </button>
-            <button
-                className="nav-button-join"
-                onClick={() => navigate("/signup")}
-            >
-                Join
-            </button>
+            {isLoggedIn ? (
+                    <>
+                        <button
+                        className="profile-button"
+                        onClick={() => {
+                            const userId = localStorage.getItem('userId');  // Get the correct user ID
+                            navigate(`/profile/${userId}`);  // Use the stored userId in the URL
+                        }}
+                        >
+                        <FaUserCircle className="profile-icon" />
+                        </button>
+                        <button className="logout-button" onClick={handleLogout}>
+                            Logout
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <button
+                            className="nav-button-signin"
+                            onClick={() => navigate("/login")}
+                        >
+                            Sign In
+                        </button>
+                        <button
+                            className="nav-button-join"
+                            onClick={() => navigate("/signup")}
+                        >
+                            Join
+                        </button>
+                    </>
+                )}
         </div>
     </nav>
     );
