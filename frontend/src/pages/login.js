@@ -25,6 +25,9 @@ function LoginForm() {
         localStorage.setItem('authToken', data.token);
         localStorage.setItem('userId', data.id); // Store the ID from the backend
         console.log('Token and ID stored:', localStorage.getItem('authToken'), localStorage.getItem('userId'));
+        
+        window.dispatchEvent(new Event("storage"));
+  
         navigate('/home');
       } else {
         console.error('Login failed:', data.msg);
