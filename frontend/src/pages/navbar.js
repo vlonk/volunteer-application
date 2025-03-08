@@ -10,18 +10,21 @@ const NavBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const userId = localStorage.getItem("userId"); // Get user ID after login/signup
-    
+
     useEffect(() => {
         if (userId) {
             fetch(`http://localhost:4000/api/user/${userId}/notifications`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Fetched notifications:", data);
-                    setNotifications(data || []);
+                    console.log("Fetched notifications:", JSON.stringify(data, null, 2));
+                    setNotifications(Array.isArray(data) ? data : Array.isArray(data.notifications) ? data.notifications : []);
                 })
-                .catch(error => console.error("Error fetching notifications:", error));
+                .catch(error => {
+                    console.error("Error fetching notifications:", error);
+                    setNotifications([]); // Ensure it's always an array
+                });
         }
-    }, [userId]); // Fetch notifications when userId is available
+    }, [userId]);
 
     // const [notifications] = useState([
     //     "not #1",
@@ -91,26 +94,30 @@ const NavBar = () => {
         </div>
 
         <div className="nav-right">
-            <div className="notification-wrapper" onClick={toggleDropdown}>
-                <FaBell className="notification-icon" />
-                {/* if there are notifications then show the badge */}
-                {notifications.length > 0 && (
-                <span className="notification-count">
-                    {notifications.length}
-                </span>
-                )}
+                <div className="notification-wrapper" onClick={toggleDropdown}>
+                    <FaBell className="notification-icon" />
+                    {/* Show notification count if there are notifications */}
+                    {notifications.length > 0 && (
+                        <span className="notification-count">
+                            {notifications.length}
+                        </span>
+                    )}
 
-                {/* if its open then open */}
-                {isOpen && (
-                <div className="notification-dropdown">
-                    {notifications.map((note, i) => (
-                    <div key={i} className="notification-item">
-                        {note}
-                    </div>
-                    ))}
+                    {/* Show notifications if dropdown is open */}
+                    {isOpen && (
+                        <div className="notification-dropdown">
+                            {Array.isArray(notifications) && notifications.length > 0 ? (
+                                notifications.map((note, i) => (
+                                    <div key={note.notificationId || i} className="notification-item">
+                                        {note.message} {/* Displaying only the message */}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="notification-item">No notifications</div>
+                            )}
+                        </div>
+                    )}
                 </div>
-                )}
-            </div>
 
             {isLoggedIn ? (
                     <>

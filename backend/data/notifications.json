@@ -43,7 +43,7 @@
     {
       "notificationId": 6,
       "eventId": "event6",
-      "userId": "3",
+      "userId": "1741451094790",
       "message": "You completed the Belaying event. Keep up the great teamwork!",
       "status": "Unread",
       "timestamp": "2024-04-05T08:00:00.000Z"
@@ -51,7 +51,7 @@
     {
       "notificationId": 7,
       "eventId": "event7",
-      "userId": "4",
+      "userId": "1741451094790",
       "message": "Thank you for volunteering at the Taco Kitchen Volunteer event. The homeless appreciated your help!",
       "status": "Unread",
       "timestamp": "2024-05-15T08:00:00.000Z"
@@ -59,7 +59,7 @@
     {
       "notificationId": 8,
       "eventId": "event8",
-      "userId": "4",
+      "userId": "1741400154744",
       "message": "You missed the Clothing Drive event. Please try to attend next time.",
       "status": "Unread",
       "timestamp": "2024-06-01T08:00:00.000Z"
