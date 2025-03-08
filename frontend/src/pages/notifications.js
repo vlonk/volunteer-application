@@ -1,31 +1,38 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import NotificationBox from "../components/notificationBox"; // Assuming you have a component to display each notification
+import NotificationBox from "../components/notificationBox"; // Assuming NotificationBox is your component to display individual notifications
 import "../styles/notifications.css";
 
-const Notifications = () => {
-  const { id } = useParams(); // Get user ID from URL
+const NotificationsPage = () => {
   const [notifications, setNotifications] = useState([]);
+  const userId = localStorage.getItem("userId"); // Get the user ID from localStorage
 
   useEffect(() => {
-    // Fetch notifications for the specific user by their userId
-    fetch(`http://localhost:4000/api/user/${id}/notifications`) 
+    // Ensure user is logged in and userId is present
+    if (!userId) {
+      console.error("User is not logged in or userId is missing");
+      return; // Prevent fetching if user is not logged in
+    }
+
+    fetch(`http://localhost:4000/api/user/${userId}/notifications`)
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched notifications:", data);
-        setNotifications(data || []); // Set the notifications in state
+        setNotifications(data || []); // If no notifications, set an empty array
       })
-      .catch((error) => console.error("Error fetching notifications:", error));
-  }, [id]); // Refetch notifications when the user ID changes
+      .catch((error) => {
+        console.error("Error fetching notifications:", error);
+        setNotifications([]); // Reset notifications on error
+      });
+  }, [userId]); // Re-fetch if userId changes (although it should be static after login)
 
   return (
     <div className="notifications-container">
       <h2>Notifications</h2>
       <div className="notification-list">
         {notifications.length > 0 ? (
-          notifications.map((notification) => (
+          notifications.map((notification, index) => (
             <NotificationBox
-              key={notification.notificationId} // Assuming notificationId is unique
+              key={index} // Use index or unique ID like notification.notificationId
               notification={notification}
             />
           ))
@@ -37,4 +44,4 @@ const Notifications = () => {
   );
 };
 
-export default Notifications;
+export default NotificationsPage;
