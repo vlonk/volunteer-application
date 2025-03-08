@@ -262,7 +262,7 @@ const ProfileManagement = () => {
                     History
                 </button>
                 </Link>
-                <Link to="/notifications">
+                <Link to="/notifications/:id">
                     <button className="profile-to-notifications-button">
                         Notifications
                     </button>
