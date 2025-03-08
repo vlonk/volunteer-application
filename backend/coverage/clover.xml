@@ -1,57 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1741393939023" clover="3.2.0">
-  <project timestamp="1741393939023" name="All files">
-    <metrics statements="48" coveredstatements="41" conditionals="20" coveredconditionals="20" methods="6" coveredmethods="6" elements="74" coveredelements="67" complexity="0" loc="48" ncloc="48" packages="1" files="1" classes="1"/>
-    <file name="authController.js" path="/Users/ny/cosc 4353/kiwecare/volunteer-application/backend/controllers/authController.js">
-      <metrics statements="48" coveredstatements="41" conditionals="20" coveredconditionals="20" methods="6" coveredmethods="6"/>
-      <line num="1" count="1" type="stmt"/>
-      <line num="2" count="1" type="stmt"/>
-      <line num="3" count="1" type="stmt"/>
-      <line num="4" count="1" type="stmt"/>
-      <line num="6" count="1" type="stmt"/>
-      <line num="9" count="5" type="stmt"/>
-      <line num="10" count="5" type="stmt"/>
-      <line num="11" count="5" type="stmt"/>
-      <line num="14" count="0" type="stmt"/>
-      <line num="15" count="0" type="stmt"/>
-      <line num="20" count="1" type="stmt"/>
-      <line num="21" count="1" type="stmt"/>
-      <line num="24" count="0" type="stmt"/>
-      <line num="28" count="1" type="stmt"/>
-      <line num="29" count="3" type="stmt"/>
-      <line num="30" count="3" type="cond" truecount="4" falsecount="0"/>
-      <line num="31" count="1" type="stmt"/>
-      <line num="35" count="2" type="stmt"/>
-      <line num="38" count="2" type="stmt"/>
-      <line num="39" count="2" type="cond" truecount="2" falsecount="0"/>
-      <line num="40" count="1" type="stmt"/>
-      <line num="43" count="1" type="stmt"/>
-      <line num="44" count="1" type="stmt"/>
-      <line num="45" count="1" type="stmt"/>
-      <line num="47" count="1" type="stmt"/>
-      <line num="48" count="1" type="stmt"/>
-      <line num="55" count="1" type="stmt"/>
-      <line num="58" count="1" type="stmt"/>
-      <line num="61" count="1" type="stmt"/>
-      <line num="67" count="1" type="stmt"/>
-      <line num="73" count="0" type="stmt"/>
-      <line num="74" count="0" type="stmt"/>
-      <line num="78" count="1" type="stmt"/>
-      <line num="79" count="4" type="stmt"/>
-      <line num="80" count="4" type="cond" truecount="4" falsecount="0"/>
-      <line num="81" count="1" type="stmt"/>
-      <line num="85" count="3" type="stmt"/>
-      <line num="88" count="3" type="stmt"/>
-      <line num="89" count="3" type="cond" truecount="2" falsecount="0"/>
-      <line num="90" count="1" type="stmt"/>
-      <line num="93" count="2" type="stmt"/>
-      <line num="94" count="2" type="stmt"/>
-      <line num="95" count="2" type="cond" truecount="2" falsecount="0"/>
-      <line num="96" count="1" type="stmt"/>
-      <line num="100" count="1" type="stmt"/>
-      <line num="106" count="1" type="stmt"/>
-      <line num="112" count="0" type="stmt"/>
-      <line num="113" count="0" type="stmt"/>
-    </file>
+<coverage generated="1741396958336" clover="3.2.0">
+  <project timestamp="1741396958336" name="All files">
+    <metrics statements="94" coveredstatements="83" conditionals="26" coveredconditionals="26" methods="12" coveredmethods="12" elements="132" coveredelements="121" complexity="0" loc="94" ncloc="94" packages="2" files="3" classes="3"/>
+    <package name="controllers">
+      <metrics statements="87" coveredstatements="76" conditionals="26" coveredconditionals="26" methods="12" coveredmethods="12"/>
+      <file name="authController.js" path="C:\Computer Science\Software Design\volunteer-application\backend\controllers\authController.js">
+        <metrics statements="48" coveredstatements="41" conditionals="20" coveredconditionals="20" methods="6" coveredmethods="6"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="10" count="5" type="stmt"/>
+        <line num="11" count="5" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="30" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="39" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+        <line num="79" count="4" type="stmt"/>
+        <line num="80" count="4" type="cond" truecount="4" falsecount="0"/>
+        <line num="81" count="1" type="stmt"/>
+        <line num="85" count="3" type="stmt"/>
+        <line num="88" count="3" type="stmt"/>
+        <line num="89" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="90" count="1" type="stmt"/>
+        <line num="93" count="2" type="stmt"/>
+        <line num="94" count="2" type="stmt"/>
+        <line num="95" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="96" count="1" type="stmt"/>
+        <line num="100" count="1" type="stmt"/>
+        <line num="106" count="1" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+      </file>
+      <file name="profileController.js" path="C:\Computer Science\Software Design\volunteer-application\backend\controllers\profileController.js">
+        <metrics statements="39" coveredstatements="35" conditionals="6" coveredconditionals="6" methods="6" coveredmethods="6"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="10" type="stmt"/>
+        <line num="11" count="10" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="24" count="2" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="31" count="2" type="stmt"/>
+        <line num="32" count="4" type="stmt"/>
+        <line num="33" count="4" type="stmt"/>
+        <line num="34" count="4" type="stmt"/>
+        <line num="35" count="4" type="stmt"/>
+        <line num="37" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="49" count="2" type="stmt"/>
+        <line num="50" count="4" type="stmt"/>
+        <line num="51" count="4" type="stmt"/>
+        <line num="52" count="4" type="stmt"/>
+        <line num="53" count="4" type="stmt"/>
+        <line num="54" count="4" type="stmt"/>
+        <line num="56" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="62" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="63" count="2" type="stmt"/>
+        <line num="67" count="2" type="stmt"/>
+        <line num="68" count="2" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="76" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="routes">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="profileRoutes.js" path="C:\Computer Science\Software Design\volunteer-application\backend\routes\profileRoutes.js">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+      </file>
+    </package>
   </project>
 </coverage>

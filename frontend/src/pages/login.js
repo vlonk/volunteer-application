@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 
 function LoginForm() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,15 +16,18 @@ function LoginForm() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({username , password })
+        body: JSON.stringify({email , password })
       });
-
+      console.log(email);
       const data = await response.json();
 
       if (response.ok) {
         console.log('Login successful:', data);
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('userId', data.id);
+        console.log('Token stored:', localStorage.getItem('authToken'));
+        navigate('/home')
         // data.token has the JWT if you want to store it
-        // localStorage.setItem('token', data.token);
       } else {
         console.error('Login failed:', data.msg);
         alert(`Login failed: ${data.msg}`);
@@ -37,12 +42,12 @@ function LoginForm() {
     <form onSubmit={handleSubmit}>
       <h1>Login:</h1>
       <div>
-        <label htmlFor="username">Username:</label>
+        <label htmlFor="email">Email:</label>
         <input
           type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
       </div>

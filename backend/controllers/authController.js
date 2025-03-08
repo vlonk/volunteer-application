@@ -26,11 +26,11 @@ function writeUsers(usersObj) {
 }
 
 exports.signup = async (req, res) => {
-    const { email, password, role } = req.body;
+    const { email, password, name, address, address2, city, state, zip, number, emergency, skills, preferences, role, availability, eventhistoryId  } = req.body;
     if (!email || !password) {
         return res.status(400).json({ msg: 'Email and password are required.' });
     }
-
+    
     // read user data
     const usersObj = readUsers();
 
@@ -46,10 +46,22 @@ exports.signup = async (req, res) => {
     
         const newId = Date.now();
         const newUser = {
-            id: newId,
-            email,
+            id: newId.toString(),
+            name: name || '',
+            address: address || '',
+            address2: address2 || '',
+            city: city || '',
+            state: state || '',
+            zip: zip || '',
+            number: number || '',
+            emergency: emergency || '',
+            email: email || '',
+            skills: skills || [],
+            preferences: preferences || [],
+            role: role || 'user',
             password: hashedPassword,
-            role: role || 'user'
+            availability: availability || [],
+            eventhistoryId: eventhistoryId || `history_${newId}`
         };
 
     usersObj[newId] = newUser;
@@ -78,7 +90,7 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
-        return res.status(400).json({ msg: 'Username and password are required.' });
+        return res.status(400).json({ msg: 'email and password are required.' });
     }
 
     // read users
