@@ -13,7 +13,7 @@ const NavBar = () => {
 
     useEffect(() => {
         const fetchNotifications = async () => {
-            if (userId) {
+            if (isLoggedIn && userId) {
                 try {
                     const response = await fetch(`http://localhost:4000/api/user/${userId}/notifications`);
                     const data = await response.json();
@@ -22,13 +22,12 @@ const NavBar = () => {
                 } catch (error) {
                     console.error("Error fetching notifications:", error);
                 }
-            } else {
-                setNotifications([]); // Clear notifications if no user is logged in
             }
         };
 
         fetchNotifications();
-    }, [userId]); // Run when `userId` changes, i.e., after login or logout
+    }, [isLoggedIn, userId]); // Fetch notifications only when isLoggedIn or userId changes
+
 
     // Check if the user is logged in on mount and handle login state
     useEffect(() => {
