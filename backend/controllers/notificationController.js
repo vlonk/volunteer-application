@@ -4,7 +4,7 @@ const path = require("path");
 // Define the actual location of our data
 const notificationsFilePath = path.join(__dirname, "../data/notifications.json");
 
-// Read the notifications.json file, parse into JS object
+// Read the notifications.json file, parse it into a JS object
 const getNotifications = async () => {
     const data = await fs.readFile(notificationsFilePath, "utf8");
     return JSON.parse(data);
@@ -19,64 +19,74 @@ const saveNotifications = async (notifications) => {
 const getAllNotifications = async (req, res) => {
     try {
         const notifications = await getNotifications();
-        res.json(notifications);
+        const userId = req.params.userId;
+
+        // Filter notifications for the specific user
+        const userNotifications = notifications.notifications.filter(
+            (notification) => notification.userId === userId
+        );
+
+        if (userNotifications.length === 0) {
+            return res.status(404).json({ message: "No notifications found for this user" });
+        }
+
+        res.json(userNotifications);
     } catch (error) {
         res.status(500).json({ message: "Error fetching notifications", error });
     }
 };
 
-// Get a single notification
+// Get a single notification by its ID
 const getNotification = async (req, res) => {
     try {
         const notifications = await getNotifications();
-        const notification = notifications[req.params.id]; //Find user with 'id' from URL params
-  
-        if (!notification) {
-            return res.status(404).json({ message: "User not found" });
-        }
-  
-        res.json(notification);
-    } 
-    catch (error) {
-        res.status(500).json({ message: "Error reading user data", error });
-    }
-}
+        const notificationId = parseInt(req.params.id);
 
-// Delete a notification
+        // Find the notification by ID
+        const notification = notifications.notifications.find(
+            (n) => n.notificationId === notificationId
+        );
+
+        if (!notification) {
+            return res.status(404).json({ message: "Notification not found" });
+        }
+
+        res.json(notification);
+    } catch (error) {
+        res.status(500).json({ message: "Error reading notification data", error });
+    }
+};
+
+// Delete a notification by its ID
 const deleteNotification = async (req, res) => {
     try {
         let notifications = await getNotifications();
-        console.log("Fetched notifications:", notifications);  // Debugging step
 
-        // Ensure notifications is a valid object or array
-        if (!notifications) {
-            return res.status(500).json({ message: "Error: notifications data is null or undefined" });
+        // Ensure notifications is an array
+        if (!notifications || !Array.isArray(notifications.notifications)) {
+            return res.status(500).json({ message: "Error: notifications data is invalid" });
         }
 
         const notificationId = parseInt(req.params.id);
+
         if (isNaN(notificationId)) {
             return res.status(400).json({ message: "Invalid notification ID" });
         }
 
-        // Convert object to array if needed
-        if (!(notifications instanceof Array)) {
-            notifications = Object.values(notifications);
+        // Filter out the notification by ID
+        const updatedNotifications = notifications.notifications.filter(
+            (n) => n.notificationId !== notificationId
+        );
+
+        // If the notification is not found
+        if (updatedNotifications.length === notifications.notifications.length) {
+            return res.status(404).json({ message: "Notification not found" });
         }
-        console.log("Notifications array before deletion:", notifications);
 
-        // Filter out the deleted notification
-        const updatedNotifications = notifications.filter(n => n.id !== notificationId);
-        console.log("Notifications array after deletion:", updatedNotifications);
+        // Save the updated notifications back to the file
+        notifications.notifications = updatedNotifications;
+        await saveNotifications(notifications);
 
-        // Convert array back to object for saving
-        const notificationsObject = updatedNotifications.reduce((acc, notification) => {
-            acc[notification.id] = notification;
-            return acc;
-        }, {});
-
-        console.log("Saving notifications:", JSON.stringify(notificationsObject, null, 2));
-
-        await saveNotifications(notificationsObject);
         res.json({ message: "Notification deleted successfully" });
     } catch (error) {
         console.error("Error deleting notification:", error);
