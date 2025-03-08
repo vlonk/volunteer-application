@@ -87,11 +87,13 @@ const updateUserHistory = async (req, res) => {
       }
   
       // Update the user's history
-      history[userHistoryKey] = updatedHistory;
-  
+      history[userHistoryKey] = [
+        ...history[userHistoryKey], // Existing events
+        updatedHistory[updatedHistory.length - 1] // The newly added event
+      ];  
       // Save the updated history
-      await saveHistory(history); // Assuming saveHistory writes the data back to the file
-  
+      await fs.writeFile(historyFilePath, JSON.stringify(history, null, 2));
+        
       res.json({ message: "User history updated successfully", updatedHistory });
     } catch (error) {
       console.error("Error updating user history:", error);
