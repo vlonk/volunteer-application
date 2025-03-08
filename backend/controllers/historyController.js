@@ -42,7 +42,7 @@ const getAllEvents = async (req, res) => {
 
 //Get a specific event for a user by eventId
 const getEvent = async (req, res) => {
-    console.log("called get single event");
+    // console.log("called get single event");
     try {
         const users = await getUsers();
         const user = users[req.params.userId];
@@ -72,4 +72,34 @@ const getEvent = async (req, res) => {
     }
 };
 
-module.exports = { getAllEvents, getEvent };
+// Function to update user history
+const updateUserHistory = async (req, res) => {
+    try {
+      const userId = req.params.userId;  // Get user ID
+      const updatedHistory = req.body;   // Get updated history from request
+  
+      // Load the user's history (assuming history is in a JSON file)
+      const history = await getHistory();  // Assuming you have a method that fetches history.json
+  
+      const userHistoryKey = `history_${userId}`;
+      if (!history[userHistoryKey]) {
+        return res.status(404).json({ message: "User history not found" });
+      }
+  
+      // Update the user's history
+      history[userHistoryKey] = [
+        ...history[userHistoryKey], // Existing events
+        updatedHistory[updatedHistory.length - 1] // The newly added event
+      ];  
+      // Save the updated history
+      await fs.writeFile(historyFilePath, JSON.stringify(history, null, 2));
+        
+      res.json({ message: "User history updated successfully", updatedHistory });
+    } catch (error) {
+      console.error("Error updating user history:", error);
+      res.status(500).json({ message: "Error updating user history", error });
+    }
+  };
+  
+
+module.exports = { getAllEvents, getEvent, updateUserHistory };
