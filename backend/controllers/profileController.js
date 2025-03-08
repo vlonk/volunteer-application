@@ -18,7 +18,7 @@ const saveUsers = async (users) => {
 
 //get list of all users and attributes
 const getAllUsers = async (req, res) => {
-    console.log("called get all users")
+    //console.log("called get all users")
     try{
         const users = await getUsers();
         res.json(users); //Respond with users data as JSON

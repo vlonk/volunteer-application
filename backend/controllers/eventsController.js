@@ -36,7 +36,11 @@ const createEvent = async (req, res) => {
             newId++;
         }
 
-        events[newId] = newEvent;
+        events[newId] = { 
+            id: newId, 
+            volunteerId: [], // making empty list of volunteers
+            ...newEvent 
+        };
         await saveEvents(events);
 
         res.status(201).json({
