@@ -193,5 +193,23 @@
     ],
     "eventhistoryId": "history_1741400154744",
     "profilePicture": ""
+  },
+  "1741451094790": {
+    "id": "1741451094790",
+    "name": "",
+    "address": "",
+    "address2": "",
+    "city": "",
+    "state": "",
+    "zip": "",
+    "number": "",
+    "emergency": "",
+    "email": "tester@test.com",
+    "skills": [],
+    "preferences": [],
+    "role": "user",
+    "password": "$2b$10$wHRlkx6wnYikVqH7rpzNtO5gAZh/BFZ3PjDmJamfFxpcOOKqp4QC.",
+    "availability": [],
+    "eventhistoryId": "history_1741451094790"
   }
 }
