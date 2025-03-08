@@ -6,13 +6,21 @@ const notificationsFilePath = path.join(__dirname, "../data/notifications.json")
 
 // Read the notifications.json file, parse it into a JS object
 const getNotifications = async () => {
-    const data = await fs.readFile(notificationsFilePath, "utf8");
-    return JSON.parse(data);
+    try {
+        const data = await fs.readFile(notificationsFilePath, "utf8");
+        // Check if the data is empty, return an empty object if so
+        if (!data) {
+            return { notifications: [] };
+        }
+        return JSON.parse(data);
+    } catch (error) {
+        throw new Error("Error reading notifications data: " + error.message);
+    }
 };
 
-// Save info to notifications.json
 const saveNotifications = async (notifications) => {
-    await fs.writeFile(notificationsFilePath, JSON.stringify(notifications, null, 2));
+    const formattedNotifications = { notifications: notifications.notifications }; // Ensure this matches your test expectations
+    await fs.writeFile(notificationsFilePath, JSON.stringify(formattedNotifications, null, 2));
 };
 
 // Get list of all notifications
@@ -36,13 +44,15 @@ const getAllNotifications = async (req, res) => {
     }
 };
 
-// Get a single notification by its ID
 const getNotification = async (req, res) => {
     try {
         const notifications = await getNotifications();
-        const notificationId = parseInt(req.params.id);
+        const notificationId = parseInt(req.params.id, 10);
 
-        // Find the notification by ID
+        if (isNaN(notificationId)) {
+            return res.status(400).json({ message: "Invalid notification ID format" });
+        }
+
         const notification = notifications.notifications.find(
             (n) => n.notificationId === notificationId
         );
@@ -53,37 +63,30 @@ const getNotification = async (req, res) => {
 
         res.json(notification);
     } catch (error) {
-        res.status(500).json({ message: "Error reading notification data", error });
+        res.status(500).json({ message: "Error reading notification data", error: error.message });
     }
 };
+
 
 // Delete a notification by its ID
 const deleteNotification = async (req, res) => {
     try {
         let notifications = await getNotifications();
-
-        // Ensure notifications is an array
-        if (!notifications || !Array.isArray(notifications.notifications)) {
-            return res.status(500).json({ message: "Error: notifications data is invalid" });
-        }
-
-        const notificationId = parseInt(req.params.id);
+        const notificationId = parseInt(req.params.id, 10);
 
         if (isNaN(notificationId)) {
-            return res.status(400).json({ message: "Invalid notification ID" });
+            return res.status(400).json({ message: "Invalid notification ID format" });
         }
 
-        // Filter out the notification by ID
         const updatedNotifications = notifications.notifications.filter(
             (n) => n.notificationId !== notificationId
         );
 
-        // If the notification is not found
-        if (updatedNotifications.length === notifications.notifications.length) {
-            return res.status(404).json({ message: "Notification not found" });
+        if (!notifications || !Array.isArray(notifications.notifications)) {
+            return res.status(500).json({ message: "Error deleting notification", error: new Error("notifications data is invalid") });
         }
+        
 
-        // Save the updated notifications back to the file
         notifications.notifications = updatedNotifications;
         await saveNotifications(notifications);
 
