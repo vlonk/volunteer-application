@@ -1,56 +1,39 @@
-import React, { useEffect, useState } from "react";
-import NotificationBox from "../components/notificationBox";
+import { useEffect, useState } from "react";
+import NotificationBox from "../components/notificationBox"; // Assuming NotificationBox is your component to display individual notifications
 import "../styles/notifications.css";
 
 const NotificationsPage = () => {
   const [notifications, setNotifications] = useState([]);
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("userId"); // Get the user ID from localStorage
 
   useEffect(() => {
+    // Ensure user is logged in and userId is present
     if (!userId) {
-      console.error("User is not logged in.");
-      return;
+      console.error("User is not logged in or userId is missing");
+      return; // Prevent fetching if user is not logged in
     }
 
     fetch(`http://localhost:4000/api/user/${userId}/notifications`)
       .then((response) => response.json())
       .then((data) => {
-        setNotifications(data || []);
+        console.log("Fetched notifications:", data);
+        setNotifications(data || []); // If no notifications, set an empty array
       })
       .catch((error) => {
         console.error("Error fetching notifications:", error);
+        setNotifications([]); // Reset notifications on error
       });
-  }, [userId]);
-
-  const handleDeleteNotification = (notificationId) => {
-    fetch(`http://localhost:4000/api/notification/${notificationId}`, {
-      method: "DELETE",
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Remove the notification from the UI
-          setNotifications((prevNotifications) =>
-            prevNotifications.filter((notification) => notification.notificationId !== notificationId)
-          );
-        } else {
-          console.error("Failed to delete notification");
-        }
-      })
-      .catch((error) => {
-        console.error("Error deleting notification:", error);
-      });
-  };
+  }, [userId]); // Re-fetch if userId changes (although it should be static after login)
 
   return (
     <div className="notifications-container">
       <h2>Notifications</h2>
       <div className="notification-list">
         {notifications.length > 0 ? (
-          notifications.map((notification) => (
+          notifications.map((notification, index) => (
             <NotificationBox
-              key={notification.notificationId}
+              key={index} // Use index or unique ID like notification.notificationId
               notification={notification}
-              onDelete={handleDeleteNotification}
             />
           ))
         ) : (
