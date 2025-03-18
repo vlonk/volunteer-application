@@ -1,9 +1,16 @@
 const express = require('express')
 const cors = require('cors')
 require('dotenv').config()
+const mongoose = require('mongoose');
 
 // declaring express app itself. app is an express app
 const app = express()
+
+// Connect the database to the backend
+mongoose.connect(process.env.MONGODB_URI, {
+  })
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch((error) => console.error('MongoDB connection error:', error));
 
 //middleware goes here
 app.use(express.json());
