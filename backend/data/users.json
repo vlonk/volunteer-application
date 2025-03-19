@@ -191,8 +191,7 @@
       "2025-03-28T05:00:00.000Z",
       "2025-03-29T05:00:00.000Z"
     ],
-    "eventhistoryId": "history_1741400154744",
-    "profilePicture": ""
+    "eventhistoryId": "history_1741400154744"
   },
   "1741451094790": {
     "id": "1741451094790",
@@ -211,5 +210,23 @@
     "password": "$2b$10$wHRlkx6wnYikVqH7rpzNtO5gAZh/BFZ3PjDmJamfFxpcOOKqp4QC.",
     "availability": [],
     "eventhistoryId": "history_1741451094790"
+  },
+  "1742361541871": {
+    "id": "1742361541871",
+    "name": "",
+    "address": "",
+    "address2": "",
+    "city": "",
+    "state": "",
+    "zip": "",
+    "number": "",
+    "emergency": "",
+    "email": "example@test.com",
+    "skills": [],
+    "preferences": [],
+    "role": "user",
+    "password": "$2b$10$tGBfuIzqxdecsptmeuhFVuKn0CuRneDrZQabugeWugFonSuGrEqzi",
+    "availability": [],
+    "eventhistoryId": "history_1742361541871"
   }
 }
