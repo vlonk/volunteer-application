@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/events_management.css";
+import "../styles/profileStyles.css";
 
 //////  EXPANDING BOXES
 
@@ -40,6 +41,11 @@ const ExpandBoxEm = ({ title, content, id, onDelete, onEdit }) => { // id, onEdi
   );
 };
 
+///// list of skills for skills dropdown section
+
+
+
+
 //////// EVENTS CREATION
 
 const EventCreation = ({ closeEventCreation, onCreateEvent }) => {  // onCreateEvent added for the backend integration
@@ -47,15 +53,50 @@ const EventCreation = ({ closeEventCreation, onCreateEvent }) => {  // onCreateE
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
   const [urgency, setUrgency] = useState('');
-  const [skills, setSkills] = useState('');
-  const [contactInfo, setContactInfo] = useState('');
+  const [number, setNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [selectedSkills, setSelectedSkills] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
+
+  const [isVisible, setIsVisible] = useState(false); // state to toggle skill visibility
+
+  const skillsList = [  // same skill list as profiles
+    "Teamwork",
+    "Organization",
+    "Lifting Heavy",
+    "Medical Assistance",
+    "Animal Care",
+    "Construction/Handy/Repair Work",
+    "Childcare",
+    "Teaching",
+    "Coaching",
+    "IT Literacy",
+    "Coordination",
+    "Project Management",
+    "Gardening",
+    "Public Speaking",
+    "Cooking",
+    "Cleaning",
+    "Art",
+    "Music",
+  ];
+
+    // Handle checkbox change to update selected skills
+    const handleSkillChange = (skill) => {
+        setSelectedSkills((prev) =>
+            prev.includes(skill) ? prev.filter((item) => item !== skill) : [...prev, skill]
+        );
+    };
+
+    const handleToggleVisibility = () => {
+        setIsVisible((prev) => !prev); // toggling visibility on click
+    };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     try {
-      if (!title || !description || !date || !urgency || !skills || !contactInfo) {
+      if (!title || !description || !date || !urgency || !number || !email || selectedSkills.length === 0) {
         throw new Error("Please fill in all sections to create event.");
       }
 
@@ -64,8 +105,9 @@ const EventCreation = ({ closeEventCreation, onCreateEvent }) => {  // onCreateE
         description,
         date,
         urgency,
-        skills,
-        contactInfo
+        number,
+        email,
+        selectedSkills,
       }
       
 
@@ -142,25 +184,66 @@ const EventCreation = ({ closeEventCreation, onCreateEvent }) => {  // onCreateE
           />
         </div>
         <div>
-          <label htmlFor="skills">Skills:</label>
+          <label htmlFor="number">Number:</label>
           <input
             type="text"
-            id="skills"
-            value={skills}
-            onChange={(e) => setSkills(e.target.value)}
+            id="number"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
             required
           />
         </div>
         <div>
-          <label htmlFor="contactInfo">Contact Info:</label>
+          <label htmlFor="email">Email:</label>
           <input
             type="text"
-            id="contactInfo"
-            value={contactInfo}
-            onChange={(e) => setContactInfo(e.target.value)}
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
+        <div>
+            {/* the button to toggle the skills dropdown visibility */}
+        <label>
+          <div onClick={handleToggleVisibility} className="skills-toggle-button">
+            {isVisible ? 'Hide Skills' : 'Show Skills:'}
+          </div>
+        </label>
+
+            {/* Show this content only if isVisible is true */}
+            {isVisible && (
+                <div className="skills-container">
+                    <div className="skills-list">
+                        {skillsList.map((skill) => (
+                            <label key={skill} className="skill-item">
+                                <input
+                                    type="checkbox"
+                                    value={skill}
+                                    checked={selectedSkills.includes(skill)} // check if the skill is selected
+                                    onChange={() => handleSkillChange(skill)} // handle checkbox change
+                                />
+                                {skill}
+                            </label>
+                        ))}
+                    </div>
+                    
+                </div>
+            )}
+            {selectedSkills.length >= 0 && (
+                <div>
+                    <h4>Selected Skills:</h4>
+                    <ul>
+                        {selectedSkills.map((skill) => (
+                            <li key={skill}>{skill}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+            
+        </div>
+        
+        
 
         <button type="submit" className="signup-button">Create</button>
       </form>
@@ -188,14 +271,15 @@ const EventEdit = ({ event, closeEventEdit, onEditEvent }) => { // altered from 
   const [date, setDate] = useState(event.date);
   const [urgency, setUrgency] = useState(event.urgency);
   const [skills, setSkills] = useState(event.skills);
-  const [contactInfo, setContactInfo] = useState(event.contactInfo);
+  const [number, setNumber] = useState(event.number);
+  const [email, setEmail] = useState(event.email);
   const [showPopup, setShowPopup] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     try {
-      if (!title || !description || !date || !urgency || !skills || !contactInfo) {
+      if (!title || !description || !date || !urgency || !skills || !number || !email) {
         throw new Error("Please fill in all sections to edit event.");
       }
 
@@ -206,7 +290,8 @@ const EventEdit = ({ event, closeEventEdit, onEditEvent }) => { // altered from 
         date,
         urgency,
         skills,
-        contactInfo
+        number,
+        email
       };
 
       // passing the updated event to the parent
@@ -289,12 +374,22 @@ const EventEdit = ({ event, closeEventEdit, onEditEvent }) => { // altered from 
           />
         </div>
         <div>
-          <label htmlFor="contactInfo">Contact Info:</label>
+          <label htmlFor="number">Number:</label>
           <input
             type="text"
-            id="contactInfo"
-            value={contactInfo}
-            onChange={(e) => setContactInfo(e.target.value)}
+            id="number"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="email">Email:</label>
+          <input
+            type="text"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
