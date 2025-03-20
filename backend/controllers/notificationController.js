@@ -1,7 +1,7 @@
 const Notification = require('../models/notificationModel');
 
 // Get all notifications for a user
-exports.getNotificationsByUserId = async (req, res) => {
+const getAllNotifications = async (req, res) => {
   try {
     const { userId } = req.params;
     const notifications = await Notification.find({ userId });
@@ -17,7 +17,7 @@ exports.getNotificationsByUserId = async (req, res) => {
 };
 
 // Get a notification by ID
-exports.getNotificationById = async (req, res) => {
+const getNotification = async (req, res) => {
   try {
     const { id } = req.params;
     const notification = await Notification.findOne({ notificationId: id });
@@ -33,7 +33,7 @@ exports.getNotificationById = async (req, res) => {
 };
 
 // Delete a notification by ID
-exports.deleteNotification = async (req, res) => {
+const deleteNotification = async (req, res) => {
   try {
     const { id } = req.params;
     const deletedNotification = await Notification.findOneAndDelete({ notificationId: id });
@@ -47,3 +47,5 @@ exports.deleteNotification = async (req, res) => {
     res.status(500).json({ message: 'Error deleting notification', error: error.message });
   }
 };
+
+module.exports = { getAllNotifications, getNotification, deleteNotification };
