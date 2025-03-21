@@ -2,20 +2,17 @@ import { useState } from "react";
 import "../styles/notificationBox.css";
 
 const NotificationBox = ({ notification, onDelete }) => {
-  // For state of confirm delete popup; when false, it's not shown
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  // Function for when the user clicks the delete button to show the confirmation popup
   const handleDelete = () => {
-    setConfirmDelete(true);
+    setConfirmDelete(true);  // Show confirmation popup
   };
 
-  // Function for confirming or canceling deletion
   const confirmDeletion = (isConfirmed) => {
     if (isConfirmed) {
-      onDelete(notification.notificationId); // Pass the notificationId back to delete the notification
+      onDelete(notification.notificationid); // Call onDelete prop passed from parent
     }
-    setConfirmDelete(false); // Hide the confirmation popup
+    setConfirmDelete(false); // Hide confirmation popup
   };
 
   return (
