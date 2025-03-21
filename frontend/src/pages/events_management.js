@@ -100,10 +100,15 @@ const EventCreation = ({ closeEventCreation, onCreateEvent }) => {  // onCreateE
         throw new Error("Please fill in all sections to create event.");
       }
 
+      const formattedDate = new Date(date);
+      if (isNaN(formattedDate)){
+        throw new Error ("Invalid date format.");
+      }
+
       const newEvent = {
         title,
         description,
-        date,
+        date: formattedDate,
         urgency,
         number,
         email,
@@ -465,19 +470,31 @@ const EventsManagement = () => {
 
   // fetch events from backend
   useEffect(() => {
+    console.log("Fetching events")
     fetch("http://localhost:4000/api/events")
-      .then(response => response.json())
+      .then(response => {
+        console.log("Response status:", response.status); // Check response status
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      
       .then(data => {
         console.log("Fetched events:", data); // checking data struct
-        // since we are using json its an object, we need an array
+        
+        // If the data is an object with event IDs as keys, convert it to an array
         const eventsArray = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key]
+          id: key,  // use the key as the event's id
+          ...data[key]  // spread the rest of the event properties
         }));
-      setEvents(eventsArray); // set the state with the events array
+        
+        setEvents(eventsArray); // set the state with the events array
       })
       .catch(error => console.error("Error fetching events:", error));
   }, []);
+  
 
     // fetch users from backend, we need to get their name and skills for the volunteer matching
     useEffect(() => {
@@ -541,7 +558,7 @@ const EventsManagement = () => {
         // backend should have generated `id`
         setEvents(prevEvents => [...prevEvents, data]); // adding new event to the list
         setShowEventCreation(false);
-        window.location.reload(); // refreshing the list  
+        //window.location.reload(); // refreshing the list  
       })
 
       .catch(error => console.error("Error creating event:", error));
@@ -549,7 +566,7 @@ const EventsManagement = () => {
 
   const handleEditEvent = async (updatedEvent) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/events/${updatedEvent.id}`, { // fetching event based on given id
+      const response = await fetch(`http://localhost:4000/api/events/${updatedEvent._id}`, { // fetching event based on given id
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedEvent),
