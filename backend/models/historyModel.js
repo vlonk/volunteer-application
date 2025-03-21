@@ -6,12 +6,12 @@ const eventHistorySchema = new mongoose.Schema({
   events: [
     {
       eventId: { type: String, required: true },
-      eventName: { type: String, required: true },
-      eventDate: { type: String}, 
+      name: { type: String, required: true },
+      date: { type: String}, 
       location: { type: String, required: true },
       description: { type: String, required: true },
       status: { type: String, required: true },
-      category: { type: String, required: true }
+      skills: {type: [String], required: true}
     }
   ]
 });

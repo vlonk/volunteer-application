@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 const eventsSchema = new mongoose.Schema({
   title: String,
+  location: String,
   description: String,
   date: String,
   urgency: String,
@@ -13,8 +14,7 @@ const eventsSchema = new mongoose.Schema({
   state: String,
   zip: String,
   selectedSkills: [String],
+  volunteersList: {type: [String], default: []},  // this is initialized in the backend, does not get populated until people sign up
 },);
 
-const Event = mongoose.model('Event', eventsSchema);
-
-module.exports = Event;
+module.exports = mongoose.model('Event', eventsSchema);
