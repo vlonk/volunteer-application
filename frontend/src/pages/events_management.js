@@ -50,6 +50,7 @@ const ExpandBoxEm = ({ title, content, id, onDelete, onEdit }) => { // id, onEdi
 
 const EventCreation = ({ closeEventCreation, onCreateEvent }) => {  // onCreateEvent added for the backend integration
   const [title, setTitle] = useState('');
+  const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
   const [urgency, setUrgency] = useState('');
@@ -96,19 +97,16 @@ const EventCreation = ({ closeEventCreation, onCreateEvent }) => {  // onCreateE
     e.preventDefault();
 
     try {
-      if (!title || !description || !date || !urgency || !number || !email || selectedSkills.length === 0) {
+      if (!title || !location || !description || !date || !urgency || !number || !email || selectedSkills.length === 0) {
         throw new Error("Please fill in all sections to create event.");
       }
 
-      const formattedDate = new Date(date);
-      if (isNaN(formattedDate)){
-        throw new Error ("Invalid date format.");
-      }
 
       const newEvent = {
         title,
+        location,
         description,
-        date: formattedDate,
+        date,
         urgency,
         number,
         email,
@@ -155,6 +153,16 @@ const EventCreation = ({ closeEventCreation, onCreateEvent }) => {  // onCreateE
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="location">Location:</label>
+          <input
+            type="text"
+            id="location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
             required
           />
         </div>
@@ -272,6 +280,7 @@ const EventCreation = ({ closeEventCreation, onCreateEvent }) => {  // onCreateE
 
 const EventEdit = ({ event, closeEventEdit, onEditEvent }) => { // altered from the event creation
   const [title, setTitle] = useState(event.title);
+  const [location, setLocation] = useState(event.location);
   const [description, setDescription] = useState(event.description);
   const [date, setDate] = useState(event.date);
   const [urgency, setUrgency] = useState(event.urgency);
@@ -320,13 +329,14 @@ const handleToggleVisibility = () => {
     
 
     try {
-      if (!title || !description || !date || !urgency || selectedSkills.length === 0 || !number || !email) {
+      if (!title || !location || !description || !date || !urgency || selectedSkills.length === 0 || !number || !email) {
         throw new Error("Please fill in all sections to edit event.");
       }
 
       const updatedEvent = {
         ...event, // grabbing the info of the specified event
         title,
+        location,
         description,
         date,
         urgency,
@@ -371,6 +381,16 @@ const handleToggleVisibility = () => {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="location">Location:</label>
+          <input
+            type="text"
+            id="location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
             required
           />
         </div>
@@ -534,7 +554,7 @@ const EventsManagement = () => {
   // fetch events from backend
   useEffect(() => {
     console.log("Fetching events")
-    fetch("http://localhost:4000/api/events")
+    fetch("http://localhost:4000/api/all-events")
       .then(response => {
         console.log("Response status:", response.status); // Check response status
 
@@ -555,7 +575,7 @@ const EventsManagement = () => {
         
         setEvents(eventsArray); // set the state with the events array
       })
-      .catch(error => console.error("Error fetching events:", error));
+      .catch(error => console.error("Error fetching events in front:", error));
   }, []);
   
 
@@ -568,28 +588,43 @@ const EventsManagement = () => {
           // since we are using json its an object, we need an array
           const usersArray = Object.keys(data).map(key => ({
             id: key,
-            ...data[key]
+            ...data[key],
+            selectedSkills: Array.isArray(data[key].selectedSkills) ? data[key].selectedSkills : [] // Ensure it's an array
           }));
         setUsers(usersArray); // set the state with the events array
+        console.log("usersarray: ", usersArray);
         })
         .catch(error => console.error("Error fetching users:", error));
     }, []);  
   
     // fetch matching events based on the user's skills
+    // Fetch matching events based on the selected user's skills
     useEffect(() => {
-      if (selectedUser) {
-        // Assuming `selectedUser.skills` contains the skills to match with events
-        const matching = events.filter(event => 
-          event.skills.split(",").some(skill => selectedUser.skills.includes(skill))
-        );
-        setMatchingEvents(matching);
-      }
-    }, [selectedUser, events]);
-  
-    // reset selectedEvent when selectedUser changes
-    useEffect(() => {
-    setSelectedEvent(null); // clear the selected event when user changes
-    }, [selectedUser]);  // runs when selectedUser changes
+      if (!selectedUser || !selectedUser.id) return; // Ensure the selectedUser has an ID
+    
+      const fetchMatchingEvents = async () => {
+        try {
+          console.log("User ID to send: ", selectedUser.id); // Log the user ID being sent
+    
+          const response = await fetch(`http://localhost:4000/api/matching-events/${selectedUser.id}`);
+    
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+          }
+    
+          const data = await response.json();
+          console.log("Matching events from backend: ", data);
+          setMatchingEvents(data); // Update matching events with response data
+    
+        } catch (error) {
+          console.error("Error fetching matching events:", error); // Catch and log any errors
+        }
+      };
+    
+      fetchMatchingEvents(); // Call the function to fetch matching events
+    
+    }, [selectedUser]); // Run when selectedUser changes
+    
 
     // fetching history to find match with user
     useEffect(() => {
@@ -667,20 +702,23 @@ const EventsManagement = () => {
       alert("Please select a user and event.");
       return;
     }
+    console.log("Selected event: ", selectedEvent);
+    console.log("Selected user: ", selectedUser);
   
     const updatedHistory = [
       ...(history[`history_${selectedUser.id}`] || []),
       {
-        eventId: selectedEvent.id,
+        eventId: selectedEvent._id,
         name: selectedEvent.title,
-        dateAttended: new Date().toISOString(),
+        date: new Date().toISOString(),  // this was date attended, only changed for it to work in schema
         location: selectedEvent.location,
         description: selectedEvent.description,
-        urgency: selectedEvent.urgency,
-        skills: selectedEvent.skills,
+        // urgency: selectedEvent.urgency, marked this out for now was not in history schema
+        skills: selectedEvent.selectedSkills, //renamed to category for schema
         status: "Pending",
       },
     ];
+    console.log("event history: ", updatedHistory);
   
     // 1️⃣ Updating user's event history
     fetch(`http://localhost:4000/api/user/${selectedUser.id}/events`, {
@@ -703,7 +741,7 @@ const EventsManagement = () => {
       });
   
     // 2️⃣ Updating the event to track the volunteer
-    fetch(`http://localhost:4000/api/events/${selectedEvent.id}`, {
+    fetch(`http://localhost:4000/api/events/${selectedEvent._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -723,7 +761,7 @@ const EventsManagement = () => {
           window.alert(""); // Clear alert after 2 seconds
         }, 2000);
   
-        window.location.reload();
+        //window.location.reload();
       })
       .catch((error) => {
         console.error("Error updating event:", error);
