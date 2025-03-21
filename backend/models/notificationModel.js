@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const notificationSchema = new mongoose.Schema({
-  notificationid: {
-    type: String,        // Unique notification identifier (can be a string)
-    required: true,
-    unique: true
-  },
+  // notificationid: {
+  //   type: String,        // Unique notification identifier (can be a string)
+  //   required: true,
+  //   unique: true
+  // },
   eventid: {
     type: String,        // Event ID the notification is related to
     required: true
