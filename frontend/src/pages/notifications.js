@@ -25,15 +25,36 @@ const NotificationsPage = () => {
       });
   }, [userId]); // Re-fetch if userId changes (although it should be static after login)
 
+  // Handle deleting a notification
+  const handleDeleteNotification = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:4000/api/notification/${id}`, {
+        method: "DELETE", // DELETE request to server
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete notification");
+      }
+
+      // Remove deleted notification from state
+      setNotifications((prevNotifications) =>
+        prevNotifications.filter((notification) => notification.notificationid !== id)
+      );
+    } catch (error) {
+      console.error("Error deleting notification:", error);
+    }
+  };
+
   return (
     <div className="notifications-container">
       <h2>Notifications</h2>
       <div className="notification-list">
         {notifications.length > 0 ? (
-          notifications.map((notification, index) => (
+          notifications.map((notification) => (
             <NotificationBox
-              key={index} // Use index or unique ID like notification.notificationId
+              key={notification.notificationid} // Use unique ID like notification.notificationId
               notification={notification}
+              onDelete={handleDeleteNotification}  // Pass the onDelete function as a prop
             />
           ))
         ) : (
