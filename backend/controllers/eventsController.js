@@ -21,7 +21,6 @@ const getEvents = async () => {
         console.log("Fetching events from the database...");
 
         const events = await Event.find(); // Assuming you are using Mongoose
-        console.log("Events fetched:", events); // Log the fetched events
 
         if (!events || events.length === 0) {
             console.log("No events found.");
@@ -42,7 +41,6 @@ const createEvent = async (req, res) => {
         const newEvent = req.body; // new event data from request body
         delete newEvent.id;
 
-        console.log("Incoming data:" ,newEvent);
         const event = new Event(newEvent);
         await event.save();
 
@@ -66,7 +64,6 @@ const getMatchingEvents = async (req, res) => {
 
         // Fetch user by custom ID
         const user = await User.findOne({ id: req.params.id });
-        console.log('User found:', user);
 
         if (!user) {
             console.log('User not found with ID:', req.params.id);
@@ -74,7 +71,6 @@ const getMatchingEvents = async (req, res) => {
         }
 
         const userSkills = user.skills;
-        console.log('User Skills:', userSkills); // Log the skills of the user
 
         if (!Array.isArray(userSkills)) {
             return res.status(500).json({ message: 'User skills are not in the expected array format' });
@@ -82,8 +78,6 @@ const getMatchingEvents = async (req, res) => {
 
         // Fetch events
         const events = await getEvents();
-        console.log('Events fetched in getMatchingEvents:', events); // Log the events
-
         if (!events || events.length === 0) {
             return res.status(404).json({ message: 'No events available' });
         }
@@ -92,7 +86,6 @@ const getMatchingEvents = async (req, res) => {
         const matchingEvents = events.filter(event =>
             userSkills.some(skill => event.selectedSkills && event.selectedSkills.includes(skill))
         );
-        console.log('Matching Events:', matchingEvents); // Log the matching events
 
         if (matchingEvents.length === 0) {
             return res.status(404).json({ message: 'No matching events found' });
@@ -106,30 +99,63 @@ const getMatchingEvents = async (req, res) => {
 };
 
 
-//when updating events from mongo
 const updateEvent = async (req, res) => {
     try {
-        const eventId = req.params.id;  // get the eventId from req
-        const updatedData = req.body; //get updated data from request to later be sent to response
+      const eventId = req.params.id; // Get the eventId from req
+      const updatedData = req.body;  // Get updated data from request
+      console.log("eventid: ", eventId);
+      console.log("updatedata: ", updatedData);
   
-        const event = await Event.findById(eventId); // fetching the event by Id we already have
-        if (!event) {
-            return res.status(404).json({ message: "Event not found" });
+      const event = await Event.findById(eventId); // Fetch the event by Id
+      if (!event) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+  
+    // Handle only the volunteer list update separately
+    if (updatedData.volunteersList) {
+        if (!Array.isArray(updatedData.volunteersList)) {
+          return res.status(400).json({ message: "Invalid volunteer list format" });
         }
+  
+        if (!Array.isArray(event.volunteersList)) {
+          event.volunteersList = [];
+        }
+  
+        console.log("Before update:", event.volunteersList);
+  
+        // Ensure no duplicate IDs are added
+        event.volunteersList = [...new Set([...event.volunteersList, ...updatedData.volunteersList])];
+  
+        console.log("After update:", event.volunteersList);
+  
+        // Mark the field as modified
+        event.markModified("volunteersList");
+  
+        await event.save();
         
-        //loop through keys in updated data and update correct object
-        Object.keys(updatedData).forEach((key) => {
+        // Return immediately after updating the volunteer list
+        console.log("Updated Event:", event);  // Log updated event before sending response
+        return res.json({ message: "Volunteer list updated successfully", event });
+      }
+
+      // Loop through other keys in updatedData and update them
+      Object.keys(updatedData).forEach((key) => {
+        if (key !== 'volunteerList') {  // Don't overwrite volunteerList again
           event[key] = updatedData[key];
-    });
-        //success
-        await event.save();     // functionality from mongo
-        res.json({ message: "Event updated successfully", event});
-    } 
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error updating event", error });
+        }
+      });
+  
+      // Save the updated event
+      await event.save();
+      res.json({ message: "Event updated successfully", event });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error updating event", error });
     }
   };
+  
+
+
 
 // Delete an event
 const deleteEvent = async (req, res) => {

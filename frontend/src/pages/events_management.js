@@ -747,26 +747,26 @@ const EventsManagement = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        ...selectedEvent,
-        volunteerId: selectedUser.id, // Assigning user to event
+        volunteersList: [selectedUser.id], // Only send the new volunteer ID
       }),
     })
-      .then((response) => response.json())
-      .then((updatedEvent) => {
-        console.log("Event updated:", updatedEvent);
-        setSelectedEvent(updatedEvent); // Update state
-        alert("Volunteer confirmed!");
-  
-        setTimeout(() => {
-          window.alert(""); // Clear alert after 2 seconds
-        }, 2000);
-  
-        //window.location.reload();
-      })
-      .catch((error) => {
-        console.error("Error updating event:", error);
-      });
-  };
+    .then((response) => response.json())
+    .then((updatedEvent) => {
+      console.log("Event updated:", updatedEvent);
+    
+      // Update only the volunteer list while preserving other event properties
+      // setSelectedEvent((prevEvent) => ({
+      //   ...prevEvent,
+      //   volunteerList: updatedEvent.volunteerList,
+      // }));
+    
+      alert("Volunteer confirmed!");
+    })
+    .catch((error) => {
+      console.error("Error updating event:", error);
+    });
+    
+    }    
   
 
 
