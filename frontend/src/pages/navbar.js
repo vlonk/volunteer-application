@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import "../styles/home.css";
 import kiWe from "../assets/kiWe.png";
 import { FaBell, FaUserCircle } from "react-icons/fa";
-import NotificationBox from "../components/notificationBox";
 
 const NavBar = () => {
   const navigate = useNavigate();
