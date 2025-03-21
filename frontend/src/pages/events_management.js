@@ -546,6 +546,7 @@ const EventsManagement = () => {
     }, [selectedUser]);
 
   const handleCreateEvent = (newEvent) => {
+    delete newEvent.id;
     fetch("http://localhost:4000/api/events", {
       method: "POST",
       headers: {
@@ -555,6 +556,7 @@ const EventsManagement = () => {
     })
       .then(response => response.json())
       .then(data => {
+        console.log("Event to send: ", data)
         // backend should have generated `id`
         setEvents(prevEvents => [...prevEvents, data]); // adding new event to the list
         setShowEventCreation(false);

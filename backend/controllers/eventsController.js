@@ -17,6 +17,8 @@ const getEvents = async (req, res) => {
 const createEvent = async (req, res) => {
     try {
         const newEvent = req.body; // new event data from request body
+        delete newEvent.id;
+
         console.log("Incoming data:" ,newEvent);
         const event = new Events(newEvent);
         await event.save();
