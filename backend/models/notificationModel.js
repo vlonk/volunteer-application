@@ -1,33 +1,39 @@
 const mongoose = require('mongoose');
 
 const notificationSchema = new mongoose.Schema({
-  // notificationid: {
-  //   type: String,        // Unique notification identifier (can be a string)
-  //   required: true,
-  //   unique: true
-  // },
+  notificationid: {
+    type: String,
+    unique: true,
+  },
   eventid: {
-    type: String,        // Event ID the notification is related to
+    type: String,
     required: true
   },
   userid: {
-    type: String,        // User ID that the notification belongs to
+    type: String,
     required: true
   },
   message: {
-    type: String,        // Notification message
+    type: String,
     required: true
   },
   status: {
-    type: String,        // Status (Unread or Read)
+    type: String,
     enum: ['Unread', 'Read'],
     default: 'Unread'
   },
   timestamp: {
-    type: Date,          // Timestamp when notification was created
+    type: Date,
     required: true
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Notification', notificationSchema);
+// Pre-save middleware to generate a unique notificationid
+notificationSchema.pre('save', async function (next) {
+  if (!this.notificationid) {
+    this.notificationid = new mongoose.Types.ObjectId().toString(); // Generate a unique string ID
+  }
+  next();
+});
 
+module.exports = mongoose.model('Notification', notificationSchema);
