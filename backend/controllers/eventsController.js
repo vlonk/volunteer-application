@@ -84,12 +84,11 @@ const deleteEvent = async (req, res) => {
     try {
         const eventId = req.params.id;
 
-        const event = await Events.findById(eventId);
-        if (!event){
+        const result = await Events.findByIdAndDelete(eventId); //deletes event by id, function from mongo
+        if (!result){
             return res.status(404).json({message: "Event not found."});
         }
 
-        await event.remove();   // functionality from mongo
         res.json({ message: "Event deleted successfully" });
     } catch (error) {
         res.status(500).json({ message: "Error deleting event", error });

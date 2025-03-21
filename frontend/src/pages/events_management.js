@@ -585,6 +585,7 @@ const EventsManagement = () => {
 
   // function to delete event via backend
   const handleDeleteEvent = (id) => {
+    console.log("Event to be deleted: ", id)
     fetch(`http://localhost:4000/api/events/${id}`, {
       method: "DELETE",
     })
@@ -692,7 +693,7 @@ const EventsManagement = () => {
             key = {event.id}
             title = {event.title}
             content = {`Info: ${event.description}`}
-            id = {event.id} // after fetching events from backend we get the id to work with the edit and delete buttons
+            id = {event._id} // after fetching events from backend we get the id to work with the edit and delete buttons
             onDelete = {handleDeleteEvent}  // passing delete functionality to the box component
             onEdit = {() => setEditEvent(event)}
             />
