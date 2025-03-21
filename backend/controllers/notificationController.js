@@ -3,8 +3,9 @@ const Notification = require('../models/notificationModel');
 // Get all notifications for a user
 const getAllNotifications = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const notifications = await Notification.find({ userId });
+    const { userid } = req.params;  // Get userId from params
+    
+    const notifications = await Notification.find({ userid });
 
     if (!notifications.length) {
       return res.status(404).json({ message: 'No notifications found for this user' });
@@ -16,11 +17,11 @@ const getAllNotifications = async (req, res) => {
   }
 };
 
-// Get a notification by ID
+// Get a notification by its ID
 const getNotification = async (req, res) => {
   try {
     const { id } = req.params;
-    const notification = await Notification.findOne({ notificationId: id });
+    const notification = await Notification.findOne({ notificationid: id });
 
     if (!notification) {
       return res.status(404).json({ message: 'Notification not found' });
@@ -36,7 +37,7 @@ const getNotification = async (req, res) => {
 const deleteNotification = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedNotification = await Notification.findOneAndDelete({ notificationId: id });
+    const deletedNotification = await Notification.findOneAndDelete({ notificationid: id });
 
     if (!deletedNotification) {
       return res.status(404).json({ message: 'Notification not found' });
