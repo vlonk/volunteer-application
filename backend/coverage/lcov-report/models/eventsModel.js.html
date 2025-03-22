@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for models/userModel.js</title>
+    <title>Code coverage report for models/eventsModel.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">models</a> userModel.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">models</a> eventsModel.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -83,12 +83,10 @@
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
+<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -104,34 +102,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const mongoose = require("mongoose");
 &nbsp;
-const userSchema = new mongoose.Schema({
-  id: { type: String, required: true, unique: true },
-  name: String,
+&nbsp;
+const eventsSchema = new mongoose.Schema({
+  title: String,
+  location: String,
+  description: String,
+  date: String,
+  urgency: String,
+  number: String,
+  email: String, 
   address: String,
-  address2: String,
   city: String,
   state: String,
   zip: String,
-  number: String,
-  emergency: String,
-  email: String,
-  skills: [String], 
-  preferences: [String], 
-  role: String,
-  password: String,
-  availability: [String], 
-  eventhistoryId: String,
-});
+  selectedSkills: [String],
+  volunteersList: {type: [String], default: []},  // this is initialized in the backend, does not get populated until people sign up
+},);
 &nbsp;
-module.exports = mongoose.model("User", userSchema);
-&nbsp;
+module.exports = mongoose.model('Event', eventsSchema);
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->

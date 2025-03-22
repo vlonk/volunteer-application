@@ -1,179 +1,146 @@
-const fs = require("fs").promises;
-const path = require("path");
 const { getAllEvents, getEvent, updateUserHistory } = require("../controllers/historyController");
-const userFilePath = path.join(__dirname, "../data/users.json");
-const historyFilePath = path.join(__dirname, "../data/history.json");
+const User = require("../models/userModel");
+const EventHistory = require("../models/historyModel");
 
-// Mock the fs module
-jest.mock("fs", () => ({
-    promises: {
-        readFile: jest.fn(),
-        writeFile: jest.fn(),
-    }
-}));
+jest.mock("../models/userModel");
+jest.mock("../models/historyModel");
 
-describe("HistoryController", () => {
+describe("Event Controller Tests", () => {
+    let req, res;
+
+    beforeEach(() => {
+        req = { params: {}, body: {} };
+        res = {
+            json: jest.fn(),
+            status: jest.fn().mockReturnThis(),
+        };
+        jest.clearAllMocks();
+    });
+
     describe("getAllEvents", () => {
-        it("should return user history successfully", async () => {
-            // Mocking the users.json and history.json data
-            const mockUsers = { "1": { eventhistoryId: "history_1" } };
-            const mockHistory = { "history_1": [{ eventId: "event_1", eventName: "Test Event" }] };
-            
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockUsers)); // Mock getUsers
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockHistory)); // Mock getHistory
-            
-            const req = { params: { userId: "1" } };
-            const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-            
+        it("should return all events for a valid user", async () => {
+            req.params.userId = "123";
+
+            const mockUser = { id: "123", eventhistoryId: "456" };
+            const mockHistory = { id: "456", events: [{ eventId: "1", name: "Test Event" }] };
+
+            User.findOne.mockResolvedValue(mockUser);
+            EventHistory.findOne.mockResolvedValue(mockHistory);
+
             await getAllEvents(req, res);
-            
-            expect(res.json).toHaveBeenCalledWith(mockHistory.history_1);
-            expect(res.status).not.toHaveBeenCalledWith(404);
+
+            expect(User.findOne).toHaveBeenCalledWith({ id: "123" });
+            expect(EventHistory.findOne).toHaveBeenCalledWith({ id: "456" });
+            expect(res.json).toHaveBeenCalledWith(mockHistory.events);
         });
 
         it("should return 404 if user is not found", async () => {
-            const mockUsers = {};
-            const mockHistory = { "history_1": [] };
-            
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockUsers)); // Mock getUsers
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockHistory)); // Mock getHistory
-            
-            const req = { params: { userId: "99" } };
-            const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-            
+            req.params.userId = "123";
+            User.findOne.mockResolvedValue(null);
+
             await getAllEvents(req, res);
-            
+
             expect(res.status).toHaveBeenCalledWith(404);
             expect(res.json).toHaveBeenCalledWith({ message: "User not found" });
         });
 
         it("should return 404 if user history is not found", async () => {
-            const mockUsers = { "1": { eventhistoryId: "history_2" } };
-            const mockHistory = { "history_1": [] };
-            
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockUsers)); // Mock getUsers
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockHistory)); // Mock getHistory
-            
-            const req = { params: { userId: "1" } };
-            const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-            
+            req.params.userId = "123";
+            User.findOne.mockResolvedValue({ id: "123", eventhistoryId: "456" });
+            EventHistory.findOne.mockResolvedValue(null);
+
             await getAllEvents(req, res);
-            
+
             expect(res.status).toHaveBeenCalledWith(404);
             expect(res.json).toHaveBeenCalledWith({ message: "User history not found" });
         });
 
-        it("should return 500 if there is an error fetching user events", async () => {
-            fs.readFile.mockRejectedValueOnce(new Error("File read error"));
-            
-            const req = { params: { userId: "1" } };
-            const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-            
+        it("should return 500 on error", async () => {
+            req.params.userId = "123";
+            User.findOne.mockRejectedValue(new Error("Database error"));
+
             await getAllEvents(req, res);
-            
+
             expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ message: "Error fetching user events", error: expect.any(Error) });
+            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ message: "Error fetching user events" }));
         });
     });
 
     describe("getEvent", () => {
-        it("should return a specific event for a user", async () => {
-            const mockUsers = { "1": { eventhistoryId: "history_1" } };
-            const mockHistory = { "history_1": [{ eventId: "event_1", eventName: "Test Event" }] };
-            
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockUsers)); // Mock getUsers
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockHistory)); // Mock getHistory
-            
-            const req = { params: { userId: "1", eventId: "event_1" } };
-            const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-            
+        it("should return the requested event", async () => {
+            req.params = { userId: "123", eventId: "1" };
+
+            const mockUser = { id: "123", eventhistoryId: "456" };
+            const mockHistory = { id: "456", events: [{ eventId: "1", name: "Test Event" }] };
+
+            User.findOne.mockResolvedValue(mockUser);
+            EventHistory.findOne.mockResolvedValue(mockHistory);
+
             await getEvent(req, res);
-            
-            expect(res.json).toHaveBeenCalledWith(mockHistory.history_1[0]);
+
+            expect(res.json).toHaveBeenCalledWith(mockHistory.events[0]);
         });
 
         it("should return 404 if event is not found", async () => {
-            const mockUsers = { "1": { eventhistoryId: "history_1" } };
-            const mockHistory = { "history_1": [{ eventId: "event_1", eventName: "Test Event" }] };
-            
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockUsers)); // Mock getUsers
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockHistory)); // Mock getHistory
-            
-            const req = { params: { userId: "1", eventId: "event_2" } };
-            const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-            
+            req.params = { userId: "123", eventId: "99" };
+
+            User.findOne.mockResolvedValue({ id: "123", eventhistoryId: "456" });
+            EventHistory.findOne.mockResolvedValue({ id: "456", events: [{ eventId: "1", name: "Test Event" }] });
+
             await getEvent(req, res);
-            
+
             expect(res.status).toHaveBeenCalledWith(404);
             expect(res.json).toHaveBeenCalledWith({ message: "Event not found" });
         });
 
-        it("should return 404 if user is not found", async () => {
-            const mockUsers = {};
-            const mockHistory = { "history_1": [] };
-            
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockUsers)); // Mock getUsers
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockHistory)); // Mock getHistory
-            
-            const req = { params: { userId: "99", eventId: "event_1" } };
-            const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-            
+        it("should return 500 on error", async () => {
+            req.params = { userId: "123", eventId: "1" };
+            User.findOne.mockRejectedValue(new Error("Database error"));
+
             await getEvent(req, res);
-            
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ message: "User not found" });
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ message: "Error fetching event" }));
         });
     });
 
     describe("updateUserHistory", () => {
-        it("should update user history successfully", async () => {
-            const mockUsers = { "1": { eventhistoryId: "history_1" } };
-            const mockHistory = { "history_1": [{ eventId: "event_1", eventName: "Test Event" }] };
-            const updatedHistory = [{ eventId: "event_2", eventName: "New Event" }];
-            
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockUsers)); // Mock getUsers
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockHistory)); // Mock getHistory
-            fs.writeFile.mockResolvedValueOnce(); // Mock writeFile
-            
-            const req = { params: { userId: "1" }, body: updatedHistory };
-            const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-            
+        it("should add an event to user history", async () => {
+            req.params.userId = "123";
+            req.body = [{ eventId: "2", name: "New Event" }];
+
+            const mockUser = { id: "123", eventhistoryId: "456" };
+            const mockHistory = { id: "456", events: [{ eventId: "1", name: "Test Event" }], save: jest.fn() };
+
+            User.findOne.mockResolvedValue(mockUser);
+            EventHistory.findOne.mockResolvedValue(mockHistory);
+
             await updateUserHistory(req, res);
-            
-            expect(res.json).toHaveBeenCalledWith({ message: "User history updated successfully", updatedHistory });
+
+            expect(mockHistory.events).toContainEqual(req.body[0]);
+            expect(mockHistory.save).toHaveBeenCalled();
+            expect(res.json).toHaveBeenCalledWith({ message: "User history updated successfully", updatedHistory: req.body });
         });
 
-        it("should return 404 if user history is not found", async () => {
-            const mockUsers = { "1": { eventhistoryId: "history_2" } };
-            const mockHistory = { "history_1": [] };
-            
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockUsers)); // Mock getUsers
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockHistory)); // Mock getHistory
-            
-            const req = { params: { userId: "1" }, body: [{ eventId: "event_2", eventName: "New Event" }] };
-            const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-            
+        it("should return 404 if user is not found", async () => {
+            req.params.userId = "123";
+            User.findOne.mockResolvedValue(null);
+
             await updateUserHistory(req, res);
-            
+
             expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ message: "User history not found" });
+            expect(res.json).toHaveBeenCalledWith({ message: "User not found" });
         });
 
-        it("should return 500 if there is an error updating user history", async () => {
-            const mockUsers = { "1": { eventhistoryId: "history_1" } };
-            const mockHistory = { "history_1": [{ eventId: "event_1", eventName: "Test Event" }] };
-            
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockUsers)); // Mock getUsers
-            fs.readFile.mockResolvedValueOnce(JSON.stringify(mockHistory)); // Mock getHistory
-            fs.writeFile.mockRejectedValueOnce(new Error("Write error")); // Mock writeFile error
-            
-            const req = { params: { userId: "1" }, body: [{ eventId: "event_2", eventName: "New Event" }] };
-            const res = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-            
+        it("should return 500 on error", async () => {
+            req.params.userId = "123";
+            req.body = [{ eventId: "2", name: "New Event" }];
+            User.findOne.mockRejectedValue(new Error("Database error"));
+
             await updateUserHistory(req, res);
-            
+
             expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ message: "Error updating user history", error: expect.any(Error) });
+            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ message: "Error updating user history" }));
         });
     });
 });
