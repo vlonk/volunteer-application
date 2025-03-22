@@ -5,34 +5,37 @@ const User = require('../models/userModel'); // Import the User model
 //read the events from the db
 
 const getAllEvents = async (req, res) => {
-    try{
-        const events = await Event.find();
-        res.status(200).json(events); // Send events as JSON response
-        return events;
-
-    } catch (error){
-        console.error("Error fetching events:", error);
-        res.status(500).send("Error fetching events from DB");    }
-
-};
+    try {
+      const events = await Event.find(); // Use `.lean()` for better performance
+      if (!events || events.length === 0) {
+        return res.status(404).json({ message: "No events found" });
+      }
+      res.status(200).json(events);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching events", error: error.message });
+    }
+  };
+  
 // works for matching events
 const getEvents = async () => {
     try {
-        console.log("Fetching events from the database...");
+        const events = await Event.find(); // Fetch all events from the database
 
-        const events = await Event.find(); // Assuming you are using Mongoose
-
+        if (!Array.isArray(events)) {
+            return res.status(500).json({ message: "Error fetching events", error: "Invalid event data" });
+          }
+        // If no events are found, log the result and return an empty array
         if (!events || events.length === 0) {
-            console.log("No events found.");
-            return [];
+            return { message: "No events found", events: [] };
         }
 
-        return events;
+        return { message: "Events fetched successfully", events };
     } catch (error) {
-        console.error("Error fetching events:", error); // Log any errors from fetching events
-        throw new Error("Error fetching events");
+        // Log the error and throw an object that can be handled by the caller
+        throw new Error("Error fetching events from DB: " + error.message);
     }
 };
+
 
 
 // for creating events
@@ -51,7 +54,6 @@ const createEvent = async (req, res) => {
             event: newEvent,
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: "Error creating event", error });
     }
 };
@@ -66,7 +68,6 @@ const getMatchingEvents = async (req, res) => {
         const user = await User.findOne({ id: req.params.id });
 
         if (!user) {
-            console.log('User not found with ID:', req.params.id);
             return res.status(404).json({ message: 'User not found' });
         }
 
@@ -78,6 +79,10 @@ const getMatchingEvents = async (req, res) => {
 
         // Fetch events
         const events = await getEvents();
+        // if (!Array.isArray(events)) {
+        //     console.error("Error: events is not an array", events);
+        //     return res.status(500).json({ message: "Error fetching events", error: "Invalid event data" });
+        // }
         if (!events || events.length === 0) {
             return res.status(404).json({ message: 'No events available' });
         }
@@ -101,56 +106,21 @@ const getMatchingEvents = async (req, res) => {
 
 const updateEvent = async (req, res) => {
     try {
-      const eventId = req.params.id; // Get the eventId from req
-      const updatedData = req.body;  // Get updated data from request
-      console.log("eventid: ", eventId);
-      console.log("updatedata: ", updatedData);
+      console.log("eventid:", req.params.id);
+      console.log("updatedata:", req.body);
   
-      const event = await Event.findById(eventId); // Fetch the event by Id
-      if (!event) {
+      const updatedEvent = await Event.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  
+      if (!updatedEvent) {
         return res.status(404).json({ message: "Event not found" });
       }
   
-    // Handle only the volunteer list update separately
-    if (updatedData.volunteersList) {
-        if (!Array.isArray(updatedData.volunteersList)) {
-          return res.status(400).json({ message: "Invalid volunteer list format" });
-        }
-  
-        if (!Array.isArray(event.volunteersList)) {
-          event.volunteersList = [];
-        }
-  
-        console.log("Before update:", event.volunteersList);
-  
-        // Ensure no duplicate IDs are added
-        event.volunteersList = [...new Set([...event.volunteersList, ...updatedData.volunteersList])];
-  
-        console.log("After update:", event.volunteersList);
-  
-        // Mark the field as modified
-        event.markModified("volunteersList");
-  
-        await event.save();
-        
-        // Return immediately after updating the volunteer list
-        console.log("Updated Event:", event);  // Log updated event before sending response
-        return res.json({ message: "Volunteer list updated successfully", event });
-      }
-
-      // Loop through other keys in updatedData and update them
-      Object.keys(updatedData).forEach((key) => {
-        if (key !== 'volunteerList') {  // Don't overwrite volunteerList again
-          event[key] = updatedData[key];
-        }
+      res.json({
+        message: "Event updated successfully",
+        event: updatedEvent,
       });
-  
-      // Save the updated event
-      await event.save();
-      res.json({ message: "Event updated successfully", event });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error updating event", error });
+      res.status(500).json({ message: "Error updating event", error: error.message });
     }
   };
   

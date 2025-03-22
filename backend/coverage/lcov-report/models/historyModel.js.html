@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for models/userModel.js</title>
+    <title>Code coverage report for models/historyModel.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">models</a> userModel.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">models</a> historyModel.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -85,11 +85,9 @@
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -105,32 +103,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const mongoose = require("mongoose");
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const mongoose = require('mongoose');
 &nbsp;
-const userSchema = new mongoose.Schema({
-  id: { type: String, required: true, unique: true },
-  name: String,
-  address: String,
-  address2: String,
-  city: String,
-  state: String,
-  zip: String,
-  number: String,
-  emergency: String,
-  email: String,
-  skills: [String], 
-  preferences: [String], 
-  role: String,
-  password: String,
-  availability: [String], 
-  eventhistoryId: String,
+const eventHistorySchema = new mongoose.Schema({
+  id: { type: String, required: true },
+  userId: { type: String, required: true },
+  events: [
+    {
+      eventId: { type: String, required: true },
+      name: { type: String, required: true },
+      date: { type: String}, 
+      location: { type: String, required: true },
+      description: { type: String, required: true },
+      status: { type: String, required: true },
+      skills: {type: [String], required: true}
+    }
+  ]
 });
 &nbsp;
-module.exports = mongoose.model("User", userSchema);
+const EventHistory = mongoose.model('EventHistory', eventHistorySchema);
+&nbsp;
+module.exports = EventHistory;
 &nbsp;
 &nbsp;</pre></td></tr></table></pre>
 
