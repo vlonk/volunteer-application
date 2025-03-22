@@ -1,30 +1,7 @@
-// const fs = require('fs');
-// const path = require('path');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 
-// const usersFilePath = path.join(__dirname, '..', 'data', 'users.json');
-
-// function readUsers() {
-//     try {
-//         const data = fs.readFileSync(usersFilePath, 'utf-8');
-//         return JSON.parse(data);
-//     } 
-//     catch (err) {
-//         console.error('Error reading users.json:', err);
-//         return {};
-//     }
-// }
-
-// function writeUsers(usersObj) {
-//     try {
-//         fs.writeFileSync(usersFilePath, JSON.stringify(usersObj, null, 2));
-//     } 
-//     catch (err) {
-//         console.error('Error writing to users.json:', err);
-//     }
-// }
 
 exports.signup = async (req, res) => {
     try {
@@ -34,24 +11,14 @@ exports.signup = async (req, res) => {
             return res.status(400).json({ msg: 'Email and password are required.' });
         }
 
-    // read user data
-    // const usersObj = readUsers();
-
-    // check if user with this email already exists
         const existingUser = await User.findOne({email});
         if (existingUser) {
             return res.status(400).json({ msg: 'User already exists with that email.' });
         }
 
-        // const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newId = Date.now().toString();
-    
-        // await UserCredentials.create({
-        //     email,
-        //     password: hashedPassword
-        // });
 
         const newUser = await User.create({
             id: newId,
@@ -71,11 +38,6 @@ exports.signup = async (req, res) => {
             availability: availability || [],
             eventhistoryId: eventhistoryId || `history_${newId}`
         });
-
-    // usersObj[newId] = newUser;
-
-    // write updated users to file
-    // writeUsers(usersObj);
 
     // generate JWT token
         const token = jwt.sign(
@@ -102,9 +64,6 @@ exports.login = async (req, res) => {
         if (!email || !password) {
             return res.status(400).json({ msg: 'email and password are required.' });
         }
-
-        // read users
-        // const usersObj = readUsers();
 
         // find user by email
         const user = await User.findOne({email});
