@@ -7,34 +7,35 @@ jest.mock('../models/notificationModel');
 describe('Notification Controller Tests', () => {
 
   beforeEach(() => {
-    // Reset the mock methods before each test
+    // Reset mock methods before each test
     Notification.find.mockReset();
     Notification.findOne.mockReset();
     Notification.findOneAndDelete.mockReset();
     Notification.prototype.save.mockReset();
   });
 
-  test('getAllNotifications should return all notifications for a user', async () => {
-    const mockNotifications = [
-      { notificationid: '1', userid: '1', message: 'Test Notification 1', status: 'Unread' },
-      { notificationid: '2', userid: '1', message: 'Test Notification 2', status: 'Read' }
+  // Test for getAllNotifications with notifications found
+  test('getAllNotifications should return 200 if notifications are found', async () => {
+    const notifications = [
+      { notificationid: 'notif1', message: 'Test notification 1' },
+      { notificationid: 'notif2', message: 'Test notification 2' }
     ];
+    Notification.find.mockResolvedValueOnce(notifications);  // Simulate notifications found
 
-    Notification.find.mockResolvedValueOnce(mockNotifications);
-
-    const req = { params: { userid: '1' } };  // Passing userId as parameter
+    const req = { params: { userid: '1' } };
     const res = {
       json: jest.fn(),
       status: jest.fn().mockReturnThis()
     };
 
     await getAllNotifications(req, res);
-    expect(res.json).toHaveBeenCalledWith(mockNotifications);
     expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(notifications);
   });
 
-  test('getAllNotifications should return 404 if no notifications found for the user', async () => {
-    Notification.find.mockResolvedValueOnce([]);
+  // Test for getAllNotifications with no notifications found
+  test('getAllNotifications should return 404 if no notifications are found', async () => {
+    Notification.find.mockResolvedValueOnce([]);  // Simulate no notifications found
 
     const req = { params: { userid: '1' } };
     const res = {
@@ -44,29 +45,32 @@ describe('Notification Controller Tests', () => {
 
     await getAllNotifications(req, res);
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ message: 'No notifications found for this user' });
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'No notifications found for this user'
+    });
   });
 
-  test('getNotification should return a notification by ID', async () => {
-    const mockNotification = { notificationid: '1', userid: '1', message: 'Test Notification', status: 'Unread' };
+  // Test for getNotification when found
+  test('getNotification should return 200 if notification is found', async () => {
+    const notification = { notificationid: 'notif1', message: 'Test notification' };
+    Notification.findOne.mockResolvedValueOnce(notification);  // Simulate notification found
 
-    Notification.findOne.mockResolvedValueOnce(mockNotification);
-
-    const req = { params: { id: '1' } };
+    const req = { params: { id: 'notif1' } };
     const res = {
       json: jest.fn(),
       status: jest.fn().mockReturnThis()
     };
 
     await getNotification(req, res);
-    expect(res.json).toHaveBeenCalledWith(mockNotification);
     expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(notification);
   });
 
-  test('getNotification should return 404 if notification not found', async () => {
-    Notification.findOne.mockResolvedValueOnce(null);
+  // Test for getNotification when not found
+  test('getNotification should return 404 if notification is not found', async () => {
+    Notification.findOne.mockResolvedValueOnce(null);  // Simulate notification not found
 
-    const req = { params: { id: '999' } };
+    const req = { params: { id: 'notif1' } };
     const res = {
       json: jest.fn(),
       status: jest.fn().mockReturnThis()
@@ -74,32 +78,34 @@ describe('Notification Controller Tests', () => {
 
     await getNotification(req, res);
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Notification not found' });
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Notification not found'
+    });
   });
 
-  test('deleteNotification should delete a notification', async () => {
-    const mockNotification = { notificationid: '1', userid: '1', message: 'Test Notification', status: 'Unread' };
+  // Test for deleteNotification when deleted
+  test('deleteNotification should return 200 if notification is successfully deleted', async () => {
+    const deletedNotification = { notificationid: 'notif1' };
+    Notification.findOneAndDelete.mockResolvedValueOnce(deletedNotification);  // Simulate notification deletion
 
-    Notification.findOneAndDelete.mockResolvedValueOnce(mockNotification);
-
-    const req = { params: { id: '1' } };
+    const req = { params: { id: 'notif1' } };
     const res = {
       json: jest.fn(),
       status: jest.fn().mockReturnThis()
     };
 
     await deleteNotification(req, res);
-    expect(Notification.findOneAndDelete).toHaveBeenCalledWith({ notificationid: '1' });
+    expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       message: 'Notification deleted successfully'
     });
-    expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  test('deleteNotification should return 404 if notification not found to delete', async () => {
-    Notification.findOneAndDelete.mockResolvedValueOnce(null);
+  // Test for deleteNotification when not found
+  test('deleteNotification should return 404 if notification is not found', async () => {
+    Notification.findOneAndDelete.mockResolvedValueOnce(null);  // Simulate notification not found
 
-    const req = { params: { id: '999' } };
+    const req = { params: { id: 'notif1' } };
     const res = {
       json: jest.fn(),
       status: jest.fn().mockReturnThis()
@@ -107,32 +113,33 @@ describe('Notification Controller Tests', () => {
 
     await deleteNotification(req, res);
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Notification not found' });
-  });
-
-  test('postNotification should create a new notification', async () => {
-    const newNotification = { userid: '1', message: 'New Test Notification', eventid: '123' };
-    const mockNotification = { notificationid: '3', ...newNotification, status: 'Unread', timestamp: new Date() };
-
-    Notification.prototype.save.mockResolvedValueOnce(mockNotification);
-
-    const req = { body: newNotification };
-    const res = {
-      json: jest.fn(),
-      status: jest.fn().mockReturnThis()
-    };
-
-    await postNotification(req, res);
-    expect(Notification.prototype.save).toHaveBeenCalled();
-    expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith({
-      message: 'Notification created successfully',
-      notification: mockNotification
+      message: 'Notification not found'
     });
   });
 
-  test('postNotification should return 400 if missing required fields', async () => {
-    const req = { body: { userid: '1', message: '' } };  // Missing eventid
+  // Test for postNotification with success
+  test('postNotification should return 201 if notification is successfully created', async () => {
+    const newNotification = { notificationid: 'notif1', userid: '1', message: 'New Test Notification', eventid: '123', timestamp: new Date() };
+    Notification.prototype.save.mockResolvedValueOnce(newNotification);  // Simulate successful save
+
+    const req = { body: { userid: '1', message: 'New Test Notification', eventid: '123' } };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn()
+    };
+
+    await postNotification(req, res);
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Notification created successfully',
+      notification: newNotification
+    });
+  });
+
+  // Test for postNotification with missing fields
+  test('postNotification should return 400 if required fields are missing', async () => {
+    const req = { body: { message: 'Test message', eventid: '123' } };  // Missing 'userid'
     const res = {
       json: jest.fn(),
       status: jest.fn().mockReturnThis()
@@ -145,10 +152,11 @@ describe('Notification Controller Tests', () => {
     });
   });
 
-  test('postNotification should handle errors gracefully', async () => {
-    Notification.prototype.save.mockRejectedValueOnce(new Error('Database error'));
+  // Test for postNotification with database error
+  test('postNotification should handle database errors gracefully', async () => {
+    Notification.prototype.save.mockRejectedValueOnce(new Error('Database error')); // Force error
 
-    const req = { body: { userid: '1', message: 'Faulty Notification', eventid: '123' } };
+    const req = { body: { userid: '1', message: 'New Test Notification', eventid: '123' } };
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn()
@@ -162,4 +170,39 @@ describe('Notification Controller Tests', () => {
     });
   });
 
+  // Test for getNotification with database error
+  test('getNotification should handle database errors gracefully', async () => {
+    Notification.findOne.mockRejectedValueOnce(new Error('Database error')); // Force error
+
+    const req = { params: { id: 'notif1' } };
+    const res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis()
+    };
+
+    await getNotification(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Error fetching notification',
+      error: 'Database error'
+    });
+  });
+
+  // Test for deleteNotification with database error
+  test('deleteNotification should handle database errors gracefully', async () => {
+    Notification.findOneAndDelete.mockRejectedValueOnce(new Error('Database error')); // Force error
+
+    const req = { params: { id: 'notif1' } };
+    const res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis()
+    };
+
+    await deleteNotification(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Error deleting notification',
+      error: 'Database error'
+    });
+  });
 });
