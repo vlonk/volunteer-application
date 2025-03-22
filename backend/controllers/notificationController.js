@@ -61,13 +61,20 @@ const postNotification = async (req, res) => {
       });
     }
 
-    // Generate a unique notification ID using the current timestamp and a random number
-    
-    //console.log("Generated notificationId:", notificationId);  // Debug log
+    // Get the last notification to determine the next notificationid
+    const lastNotification = await Notification.findOne().sort({ notificationid: -1 });
+
+    // Generate a new notification ID, incrementing from the last notification's ID (e.g., notif1, notif2, etc.)
+    let notificationid = 'notif1';  // Default ID if no notifications exist
+
+    if (lastNotification && lastNotification.notificationid) {
+      const lastIdNumber = parseInt(lastNotification.notificationid.replace('notif', ''), 10);
+      notificationid = 'notif' + (lastIdNumber + 1);
+    }
 
     // Create a new notification object
     const newNotification = new Notification({
-      //notificationid: notificationid,  // Unique notification ID
+      notificationid,  // Unique notification ID
       userid,  // User ID that the notification is for
       message, // Notification message
       eventid, // Event ID the notification is associated with

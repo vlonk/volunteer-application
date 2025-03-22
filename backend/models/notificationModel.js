@@ -28,12 +28,4 @@ const notificationSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-// Pre-save middleware to generate a unique notificationid
-notificationSchema.pre('save', async function (next) {
-  if (!this.notificationid) {
-    this.notificationid = new mongoose.Types.ObjectId().toString(); // Generate a unique string ID
-  }
-  next();
-});
-
 module.exports = mongoose.model('Notification', notificationSchema);
