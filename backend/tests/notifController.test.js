@@ -1,93 +1,208 @@
-const request = require('supertest');
-const app = require('../app'); // Import your Express app
+const { getAllNotifications, getNotification, deleteNotification, postNotification } = require('../controllers/notificationController');
 const Notification = require('../models/notificationModel');
 
-// Mock Mongoose model
+// Mock Mongoose methods
 jest.mock('../models/notificationModel');
 
-describe('Notification Controller', () => {
-  describe('GET /notifications/:userId', () => {
-    it('should return all notifications for a user', async () => {
-      const mockNotifications = [
-        { notificationId: 1, userId: '1', message: 'Test 1', status: 'Unread' },
-        { notificationId: 2, userId: '1', message: 'Test 2', status: 'Read' }
-      ];
+describe('Notification Controller Tests', () => {
 
-      Notification.find.mockResolvedValue(mockNotifications);
+  beforeEach(() => {
+    // Reset mock methods before each test
+    Notification.find.mockReset();
+    Notification.findOne.mockReset();
+    Notification.findOneAndDelete.mockReset();
+    Notification.prototype.save.mockReset();
+  });
 
-      const response = await request(app).get('/notifications/1');
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockNotifications);
-    });
+  // Test for getAllNotifications with notifications found
+  test('getAllNotifications should return 200 if notifications are found', async () => {
+    const notifications = [
+      { notificationid: 'notif1', message: 'Test notification 1' },
+      { notificationid: 'notif2', message: 'Test notification 2' }
+    ];
+    Notification.find.mockResolvedValueOnce(notifications);  // Simulate notifications found
 
-    it('should return 404 if no notifications are found', async () => {
-      Notification.find.mockResolvedValue([]);
+    const req = { params: { userid: '1' } };
+    const res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis()
+    };
 
-      const response = await request(app).get('/notifications/1');
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBe('No notifications found for this user');
-    });
+    await getAllNotifications(req, res);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(notifications);
+  });
 
-    it('should return 500 if there is an error fetching notifications', async () => {
-      Notification.find.mockRejectedValue(new Error('Database error'));
+  // Test for getAllNotifications with no notifications found
+  test('getAllNotifications should return 404 if no notifications are found', async () => {
+    Notification.find.mockResolvedValueOnce([]);  // Simulate no notifications found
 
-      const response = await request(app).get('/notifications/1');
-      expect(response.status).toBe(500);
-      expect(response.body.message).toBe('Error fetching notifications');
+    const req = { params: { userid: '1' } };
+    const res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis()
+    };
+
+    await getAllNotifications(req, res);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'No notifications found for this user'
     });
   });
 
-  describe('GET /notifications/notification/:id', () => {
-    it('should return a notification by its ID', async () => {
-      const mockNotification = { notificationId: 1, userId: '1', message: 'Test', status: 'Unread' };
+  // Test for getNotification when found
+  test('getNotification should return 200 if notification is found', async () => {
+    const notification = { notificationid: 'notif1', message: 'Test notification' };
+    Notification.findOne.mockResolvedValueOnce(notification);  // Simulate notification found
 
-      Notification.findOne.mockResolvedValue(mockNotification);
+    const req = { params: { id: 'notif1' } };
+    const res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis()
+    };
 
-      const response = await request(app).get('/notifications/notification/1');
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockNotification);
-    });
+    await getNotification(req, res);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(notification);
+  });
 
-    it('should return 404 if the notification is not found', async () => {
-      Notification.findOne.mockResolvedValue(null);
+  // Test for getNotification when not found
+  test('getNotification should return 404 if notification is not found', async () => {
+    Notification.findOne.mockResolvedValueOnce(null);  // Simulate notification not found
 
-      const response = await request(app).get('/notifications/notification/999');
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBe('Notification not found');
-    });
+    const req = { params: { id: 'notif1' } };
+    const res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis()
+    };
 
-    it('should return 500 if there is an error fetching the notification', async () => {
-      Notification.findOne.mockRejectedValue(new Error('Database error'));
-
-      const response = await request(app).get('/notifications/notification/1');
-      expect(response.status).toBe(500);
-      expect(response.body.message).toBe('Error fetching notification');
+    await getNotification(req, res);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Notification not found'
     });
   });
 
-  describe('DELETE /notifications/:id', () => {
-    it('should delete a notification by its ID', async () => {
-      Notification.findOneAndDelete.mockResolvedValue({ notificationId: 1 });
+  // Test for deleteNotification when deleted
+  test('deleteNotification should return 200 if notification is successfully deleted', async () => {
+    const deletedNotification = { notificationid: 'notif1' };
+    Notification.findOneAndDelete.mockResolvedValueOnce(deletedNotification);  // Simulate notification deletion
 
-      const response = await request(app).delete('/notifications/1');
-      expect(response.status).toBe(200);
-      expect(response.body.message).toBe('Notification deleted successfully');
+    const req = { params: { id: 'notif1' } };
+    const res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis()
+    };
+
+    await deleteNotification(req, res);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Notification deleted successfully'
     });
+  });
 
-    it('should return 404 if the notification to delete is not found', async () => {
-      Notification.findOneAndDelete.mockResolvedValue(null);
+  // Test for deleteNotification when not found
+  test('deleteNotification should return 404 if notification is not found', async () => {
+    Notification.findOneAndDelete.mockResolvedValueOnce(null);  // Simulate notification not found
 
-      const response = await request(app).delete('/notifications/999');
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBe('Notification not found');
+    const req = { params: { id: 'notif1' } };
+    const res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis()
+    };
+
+    await deleteNotification(req, res);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Notification not found'
     });
+  });
 
-    it('should return 500 if there is an error deleting the notification', async () => {
-      Notification.findOneAndDelete.mockRejectedValue(new Error('Database error'));
+  // Test for postNotification with success
+  test('postNotification should return 201 if notification is successfully created', async () => {
+    const newNotification = { notificationid: 'notif1', userid: '1', message: 'New Test Notification', eventid: '123', timestamp: new Date() };
+    Notification.prototype.save.mockResolvedValueOnce(newNotification);  // Simulate successful save
 
-      const response = await request(app).delete('/notifications/1');
-      expect(response.status).toBe(500);
-      expect(response.body.message).toBe('Error deleting notification');
+    const req = { body: { userid: '1', message: 'New Test Notification', eventid: '123' } };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn()
+    };
+
+    await postNotification(req, res);
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Notification created successfully',
+      notification: newNotification
+    });
+  });
+
+  // Test for postNotification with missing fields
+  test('postNotification should return 400 if required fields are missing', async () => {
+    const req = { body: { message: 'Test message', eventid: '123' } };  // Missing 'userid'
+    const res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis()
+    };
+
+    await postNotification(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      message: "Missing required fields: userid, message, or eventid"
+    });
+  });
+
+  // Test for postNotification with database error
+  test('postNotification should handle database errors gracefully', async () => {
+    Notification.prototype.save.mockRejectedValueOnce(new Error('Database error')); // Force error
+
+    const req = { body: { userid: '1', message: 'New Test Notification', eventid: '123' } };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn()
+    };
+
+    await postNotification(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Error creating notification',
+      error: 'Database error'
+    });
+  });
+
+  // Test for getNotification with database error
+  test('getNotification should handle database errors gracefully', async () => {
+    Notification.findOne.mockRejectedValueOnce(new Error('Database error')); // Force error
+
+    const req = { params: { id: 'notif1' } };
+    const res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis()
+    };
+
+    await getNotification(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Error fetching notification',
+      error: 'Database error'
+    });
+  });
+
+  // Test for deleteNotification with database error
+  test('deleteNotification should handle database errors gracefully', async () => {
+    Notification.findOneAndDelete.mockRejectedValueOnce(new Error('Database error')); // Force error
+
+    const req = { params: { id: 'notif1' } };
+    const res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis()
+    };
+
+    await deleteNotification(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'Error deleting notification',
+      error: 'Database error'
     });
   });
 });
