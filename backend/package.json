@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
