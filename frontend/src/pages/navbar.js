@@ -9,8 +9,18 @@ const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [notifications, setNotifications] = useState([]);
-  const [confirmDeleteNotification, setConfirmDeleteNotification] = useState(null); // To handle delete confirmation
+  const [confirmDeleteNotification, setConfirmDeleteNotification] = useState(null);
   const userId = localStorage.getItem("userId");
+
+  // Check JWT for admin role
+  const token = localStorage.getItem("authToken");
+  let isAdmin = false;
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      isAdmin = payload.role === 'admin';
+    } catch {}
+  }
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -36,50 +46,40 @@ const NavBar = () => {
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem("authToken");
-      setIsLoggedIn(!!token); // Convert to boolean
+      setIsLoggedIn(!!token);
     };
 
     checkAuth();
     window.addEventListener("storage", checkAuth);
-
-    return () => {
-      window.removeEventListener("storage", checkAuth);
-    };
+    return () => window.removeEventListener("storage", checkAuth);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    localStorage.removeItem("id");
+    localStorage.removeItem("userId");
     setIsLoggedIn(false);
     setNotifications([]);
     navigate("/login");
   };
 
   const toggleDropdown = () => {
-    setIsOpen((prevState) => !prevState);
+    setIsOpen(prev => !prev);
   };
 
   const handleDeleteNotification = async (notificationId) => {
     try {
-      await fetch(`http://localhost:4000/api/notification/${notificationId}`, {
-        method: "DELETE",
-      });
-      setNotifications((prevNotifications) =>
-        prevNotifications.filter(
-          (notification) => notification.notificationid !== notificationId
-        )
-      );
+      await fetch(`http://localhost:4000/api/notification/${notificationId}`, { method: "DELETE" });
+      setNotifications(prev => prev.filter(n => n.notificationid !== notificationId));
     } catch (error) {
       console.error("Error deleting notification:", error);
     }
   };
 
-  // Handle delete confirmation logic
   const confirmDeletion = (isConfirmed) => {
     if (isConfirmed && confirmDeleteNotification) {
-      handleDeleteNotification(confirmDeleteNotification); // Trigger the deletion
+      handleDeleteNotification(confirmDeleteNotification);
     }
-    setConfirmDeleteNotification(null); // Reset the confirmation state
+    setConfirmDeleteNotification(null);
   };
 
   return (
@@ -90,32 +90,26 @@ const NavBar = () => {
       </div>
 
       <div className="nav-center">
-        <button className="nav-link" onClick={() => navigate("/home")}>
-          Home
-        </button>
-        <button className="nav-link" onClick={() => navigate("/events")}>
-          Events
-        </button>
-        <button className="nav-link" onClick={() => navigate("/events_management")}>
-          Events Management
-        </button>
+        <button className="nav-link" onClick={() => navigate("/home")}>Home</button>
+        <button className="nav-link" onClick={() => navigate("/events")}>Events</button>
+        <button className="nav-link" onClick={() => navigate("/events_management")}>Events Management</button>
+        {isAdmin && (
+          <button className="nav-link" onClick={() => navigate("/reports")}>Reports</button>
+        )}
       </div>
 
       <div className="nav-right">
         <div className="notification-wrapper" onClick={toggleDropdown}>
           <FaBell className="notification-icon" />
-          {notifications.length > 0 && (
-            <span className="notification-count">{notifications.length}</span>
-          )}
-
+          {notifications.length > 0 && <span className="notification-count">{notifications.length}</span>}
           {isOpen && (
             <div className="notification-dropdown">
               {notifications.length > 0 ? (
-                notifications.map((note) => (
+                notifications.map(note => (
                   <div
                     key={note.notificationid}
                     className="notification-item"
-                    onClick={() => setConfirmDeleteNotification(note.notificationid)} // Set notification to delete
+                    onClick={() => setConfirmDeleteNotification(note.notificationid)}
                   >
                     {note.message}
                   </div>
@@ -129,40 +123,25 @@ const NavBar = () => {
 
         {isLoggedIn ? (
           <>
-            <button
-              className="profile-button"
-              onClick={() => {
-                const userId = localStorage.getItem("userId");
-                navigate(`/profile/${userId}`);
-              }}
-            >
+            <button className="profile-button" onClick={() => navigate(`/profile/${userId}`)}>
               <FaUserCircle className="profile-icon" />
             </button>
-            <button className="logout-button" onClick={handleLogout}>
-              Logout
-            </button>
+            <button className="logout-button" onClick={handleLogout}>Logout</button>
           </>
         ) : (
           <>
-            <button className="nav-button-signin" onClick={() => navigate("/login")}>
-              Sign In
-            </button>
-            <button className="nav-button-join" onClick={() => navigate("/signup")}>
-              Join
-            </button>
+            <button className="nav-button-signin" onClick={() => navigate("/login")}>Sign In</button>
+            <button className="nav-button-join" onClick={() => navigate("/signup")}>Join</button>
           </>
         )}
       </div>
 
-      {/* Delete Confirmation Popup */}
       {confirmDeleteNotification !== null && (
         <div className="confirmation-popup">
           <div className="popup-box">
             <p>Are you sure you want to delete this notification?</p>
             <button onClick={() => confirmDeletion(true)}>Yes</button>
-            <button className="cancel" onClick={() => confirmDeletion(false)}>
-              No
-            </button>
+            <button className="cancel" onClick={() => confirmDeletion(false)}>No</button>
           </div>
         </div>
       )}
