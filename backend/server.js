@@ -26,12 +26,15 @@ const profileRoutes = require("./routes/profileRoutes")
 const notificationRoutes = require("./routes/notificationRoutes")
 const historyRoutes = require("./routes/historyRoutes")
 const eventsRoutes = require("./routes/eventsRoutes")
+const reportRoutes = require('./routes/reportRoutes');
 
 //Use the routes here
 app.use(profileRoutes)
 app.use(notificationRoutes)
 app.use(historyRoutes)
 app.use(eventsRoutes)
+app.use('/api/reports', reportRoutes);
+
 
 //listen for requests
 app.listen(process.env.PORT,() =>{
