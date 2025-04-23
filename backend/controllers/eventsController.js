@@ -29,7 +29,7 @@ const getEvents = async () => {
             return { message: "No events found", events: [] };
         }
 
-        return { message: "Events fetched successfully", events };
+        return events;
     } catch (error) {
         // Log the error and throw an object that can be handled by the caller
         throw new Error("Error fetching events from DB: " + error.message);

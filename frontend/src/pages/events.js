@@ -125,7 +125,35 @@ const ExpandBox = ({ title, content, loggedIn }) => {
 
 const Events = () => {
     const navigate = useNavigate();
+    const [events, setEvents] = useState([]);
     const [loggedIn, setLoggedIn] = useState(false);
+
+      // fetch events from backend
+      useEffect(() => {
+        console.log("Fetching events")
+        fetch("http://localhost:4000/api/all-events")
+          .then(response => {
+            console.log("Response status:", response.status); // Check response status
+    
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          
+          .then(data => {
+            console.log("Fetched events:", data); // checking data struct
+            
+            // If the data is an object with event IDs as keys, convert it to an array
+            const eventsArray = Object.keys(data).map(key => ({
+              id: key,  // use the key as the event's id
+              ...data[key]  // spread the rest of the event properties
+            }));
+            
+            setEvents(eventsArray); // set the state with the events array
+          })
+          .catch(error => console.error("Error fetching events in front:", error));
+      }, []);
 
     useEffect(() => {
         const checkAuth = () => {
@@ -152,16 +180,14 @@ const Events = () => {
             </div>
 
             <div className="events-listing">
-                <ExpandBox
-                    title="Event: Blood Drive Volunteers"
-                    content="Info: In need of volunteers to aid staff in organizing blood drive for the city hospitals."
-                    loggedIn={loggedIn}
-                />
-                <ExpandBox
-                    title="Event: Food Bank Non-Profit"
-                    content="Info: Local non-profit in need of people willing to help in moving food boxes and handing out food items to people in need."
-                    loggedIn={loggedIn}
-                />
+                {events.map((event) =>(
+                    <ExpandBox
+                    key = {event.id}
+                    title = {`Event: ${event.title}`}
+                    content = {`Info: ${event.description}`}
+                    id = {event._id}    // thinking of using this for the sign up button
+                    />
+                ))}
             </div>
 
             <div className="events-return-home">
