@@ -553,7 +553,7 @@ const EventsManagement = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [history, setHistory] = useState([]);
 
-
+  const API_URL = process.env.REACT_APP_API_URL;
   // fetch events from backend
   useEffect(() => {
     console.log("Fetching events")
@@ -581,7 +581,6 @@ const EventsManagement = () => {
       .catch(error => console.error("Error fetching events in front:", error));
   }, []);
   
-
     // fetch users from backend, we need to get their name and skills for the volunteer matching
     useEffect(() => {
       fetch(`${API_URL}/api/profiles`)
