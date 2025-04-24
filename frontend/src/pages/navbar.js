@@ -92,9 +92,11 @@ const NavBar = () => {
       <div className="nav-center">
         <button className="nav-link" onClick={() => navigate("/home")}>Home</button>
         <button className="nav-link" onClick={() => navigate("/events")}>Events</button>
-        <button className="nav-link" onClick={() => navigate("/events_management")}>Events Management</button>
         {isAdmin && (
+          <>
+          <button className="nav-link" onClick={() => navigate("/events_management")}>Events Management</button>  {/*events management moved to admin only */}
           <button className="nav-link" onClick={() => navigate("/reports")}>Reports</button>
+          </>
         )}
       </div>
 
