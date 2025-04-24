@@ -61,8 +61,6 @@ const EventCreation = ({ closeEventCreation, onCreateEvent }) => {  // onCreateE
 
   const [isVisible, setIsVisible] = useState(false); // state to toggle skill visibility
 
-  const API_URL = process.env.REACT_APP_API_URL;
-
 
   const skillsList = [  // same skill list as profiles
     "Teamwork",
@@ -583,6 +581,7 @@ const EventsManagement = () => {
   
     // fetch users from backend, we need to get their name and skills for the volunteer matching
     useEffect(() => {
+      const API_URL = process.env.REACT_APP_API_URL;
       fetch(`${API_URL}/api/profiles`)
         .then(response => response.json())
         .then(data => {
@@ -602,6 +601,7 @@ const EventsManagement = () => {
     // fetch matching events based on the user's skills
     // Fetch matching events based on the selected user's skills
     useEffect(() => {
+      const API_URL = process.env.REACT_APP_API_URL;
       if (!selectedUser || !selectedUser.id) return; // Ensure the selectedUser has an ID
     
       const fetchMatchingEvents = async () => {
@@ -627,9 +627,10 @@ const EventsManagement = () => {
     
     }, [selectedUser]); // Run when selectedUser changes
     
-
+    
     // fetching history to find match with user
     useEffect(() => {
+      const API_URL = process.env.REACT_APP_API_URL;
       if (selectedUser) { 
         fetch(`${API_URL}/api/user/${selectedUser.id}/events`)
           .then(response => {

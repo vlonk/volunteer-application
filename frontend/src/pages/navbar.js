@@ -22,9 +22,8 @@ const NavBar = () => {
     } catch {}
   }
 
-  const API_URL = process.env.REACT_APP_API_URL;
-
   useEffect(() => {
+    const API_URL = process.env.REACT_APP_API_URL;
     const fetchNotifications = async () => {
       if (isLoggedIn && userId) {
         try {
