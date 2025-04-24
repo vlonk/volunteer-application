@@ -555,6 +555,7 @@ const EventsManagement = () => {
   // fetch events from backend
   useEffect(() => {
     console.log("Fetching events")
+    const API_URL = process.env.REACT_APP_API_URL;
     fetch(`${API_URL}/api/all-events`)
       .then(response => {
         console.log("Response status:", response.status); // Check response status

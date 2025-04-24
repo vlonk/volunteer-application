@@ -52,9 +52,9 @@ const ProfileManagement = () => {
     const [isEditingInfo, setIsEditingInfo] = useState(false);
     const [availability, setAvailability] = useState([]);
 
-    const API_URL = process.env.REACT_APP_API_URL;
     //everytime page renders, set id to id from url to set data,skills,preferences
     useEffect(() => {
+        const API_URL = process.env.REACT_APP_API_URL;
         fetch(`${API_URL}/api/profile/${id}`)
             .then((response) => response.json())
             .then((data) => {
