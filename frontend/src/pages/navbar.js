@@ -69,6 +69,7 @@ const NavBar = () => {
 
   const handleDeleteNotification = async (notificationId) => {
     try {
+      const API_URL = process.env.REACT_APP_API_URL;
       await fetch(`${API_URL}/api/notification/${notificationId}`, { method: "DELETE" });
       setNotifications(prev => prev.filter(n => n.notificationid !== notificationId));
     } catch (error) {
