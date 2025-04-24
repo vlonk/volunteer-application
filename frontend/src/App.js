@@ -10,6 +10,7 @@ import History from './pages/history'
 import Notifications from './pages/notifications'
 import EventsManagement from './pages/events_management';
 import Reports from './pages/reports';
+import EventsReports from './pages/events_reports';
 
 
 function App() {
@@ -29,6 +30,8 @@ function App() {
       <Route path="/events_management" element={<EventsManagement/>} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/reports" element={<Reports />} />
+      <Route path="/events_reports" element={<EventsReports />} />
+
 
       </Routes>
     </div>

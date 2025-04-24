@@ -546,9 +546,10 @@ const EventsManagement = () => {
   const [editEvent, setEditEvent] = useState(null);  // tracks the event editting
   const [users, setUsers] = useState([]);  // using this for volunteers
   const [matchingEvents, setMatchingEvents] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null); // used for adding user and event by admin
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [history, setHistory] = useState([]);
+  const [selectedAssignment, setSelectedAssignment] = useState(""); // added in as this will go in the volunteersList for their respective assignments
 
 
   // fetch events from backend
@@ -747,18 +748,16 @@ const EventsManagement = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        volunteersList: [selectedUser.id], // Only send the new volunteer ID
+        volunteersList: [{
+          id: selectedUser.id,
+          name: selectedUser.name, // changing volunteersList to be an array of objects containing these
+          assignment: selectedAssignment 
+        }]
       }),
     })
     .then((response) => response.json())
     .then((updatedEvent) => {
       console.log("Event updated:", updatedEvent);
-    
-      // Update only the volunteer list while preserving other event properties
-      // setSelectedEvent((prevEvent) => ({
-      //   ...prevEvent,
-      //   volunteerList: updatedEvent.volunteerList,
-      // }));
     
       alert("Volunteer confirmed!");
     })
@@ -837,7 +836,13 @@ const EventsManagement = () => {
             <div className = "dropdown-match-box">
                 <div className = "dropdown-match-message">
                     <h3>Assigning Volunteer to Event</h3>
-                </div>
+                  </div>
+                    <input
+                    type="text"
+                    placeholder="Enter assignment"
+                    value={selectedAssignment}
+                    onChange={(e) => setSelectedAssignment(e.target.value)}
+                    />
                 <button onClick={confirmVolunteer}>
                 Confirm
                 </button>

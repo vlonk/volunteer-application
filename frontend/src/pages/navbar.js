@@ -96,6 +96,8 @@ const NavBar = () => {
           <>
           <button className="nav-link" onClick={() => navigate("/events_management")}>Events Management</button>  {/*events management moved to admin only */}
           <button className="nav-link" onClick={() => navigate("/reports")}>Reports</button>
+          <button className="nav-link" onClick={() => navigate("/events_reports")}>Events Reports</button>
+
           </>
         )}
       </div>
