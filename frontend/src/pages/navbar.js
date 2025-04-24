@@ -23,10 +23,10 @@ const NavBar = () => {
   }
 
   useEffect(() => {
-    const API_URL = process.env.REACT_APP_API_URL;
     const fetchNotifications = async () => {
       if (isLoggedIn && userId) {
         try {
+          const API_URL = process.env.REACT_APP_API_URL;
           const response = await fetch(`${API_URL}/api/user/${userId}/notifications`);
           const data = await response.json();
           if (Array.isArray(data)) {
