@@ -23,17 +23,19 @@ function LoginForm() {
       const data = await response.json();
   
       if (response.ok) {
+        const data = await response.json();
         console.log('Login successful:', data);
         localStorage.setItem('authToken', data.token);
         localStorage.setItem('userId', data.id); // Store the ID from the backend
         console.log('Token and ID stored:', localStorage.getItem('authToken'), localStorage.getItem('userId'));
         
         window.dispatchEvent(new Event("storage"));
-  
+        
         navigate('/home');
       } else {
-        console.error('Login failed:', data.msg);
-        alert(`Login failed: ${data.msg}`);
+        const data = await response.json();  // Safely parsing the response in case of failure
+        console.error('Login failed:', data.msg || 'Unknown error');
+        alert(`Login failed: ${data.msg || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Network error:', error);
