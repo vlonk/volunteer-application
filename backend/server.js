@@ -33,7 +33,7 @@ app.use(profileRoutes)
 app.use(notificationRoutes)
 app.use(historyRoutes)
 app.use(eventsRoutes)
-app.use('/api/reports', reportRoutes);
+//app.use('/api/reports', reportRoutes);
 
 
 //listen for requests

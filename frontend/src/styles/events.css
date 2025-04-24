@@ -98,12 +98,22 @@
     display: block;
 }
 
-.events-search-spacer {
+.events-listing-spacer {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 10px;
     margin-top: 70px;
+}
+
+.events-listing-spacer button {
+    background-color: #254222;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.9rem;
+    cursor: pointer;
 }
 
 .sign-up {
