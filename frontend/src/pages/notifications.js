@@ -28,6 +28,7 @@ const NotificationsPage = () => {
 
   // Handle deleting a notification
   const handleDeleteNotification = async (id) => {
+    const API_URL = process.env.REACT_APP_API_URL;
     try {
       const response = await fetch(`${API_URL}/api/notification/${id}`, {
         method: "DELETE", // DELETE request to server
