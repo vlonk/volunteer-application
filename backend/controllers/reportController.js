@@ -14,11 +14,14 @@ const getAllEventsForUsers = async (req, res) => {
         const eventHistory = await EventHistory.findOne({ userId: user.id });
 
         if (eventHistory) {
-          const eventNames = eventHistory.events.map((event) => event.name);
+          const eventDetails = eventHistory.events.map((event) => ({
+            name: event.name,
+            status: event.status,  // Include the status of the event
+          }));
           return {
             userId: user.id,
             name: user.name,
-            events: eventNames
+            events: eventDetails,
           };
         }
         return null;
