@@ -143,6 +143,7 @@ const ProfileManagement = () => {
     
         try {
             // PUT request to update the profile
+            const API_URL = process.env.REACT_APP_API_URL;
             const response = await fetch(
                 `${API_URL}/api/profile/${id}`,
                 {
@@ -219,6 +220,7 @@ const ProfileManagement = () => {
                 availability: profile.availability || [],
             };
             try {
+                const API_URL = process.env.REACT_APP_API_URL;
                 const response = await fetch(
                     `${API_URL}/api/profile/${id}`,
                     {
