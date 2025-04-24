@@ -1,66 +1,69 @@
-/* Set background color for the entire page */
-  
-  /* Styling the container to center it and give some space */
-  .container {
-    max-width: 1200px;
-    margin: 40px auto;
+/* General container styling */
+.container {
+    margin-top: 20px;
     padding: 20px;
-    background-color: white; /* White background for the content */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
-    border-radius: 8px; /* Rounded corners */
+    background-color: #f0f8f0; /* Light green background */
+    border-radius: 8px;
+  }
+  
+  /* Table box container */
+  .table-box {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #ffffff; /* White background for the table */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   }
   
   /* Table styling */
   .table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 16px;
-    background-color: #fff; /* White background for the table */
-    border: 1px solid #ddd; /* Border for the table */
-    border-radius: 8px; /* Rounded corners for the table */
-    overflow: hidden; /* Ensure rounded corners don't break */
+    margin-bottom: 10px;
   }
   
-  /* Table header */
-  .table th {
-    background-color: #f8f9fa; /* Light grey background for header */
+  .table th, .table td {
+    padding: 12px;
     text-align: left;
-    padding: 15px 20px; /* Padding for header cells */
-    font-weight: bold;
-    color: #343a40; /* Dark text for contrast */
+    border: 1px solid #ddd;
   }
   
-  /* Table data */
-  .table td {
-    border-top: 1px solid #ddd; /* Border for top of each cell */
-    padding: 12px 20px; /* Padding for data cells */
-    vertical-align: top;
-    word-wrap: break-word;  /* Ensure long words wrap within the cell */
-    white-space: pre-line;  /* Allow line breaks in a single cell */
-  }
-  
-  /* Add spacing between table rows */
-  .table tbody tr:nth-child(even) {
-    background-color: #f9f9f9; /* Alternating row color */
-  }
-  
-  /* Button styling */
-  .btn {
-    padding: 12px 25px;
-    background-color: #007bff; /* Blue button */
+  .table th {
+    background-color: #4caf50; /* Green header */
     color: white;
+  }
+  
+  .table td {
+    background-color: #fafafa;
+  }
+  
+  .table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Alternating row colors */
+  }
+  
+  /* Button styling for download */
+  .btn-primary {
+    background-color: #28a745; /* Green button */
+    color: white;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
     font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
     margin-top: 20px;
-    display: block; /* Ensure button is on its own line */
-    width: 200px;
-    text-align: center;
+    display: inline-block;
   }
   
-  .btn:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+  .btn-primary:hover {
+    background-color: #218838; /* Darker green on hover */
+  }
+  
+  .btn-primary:focus {
+    outline: none;
+  }
+  
+  .btn-primary:active {
+    background-color: #1e7e34; /* Even darker green on click */
   }
   
