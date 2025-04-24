@@ -61,6 +61,9 @@ const EventCreation = ({ closeEventCreation, onCreateEvent }) => {  // onCreateE
 
   const [isVisible, setIsVisible] = useState(false); // state to toggle skill visibility
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
+
   const skillsList = [  // same skill list as profiles
     "Teamwork",
     "Organization",
@@ -554,7 +557,7 @@ const EventsManagement = () => {
   // fetch events from backend
   useEffect(() => {
     console.log("Fetching events")
-    fetch("http://localhost:4000/api/all-events")
+    fetch(`${API_URL}/api/all-events`)
       .then(response => {
         console.log("Response status:", response.status); // Check response status
 
@@ -581,7 +584,7 @@ const EventsManagement = () => {
 
     // fetch users from backend, we need to get their name and skills for the volunteer matching
     useEffect(() => {
-      fetch("http://localhost:4000/api/profiles")
+      fetch(`${API_URL}/api/profiles`)
         .then(response => response.json())
         .then(data => {
           console.log("Fetched users:", data); // checking data struct
@@ -606,7 +609,7 @@ const EventsManagement = () => {
         try {
           console.log("User ID to send: ", selectedUser.id); // Log the user ID being sent
     
-          const response = await fetch(`http://localhost:4000/api/matching-events/${selectedUser.id}`);
+          const response = await fetch(`${API_URL}/api/matching-events/${selectedUser.id}`);
     
           if (!response.ok) {
             throw new Error(`Error: ${response.status}`);
@@ -629,7 +632,7 @@ const EventsManagement = () => {
     // fetching history to find match with user
     useEffect(() => {
       if (selectedUser) { 
-        fetch(`http://localhost:4000/api/user/${selectedUser.id}/events`)
+        fetch(`${API_URL}/api/user/${selectedUser.id}/events`)
           .then(response => {
             if (!response.ok) {
               throw new Error("Failed to fetch event history");
@@ -645,7 +648,7 @@ const EventsManagement = () => {
 
   const handleCreateEvent = (newEvent) => {
     delete newEvent.id;
-    fetch("http://localhost:4000/api/events", {
+    fetch(`${API_URL}/api/events`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -666,7 +669,7 @@ const EventsManagement = () => {
 
   const handleEditEvent = async (updatedEvent) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/events/${updatedEvent._id}`, { // fetching event based on given id
+      const response = await fetch(`${API_URL}/api/events/${updatedEvent._id}`, { // fetching event based on given id
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedEvent),
@@ -684,7 +687,7 @@ const EventsManagement = () => {
   // function to delete event via backend
   const handleDeleteEvent = (id) => {
     console.log("Event to be deleted: ", id)
-    fetch(`http://localhost:4000/api/events/${id}`, {
+    fetch(`${API_URL}/api/events/${id}`, {
       method: "DELETE",
     })
       .then(response => {
@@ -721,7 +724,7 @@ const EventsManagement = () => {
     console.log("event history: ", updatedHistory);
   
     // 1️⃣ Updating user's event history
-    fetch(`http://localhost:4000/api/user/${selectedUser.id}/events`, {
+    fetch(`${API_URL}/api/user/${selectedUser.id}/events`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -741,7 +744,7 @@ const EventsManagement = () => {
       });
   
     // 2️⃣ Updating the event to track the volunteer
-    fetch(`http://localhost:4000/api/events/${selectedEvent._id}`, {
+    fetch(`${API_URL}api/events/${selectedEvent._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

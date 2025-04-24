@@ -52,9 +52,10 @@ const ProfileManagement = () => {
     const [isEditingInfo, setIsEditingInfo] = useState(false);
     const [availability, setAvailability] = useState([]);
 
+    const API_URL = process.env.REACT_APP_API_URL;
     //everytime page renders, set id to id from url to set data,skills,preferences
     useEffect(() => {
-        fetch(`http://localhost:4000/api/profile/${id}`)
+        fetch(`${API_URL}/api/profile/${id}`)
             .then((response) => response.json())
             .then((data) => {
                 console.log("Fetched data:", data);
@@ -143,7 +144,7 @@ const ProfileManagement = () => {
         try {
             // PUT request to update the profile
             const response = await fetch(
-                `http://localhost:4000/api/profile/${id}`,
+                `${API_URL}/api/profile/${id}`,
                 {
                     method: "PUT",
                     headers: {
@@ -219,7 +220,7 @@ const ProfileManagement = () => {
             };
             try {
                 const response = await fetch(
-                    `http://localhost:4000/api/profile/${id}`,
+                    `${API_URL}/api/profile/${id}`,
                     {
                         method: "PUT",
                         headers: {

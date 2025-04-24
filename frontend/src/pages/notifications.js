@@ -13,7 +13,8 @@ const NotificationsPage = () => {
       return; // Prevent fetching if user is not logged in
     }
 
-    fetch(`http://localhost:4000/api/user/${userId}/notifications`)
+    const API_URL = process.env.REACT_APP_API_URL;
+    fetch(`${API_URL}/api/user/${userId}/notifications`)
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched notifications:", data);
@@ -28,7 +29,7 @@ const NotificationsPage = () => {
   // Handle deleting a notification
   const handleDeleteNotification = async (id) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/notification/${id}`, {
+      const response = await fetch(`${API_URL}/api/notification/${id}`, {
         method: "DELETE", // DELETE request to server
       });
 

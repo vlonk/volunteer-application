@@ -7,8 +7,10 @@ const History = () => {
     const { id } = useParams(); // Get user ID from URL
     const [eventHistory, setEventHistory] = useState([]);
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     useEffect(() => {
-      fetch(`http://localhost:4000/api/user/${id}/events`) 
+      fetch(`${API_URL}/api/user/${id}/events`) 
         .then((response) => response.json())
         .then((data) => {
           console.log("Fetched event history:", data);
