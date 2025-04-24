@@ -1,48 +1,39 @@
-const Event = require('../models/eventsModel');
 const User = require('../models/userModel');
+const EventHistory = require('../models/historyModel');
+const Event = require('../models/eventsModel'); // If necessary for event details
 
-const getVolunteerParticipationReport = async (req, res) => {
+// Controller to fetch events for all users
+const getAllEventsForUsers = async (req, res) => {
   try {
-    // Fetch all events and populate the volunteers list
-    const events = await Event.find().populate('volunteersList');
+    // Fetch all users
+    const users = await User.find(); // Get all users
+    
+    // Loop through users and get their event histories
+    const reportData = await Promise.all(
+      users.map(async (user) => {
+        const eventHistory = await EventHistory.findOne({ userId: user.id });
 
-    // Create a map to track volunteer participation
-    const volunteerParticipation = {};
+        if (eventHistory) {
+          const eventNames = eventHistory.events.map((event) => event.name);
+          return {
+            userId: user.id,
+            name: user.name,
+            events: eventNames
+          };
+        }
+        return null;
+      })
+    );
 
-    // Loop through events and build the report
-    events.forEach(event => {
-      event.volunteersList.forEach(volunteerId => {
-        // Fetch the user by their ID
-        User.findById(volunteerId).then(user => {
-          if (!volunteerParticipation[user.email]) {
-            volunteerParticipation[user.email] = {
-              _id: user._id,
-              email: user.email,
-              events: [],
-            };
-          }
+    // Filter out users with no events
+    const filteredReportData = reportData.filter((item) => item !== null);
 
-          // Add event details to the volunteer's event history
-          volunteerParticipation[user.email].events.push({
-            title: event.title,
-            date: event.date,
-            location: event.location,
-          });
-        });
-      });
-    });
-
-    // Convert the map to an array
-    const reportData = Object.values(volunteerParticipation);
-
-    // Return the report data as JSON
-    return res.json(reportData);
-  } catch (err) {
-    return res.status(500).json({
-      message: "Error generating the volunteer participation report",
-      error: err.message,
-    });
+    // Send the result as JSON response
+    res.json(filteredReportData);
+  } catch (error) {
+    console.error("Error fetching event data for users:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
-module.exports = { getVolunteerParticipationReport };
+module.exports = { getAllEventsForUsers };

@@ -1,81 +1,79 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/report.css';
+import React, { useState, useEffect } from "react";
+import "../styles/report.css";
 
-const VolunteerParticipationReport = () => {
-  const [volunteers, setVolunteers] = useState([]);
+function Reports() {
+  const [reportData, setReportData] = useState([]);
 
+  // Fetch data for all users and their event histories
   useEffect(() => {
-    // Fetch the volunteer participation report from the backend (this returns JSON)
-    fetch('http://localhost:4000/api/volunteer-participation')
-      .then(response => response.json())
-      .then(data => setVolunteers(data))
-      .catch(error => console.error('Error fetching volunteer data:', error));
+    const fetchReportData = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/api/reports/all');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const result = await response.json();
+        console.log('Fetched report data:', result);
+        setReportData(result);
+      } catch (error) {
+        console.error('Error fetching report data:', error);
+      }
+    };
+
+    fetchReportData();
   }, []);
 
+  // Function to download data as CSV
   const downloadCSV = () => {
-    // Prepare the CSV data based on the volunteer data
-    const csvRows = [];
-    
-    // Add CSV headers
-    csvRows.push(['Email', 'Events Participated'].join(','));
+    const headers = ["User ID", "Name", "Events"];
+    const rows = reportData.map(user => [
+      user.userId,
+      user.name,
+      user.events.join(", "),
+    ]);
 
-    // Add each volunteer's data to CSV
-    volunteers.forEach(volunteer => {
-      const events = volunteer.events.map(event => `${event.title} - ${event.date} - ${event.location}`).join('; ');
-      csvRows.push([volunteer.email, events].join(','));
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += headers.join(",") + "\r\n";
+    rows.forEach(row => {
+      csvContent += row.join(",") + "\r\n";
     });
 
-    // Create the CSV string
-    const csvData = csvRows.join('\n');
-
-    // Create a Blob with the CSV data and trigger the download
-    const blob = new Blob([csvData], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'volunteer_participation_report.csv');
+    // Create a downloadable link and trigger the download
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "volunteer_event_report.csv");
     document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link); // Clean up the DOM
+    document.body.removeChild(link);
   };
 
   return (
-    <div className="report-container">
-      <h1>Volunteer Participation Report</h1>
-      <button className="download-button" onClick={downloadCSV}>Download CSV</button>
-      <table className="report-table">
+    <div className="container">
+      <h2>Volunteer Event Report</h2>
+      <table className="table table-bordered">
         <thead>
           <tr>
-            <th>Email</th>
-            <th>Events Participated</th>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Events</th>
           </tr>
         </thead>
         <tbody>
-          {volunteers.length > 0 ? (
-            volunteers.map((volunteer) => (
-              <tr key={volunteer._id}>
-                <td>{volunteer.email}</td>
-                <td>
-                  <ul>
-                    {volunteer.events.map((event, index) => (
-                      <li key={index}>
-                        {event.title} - {new Date(event.date).toLocaleDateString()} - {event.location}
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="2">No volunteer data available</td>
+          {reportData.map((user, index) => (
+            <tr key={index}>
+              <td>{user.userId}</td>
+              <td>{user.name}</td>
+              <td>{user.events.join(", ")}</td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
+      <button className="btn btn-primary" onClick={downloadCSV}>
+        Download as CSV
+      </button>
     </div>
   );
-};
+}
 
-export default VolunteerParticipationReport;
-
+export default Reports;
