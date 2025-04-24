@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { getAllUsersWithEventHistory } = require('../controllers/reportController'); // Import the controller
+const { getAllUsers } = require("../controllers/profileController");
+const { getAllEventsForUsers } = require("../controllers/reportController");
 
-// Route to get all users with event history
-router.get('/users/event-history', getAllUsersWithEventHistory);
+// Fetch all users
+router.get("/api/profiles", getAllUsers);
+
+// Fetch events for all users
+router.get("/api/reports/all", getAllEventsForUsers);
 
 module.exports = router;

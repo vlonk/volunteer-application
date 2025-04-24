@@ -1,31 +1,39 @@
-const User = require('../models/userModel'); // Import User model
+const User = require('../models/userModel');
+const EventHistory = require('../models/historyModel');
+const Event = require('../models/eventsModel'); // If necessary for event details
 
-// Get all users with their event history
-const getAllUsersWithEventHistory = async (req, res) => {
+// Controller to fetch events for all users
+const getAllEventsForUsers = async (req, res) => {
   try {
-    // Fetch all users from MongoDB
-    const users = await User.find(); 
+    // Fetch all users
+    const users = await User.find(); // Get all users
+    
+    // Loop through users and get their event histories
+    const reportData = await Promise.all(
+      users.map(async (user) => {
+        const eventHistory = await EventHistory.findOne({ userId: user.id });
 
-    // If no users found
-    if (!users || users.length === 0) {
-      return res.status(404).json({ message: 'No users found' });
-    }
+        if (eventHistory) {
+          const eventNames = eventHistory.events.map((event) => event.name);
+          return {
+            userId: user.id,
+            name: user.name,
+            events: eventNames
+          };
+        }
+        return null;
+      })
+    );
 
-    // Map the users to include their event history (eventId and eventName)
-    const usersWithEventHistory = users.map(user => ({
-      id: user.id,
-      name: user.name,
-      eventHistory: user.eventhistoryId ? {
-        eventId: user.eventhistoryId, 
-        eventName: user.eventName // Adjust this based on your model or event data structure
-      } : null
-    }));
+    // Filter out users with no events
+    const filteredReportData = reportData.filter((item) => item !== null);
 
-    // Return the users with event history data
-    res.json(usersWithEventHistory);
+    // Send the result as JSON response
+    res.json(filteredReportData);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching users with event history', error });
+    console.error("Error fetching event data for users:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
-module.exports = { getAllUsersWithEventHistory };
+module.exports = { getAllEventsForUsers };
