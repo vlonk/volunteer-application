@@ -1,48 +1,31 @@
-const Event = require('../models/eventsModel');
-const User = require('../models/userModel');
+const User = require('../models/userModel'); // Import User model
 
-const getVolunteerParticipationReport = async (req, res) => {
+// Get all users with their event history
+const getAllUsersWithEventHistory = async (req, res) => {
   try {
-    // Fetch all events and populate the volunteers list
-    const events = await Event.find().populate('volunteersList');
+    // Fetch all users from MongoDB
+    const users = await User.find(); 
 
-    // Create a map to track volunteer participation
-    const volunteerParticipation = {};
+    // If no users found
+    if (!users || users.length === 0) {
+      return res.status(404).json({ message: 'No users found' });
+    }
 
-    // Loop through events and build the report
-    events.forEach(event => {
-      event.volunteersList.forEach(volunteerId => {
-        // Fetch the user by their ID
-        User.findById(volunteerId).then(user => {
-          if (!volunteerParticipation[user.email]) {
-            volunteerParticipation[user.email] = {
-              _id: user._id,
-              email: user.email,
-              events: [],
-            };
-          }
+    // Map the users to include their event history (eventId and eventName)
+    const usersWithEventHistory = users.map(user => ({
+      id: user.id,
+      name: user.name,
+      eventHistory: user.eventhistoryId ? {
+        eventId: user.eventhistoryId, 
+        eventName: user.eventName // Adjust this based on your model or event data structure
+      } : null
+    }));
 
-          // Add event details to the volunteer's event history
-          volunteerParticipation[user.email].events.push({
-            title: event.title,
-            date: event.date,
-            location: event.location,
-          });
-        });
-      });
-    });
-
-    // Convert the map to an array
-    const reportData = Object.values(volunteerParticipation);
-
-    // Return the report data as JSON
-    return res.json(reportData);
-  } catch (err) {
-    return res.status(500).json({
-      message: "Error generating the volunteer participation report",
-      error: err.message,
-    });
+    // Return the users with event history data
+    res.json(usersWithEventHistory);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching users with event history', error });
   }
 };
 
-module.exports = { getVolunteerParticipationReport };
+module.exports = { getAllUsersWithEventHistory };

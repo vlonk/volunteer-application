@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { getVolunteerParticipationReport } = require('../controllers/reportController'); // Adjust the import path as necessary
+const { getAllUsersWithEventHistory } = require('../controllers/reportController'); // Import the controller
 
-// Route to get the volunteer participation report
-router.get('/api/volunteer-participation', getVolunteerParticipationReport);
+// Route to get all users with event history
+router.get('/users/event-history', getAllUsersWithEventHistory);
 
 module.exports = router;
