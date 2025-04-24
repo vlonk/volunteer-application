@@ -2,30 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/events.css";
 
-const SearchBar = ({ onSearch }) => {
-    const [searchTerm, setSearchTerm] = useState("");
-
-    const handleInputChange = (e) => {
-        setSearchTerm(e.target.value);
-    };
-
-    const handleSearch = () => {
-        onSearch(searchTerm);
-    };
-
-    return (
-        <div className="events-searchbar">
-            <input
-                type="text"
-                value={searchTerm}
-                onChange={handleInputChange}
-                placeholder="Search..."
-            />
-            <button onClick={handleSearch}>Search</button>
-        </div>
-    );
-};
-
 const ExpandBox = ({ title, content, loggedIn }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [hasSignedUp, setHasSignedUp] = useState(false);
@@ -108,13 +84,15 @@ const ExpandBox = ({ title, content, loggedIn }) => {
 
             {isExpanded && (
                 <>
-                    {!hasSignedUp ? (
-                        <div className = "sign-up">
-                        <button onClick={handleSignUp}>Sign Up</button>
+                    {title !== "Event: No events available" && !hasSignedUp ? ( // this is so the sign up button shows up when there is actually an event not signed up for
+                        <div className="sign-up">
+                            <button onClick={handleSignUp}>Sign Up</button>
                         </div>
-                    ) : (
-                        <p className="message-signed-up">You've signed up for this event!</p>
-                    )}
+                        ) : title !== "Event: No events available" && hasSignedUp ? (   // this for an event that has been signed up for
+                            <p className="message-signed-up">You've signed up for this event!</p>
+                        ) : null    // sign up won't show up when there are no events to sign up for
+                    }
+
                     {showLoginMessage && <p className="message-login-required">You must be logged in to sign up.</p>}
                     <p>{content}</p>
                 </>
@@ -126,7 +104,40 @@ const ExpandBox = ({ title, content, loggedIn }) => {
 const Events = () => {
     const navigate = useNavigate();
     const [events, setEvents] = useState([]);
+    const [listing, setListing] = useState("all");  // this is added to make the listing of events change between all events and matching events for the user
+    const userId = localStorage.getItem("userId");  // we have the userId in local storage since its stored when handling the sign in
     const [loggedIn, setLoggedIn] = useState(false);
+
+
+    // fetching events based on the listing choice
+    useEffect(() => {
+        const fetchEvents = async () => {
+            const endpoint = 
+                listing === "matching"
+                ? `http://localhost:4000/api/matching-events/${userId}`
+                : "http://localhost:4000/api/all-events";
+
+            try {
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                let eventsArray = Array.isArray(data) ? data : [];
+
+                  if (eventsArray.length === 0) {
+                    eventsArray = [{
+                        id: "no-events",
+                        title: "No events available",
+                        description: "There are currently no events to display. Please check back later!"
+                    }];
+                }
+                  
+                  setEvents(eventsArray); // set the state with the events array
+            }
+            catch (error){
+                console.error("error fetching events: ", error);
+            }
+        }
+        fetchEvents();
+    }, [listing, userId])
 
       // fetch events from backend
       useEffect(() => {
@@ -144,7 +155,7 @@ const Events = () => {
           .then(data => {
             console.log("Fetched events:", data); // checking data struct
             
-            // If the data is an object with event IDs as keys, convert it to an array
+            // if the data is an object with event IDs as keys, convert it to an array
             const eventsArray = Object.keys(data).map(key => ({
               id: key,  // use the key as the event's id
               ...data[key]  // spread the rest of the event properties
@@ -159,6 +170,7 @@ const Events = () => {
         const checkAuth = () => {
             const token = localStorage.getItem("authToken");
             setLoggedIn(!!token);
+            console.log("Log in status: ", loggedIn);
         };
 
         checkAuth();
@@ -167,16 +179,15 @@ const Events = () => {
         return () => {
             window.removeEventListener("storage", checkAuth);
         };
-    }, []);
-
-    const handleSearch = (query) => {
-        console.log("Searching for:", query);
-    };
+    }, [loggedIn]);
 
     return (
         <div>
-            <div className="events-search-spacer">
-                <SearchBar onSearch={handleSearch} />
+            <div className="events-listing-spacer">
+                <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+                <button onClick={() => setListing("all")}>All Events</button>
+                <button onClick={() => setListing("matching")}>Matching Events</button>
+        </div>
             </div>
 
             <div className="events-listing">
@@ -185,8 +196,10 @@ const Events = () => {
                     key = {event.id}
                     title = {`Event: ${event.title}`}
                     content = {`Info: ${event.description}`}
-                    id = {event._id}    // thinking of using this for the sign up button
+                    //id = {event._id}    // thinking of using this for the sign up button
+                    loggedIn
                     />
+                    
                 ))}
             </div>
 
