@@ -29,7 +29,9 @@ function Reports() {
     const rows = reportData.map(user => [
       user.userId,
       user.name,
-      user.events.join(", "),
+      user.events
+        .map(event => `${event.name} (${event.status})`)  // Add status to the event
+        .join("\n"),  // Add newline between events
     ]);
 
     let csvContent = "data:text/csv;charset=utf-8,";
@@ -64,7 +66,17 @@ function Reports() {
             <tr key={index}>
               <td>{user.userId}</td>
               <td>{user.name}</td>
-              <td>{user.events.join(", ")}</td>
+              <td>
+                {user.events.length > 0 ? (
+                  user.events.map((event, idx) => (
+                    <div key={idx}>
+                      {event.name} ({event.status})
+                    </div>
+                  ))
+                ) : (
+                  <div>None</div>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

@@ -1,55 +1,66 @@
-.container {
-    max-width: 900px;
-    margin: 20px auto;
+/* Set background color for the entire page */
+  
+  /* Styling the container to center it and give some space */
+  .container {
+    max-width: 1200px;
+    margin: 40px auto;
     padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: white; /* White background for the content */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+    border-radius: 8px; /* Rounded corners */
   }
   
-  h2 {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
+  /* Table styling */
   .table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
-  }
-  
-  .table th,
-  .table td {
-    padding: 10px;
-    text-align: left;
-    border: 1px solid #ddd;
-  }
-  
-  .table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-  }
-  
-  .table tbody tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .btn {
-    display: block;
-    width: 200px;
-    margin: 0 auto;
-    padding: 10px 20px;
+    margin: 20px 0;
     font-size: 16px;
-    background-color: #007bff;
+    background-color: #fff; /* White background for the table */
+    border: 1px solid #ddd; /* Border for the table */
+    border-radius: 8px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensure rounded corners don't break */
+  }
+  
+  /* Table header */
+  .table th {
+    background-color: #f8f9fa; /* Light grey background for header */
+    text-align: left;
+    padding: 15px 20px; /* Padding for header cells */
+    font-weight: bold;
+    color: #343a40; /* Dark text for contrast */
+  }
+  
+  /* Table data */
+  .table td {
+    border-top: 1px solid #ddd; /* Border for top of each cell */
+    padding: 12px 20px; /* Padding for data cells */
+    vertical-align: top;
+    word-wrap: break-word;  /* Ensure long words wrap within the cell */
+    white-space: pre-line;  /* Allow line breaks in a single cell */
+  }
+  
+  /* Add spacing between table rows */
+  .table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Alternating row color */
+  }
+  
+  /* Button styling */
+  .btn {
+    padding: 12px 25px;
+    background-color: #007bff; /* Blue button */
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    display: block; /* Ensure button is on its own line */
+    width: 200px;
     text-align: center;
   }
   
   .btn:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Darker blue on hover */
   }
   
