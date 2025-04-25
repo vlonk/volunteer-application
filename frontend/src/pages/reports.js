@@ -9,7 +9,8 @@ function Reports() {
   useEffect(() => {
     const fetchReportData = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/reports/all");
+        const API_URL = process.env.REACT_APP_API_URL;
+        const response = await fetch(`${API_URL}/api/reports/all`);
         if (!response.ok) throw new Error("Failed to fetch data");
         const result = await response.json();
         setReportData(result);
