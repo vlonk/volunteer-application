@@ -29,10 +29,10 @@ const eventsRoutes = require("./routes/eventsRoutes");
 const reportRoutes = require('./routes/reportRoutes');
 
 app.use('/api/auth', authRoutes);
-app.use('/api/profile', profileRoutes);
-app.use('/api/notifications', notificationRoutes);
-app.use('/api/history', historyRoutes);
-app.use('/api/events', eventsRoutes);
-app.use('/api/reports', reportRoutes);
+app.use(profileRoutes);
+app.use(notificationRoutes);
+app.use(historyRoutes);
+app.use(eventsRoutes);
+app.use(reportRoutes);
 
 module.exports = app;
