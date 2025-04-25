@@ -113,6 +113,7 @@ const Events = () => {
     // fetching events based on the listing choice
     useEffect(() => {
         const fetchEvents = async () => {
+            const API_URL = process.env.REACT_APP_API_URL;
             const endpoint = 
                 listing === "matching"
                 ? `${API_URL}/api/matching-events/${userId}`
