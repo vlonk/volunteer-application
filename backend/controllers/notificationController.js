@@ -60,8 +60,20 @@ const postNotification = async (req, res) => {
       });
     }
 
+    // Generate a unique ID if not provided — using a timestamp and random suffix
+    const generatedId = notificationid || `notif-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+    // Check if notificationid already exists (optional extra safety step)
+    const exists = await Notification.findOne({ notificationid: generatedId });
+    if (exists) {
+      return res.status(409).json({
+        message: "Notification with this ID already exists",
+        conflictId: generatedId
+      });
+    }
+
     const newNotification = new Notification({
-      notificationid: notificationid || `notif-${Date.now()}`,  // Use provided or fallback
+      notificationid: generatedId,
       userid,
       message,
       eventid,
