@@ -139,32 +139,32 @@ const Events = () => {
         fetchEvents();
     }, [listing, userId])
 
-      // fetch events from backend
-      useEffect(() => {
-        console.log("Fetching events")
-        fetch("http://localhost:4000/api/all-events")
-          .then(response => {
-            console.log("Response status:", response.status); // Check response status
+    //   // fetch events from backend
+    //   useEffect(() => {
+    //     console.log("Fetching events")
+    //     fetch("http://localhost:4000/api/all-events")
+    //       .then(response => {
+    //         console.log("Response status:", response.status); // Check response status
     
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-          })
+    //         if (!response.ok) {
+    //           throw new Error(`HTTP error! status: ${response.status}`);
+    //         }
+    //         return response.json();
+    //       })
           
-          .then(data => {
-            console.log("Fetched events:", data); // checking data struct
+    //       .then(data => {
+    //         console.log("Fetched events:", data); // checking data struct
             
-            // if the data is an object with event IDs as keys, convert it to an array
-            const eventsArray = Object.keys(data).map(key => ({
-              id: key,  // use the key as the event's id
-              ...data[key]  // spread the rest of the event properties
-            }));
+    //         // if the data is an object with event IDs as keys, convert it to an array
+    //         const eventsArray = Object.keys(data).map(key => ({
+    //           id: key,  // use the key as the event's id
+    //           ...data[key]  // spread the rest of the event properties
+    //         }));
             
-            setEvents(eventsArray); // set the state with the events array
-          })
-          .catch(error => console.error("Error fetching events in front:", error));
-      }, []);
+    //         setEvents(eventsArray); // set the state with the events array
+    //       })
+    //       .catch(error => console.error("Error fetching events in front:", error));
+    //   }, []);
 
     useEffect(() => {
         const checkAuth = () => {

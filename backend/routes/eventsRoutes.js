@@ -2,11 +2,13 @@ const express = require("express")
 
 const router = express.Router();
 
-const {getAllEvents, getEvents, createEvent, getMatchingEvents, updateEvent, deleteEvent} = require('../controllers/eventsController');
+const {getAllEvents, getEvents, createEvent, getMatchingEvents, updateEvent, deleteEvent, getEventById} = require('../controllers/eventsController');
 
 //route for getting all events
 router.get("/api/all-events", getAllEvents);
 router.get("/api/events", getEvents);
+//route for getting a specific event by id
+router.get("/api/events/:id", getEventById);
 //route for getting the matching events
 router.get("/api/matching-events/:id", getMatchingEvents);
 //route for creating new events
