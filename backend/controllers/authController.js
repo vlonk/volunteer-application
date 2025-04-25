@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
+const sendWelcomeEmail = require('../utils/sendWelcomeEmail');
 
 
 exports.signup = async (req, res) => {
@@ -45,6 +46,8 @@ exports.signup = async (req, res) => {
             process.env.JWT_SECRET || 'defaultsecret',
             { expiresIn: '1h' }
         );
+        
+        await sendWelcomeEmail(newUser.email, newUser.id);
 
         return res.status(201).json({
             msg: 'User registered successfully',
