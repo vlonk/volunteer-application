@@ -755,7 +755,6 @@ const EventsManagement = () => {
 
 
     // updating the event to track the volunteer
-    
     fetch(`${API_URL}api/events/${selectedEvent._id}`)  // first using a GET for the current volunteer list
     .then((response) => {
     if (!response.ok) {
@@ -813,7 +812,7 @@ const EventsManagement = () => {
     };
     console.log("Sending notification with body:", requestBody);  // Log request body
     try {
-      const response = await fetch('http://localhost:4000/api/notification/create', {
+      const response = await fetch(`${API_URL}/api/notification/create`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
