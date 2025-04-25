@@ -705,8 +705,13 @@ const EventsManagement = () => {
     console.log("Selected event: ", selectedEvent);
     console.log("Selected user: ", selectedUser);
   
+
+    const previousHistory = Array.isArray(history[`history_${selectedUser.id}`])  // ensures a good array
+    ? history[`history_${selectedUser.id}`]
+    : [];
+
     const updatedHistory = [
-      ...(history[`history_${selectedUser.id}`] || []),
+    ...previousHistory,
       {
         eventId: selectedEvent._id,
         name: selectedEvent.title,
@@ -720,7 +725,7 @@ const EventsManagement = () => {
     ];
     console.log("event history: ", updatedHistory);
   
-    // 1️⃣ Updating user's event history
+    // updating user's event history
     fetch(`http://localhost:4000/api/user/${selectedUser.id}/events`, {
       method: "PUT",
       headers: {
@@ -740,35 +745,49 @@ const EventsManagement = () => {
         console.error("Error updating user history:", error);
       });
   
-    // 2️⃣ Updating the event to track the volunteer
-    fetch(`http://localhost:4000/api/events/${selectedEvent._id}`, {
+
+
+    // updating the event to track the volunteer
+    fetch(`http://localhost:4000/api/events/${selectedEvent._id}`)  // first using a GET for the current volunteer list
+    .then((response) => {
+    if (!response.ok) {
+      throw new Error("Failed to fetch event data");
+    }
+    return response.json();
+  })
+  .then((eventData) => {
+    // appending the new volunteer to the existing list
+    const updatedVolunteers = [
+      ...eventData.volunteersList,
+      {
+        id: selectedUser.id,
+        name: selectedUser.name,
+        assignment: selectedAssignment
+      }
+    ];
+
+    // then sending the updated volunteer list back to the server using PUT
+    return fetch(`http://localhost:4000/api/events/${selectedEvent._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        volunteersList: [{
-          id: selectedUser.id,
-          name: selectedUser.name, // changing volunteersList to be an array of objects containing these
-          assignment: selectedAssignment 
-        }]
+        volunteersList: updatedVolunteers
       }),
-    })
-    .then((response) => response.json())
-    .then((updatedEvent) => {
-      console.log("Event updated:", updatedEvent);
-    
-      alert("Volunteer confirmed!");
-    })
-    .catch((error) => {
-      console.error("Error updating event:", error);
     });
-    
+  })
+  .then((response) => response.json())
+  .then((updatedEvent) => {
+    console.log("Event updated:", updatedEvent);
+    alert("Volunteer confirmed!");
+  })
+  .catch((error) => {
+    console.error("Error updating event:", error);
+  });
+
     }    
   
-
-
-
   return (
     <div className = "central-container">
         <div className="half-container">

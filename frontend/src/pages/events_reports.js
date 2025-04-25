@@ -22,6 +22,40 @@ const EventsReports = () => {
         fetchReportData();
       }, [selectedEvent]);
 
+      const downloadCSV = () => {
+        const headers = ["User ID", "Name", "Event Name", "Status"];
+        let rows = [];
+    
+        reportData.forEach(user => {
+          if (user.events.length === 0) {
+            rows.push([user.userId, user.name, "—", "—"]);
+          } else {
+            user.events.forEach((event, idx) => {
+              rows.push([
+                idx === 0 ? user.userId : "", // only first row gets the userId
+                idx === 0 ? user.name : "",   // only first row gets the name
+                event.name,
+                event.status
+              ]);
+            });
+          }
+        });
+    
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += headers.join(",") + "\r\n";
+        rows.forEach(row => {
+          csvContent += row.join(",") + "\r\n";
+        });
+    
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "volunteer_event_report.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+
     const DropdownMenu = ({title, options, onSelect, selectedItem}) => {
         const [isOpen, setIsOpen] = useState(false);
       
@@ -115,14 +149,20 @@ const EventsReports = () => {
                     ))
                   ) : (
                     <tr>
-                          <td colSpan="4">No volunteers assigned</td>
-
+                          <td>{reportData?.title}</td>
+                        <td>{reportData?.description}</td>
+                        <td>—</td>
+                        <td>No volunteers assigned</td>
                     </tr>
                   )
                 }
               </tbody>
             </table>
+            <button className="btn btn-primary" onClick={downloadCSV}>
+        Download as CSV
+      </button>
           </div>
+          
           )} 
         </div>
     );
