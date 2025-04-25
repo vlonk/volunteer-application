@@ -599,7 +599,6 @@ const EventsManagement = () => {
     }, []);  
   
     // fetch matching events based on the user's skills
-    // Fetch matching events based on the selected user's skills
     useEffect(() => {
       if (!selectedUser || !selectedUser.id) return; // Ensure the selectedUser has an ID
     

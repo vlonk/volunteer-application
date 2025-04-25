@@ -39,4 +39,36 @@ const getAllEventsForUsers = async (req, res) => {
   }
 };
 
-module.exports = { getAllEventsForUsers };
+//Controller to get info from an event based on its Id
+const getSelectedEventInfo = async (req, res) => {
+  try{
+    console.log("Requested Event ID:", req.params.id);
+    // check for a missing or invalid ID, will always trigger when page loads as no event has been picked yet
+    if (!req.params.id || req.params.id.length !== 24) {
+      return res.status(400).json({ message: "Invalid or missing Event ID." });
+    }
+    const event = await Event.findById(req.params.id);
+
+
+    if (!event){
+      return res.status(404).json({message: "Event not found."})
+    }
+
+    const reportData = {
+      title: event.title,
+      description: event.description,
+      volunteers: event.volunteersList.map(v => ({
+        id: v.id,
+        name: v.name,
+        assignment: v.assignment
+      }))
+    };
+
+    res.status(200).json(reportData);
+  } catch (error){
+    console.error("Error fetching selected event.");
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+module.exports = { getAllEventsForUsers, getSelectedEventInfo };
