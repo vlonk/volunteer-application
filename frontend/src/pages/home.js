@@ -45,7 +45,7 @@ const Home = () => {
             <h3>Senior Home Volunteering</h3>
             <p>Join us for a day of fun volunteering at the Houston senior home.</p>
             <div className="event-info">
-                <span className="event-date">Feb 25</span>
+                <span className="event-date">May 26</span>
                 <button
                 className="event-join-button"
                 onClick={() => navigate("/events")}
@@ -60,7 +60,7 @@ const Home = () => {
             <h3>Garden Center Volunteering</h3>
             <p>Join us for a day of fun volunteering at the Houston garden center.</p>
             <div className="event-info">
-                <span className="event-date">Feb 25</span>
+                <span className="event-date">June 14</span>
                 <button
                 className="event-join-button"
                 onClick={() => navigate("/events")}
@@ -74,7 +74,7 @@ const Home = () => {
             <h3>Half Marathon Volunteering</h3>
             <p>Join us for a day of fun volunteering at the Houston half marathon.</p>
             <div className="event-info">
-                <span className="event-date">Feb 25</span>
+                <span className="event-date">July 1</span>
                 <button
                 className="event-join-button"
                 onClick={() => navigate("/events")}
