@@ -141,8 +141,8 @@ const EventsReports = () => {
                 {reportData && reportData.volunteers && reportData.volunteers.length > 0 ? (
                     reportData.volunteers.map((volunteer, index) => (
                       <tr key={index}>
-                        <td>{reportData.title}</td>
-                        <td>{reportData.description}</td>
+                        <td>{index === 0 ? reportData.title : ""}</td>  {/* This keeps title and description from repeating */}
+                        <td>{index === 0 ? reportData.description : ""}</td>
                         <td>{volunteer.name}</td>
                         <td>{volunteer.assignment}</td>
                       </tr>
