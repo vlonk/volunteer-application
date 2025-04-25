@@ -550,14 +550,6 @@ const ProfileManagement = () => {
                         </div>
                     )}
                 </div>
-                    
-                <div className="stats-section">
-                    <h3>Care Count</h3>
-                    <p>Total Hours Volunteered: 0</p>
-                    <p>Events Attended: 0</p>
-                    <p>Organizations Helped: 0</p>
-                    <p>People Directly Impacted: 0</p>
-                </div>
             </div>
         </div>
     );
