@@ -11,7 +11,8 @@ const EventsReports = () => {
       useEffect(() => {
         const fetchReportData = async () => {
           try {
-            const response = await fetch(`http://localhost:4000/api/event-report/${selectedEvent._id}`);
+            const API_URL = process.env.REACT_APP_API_URL;
+            const response = await fetch(`${API_URL}/api/event-report/${selectedEvent._id}`);
             if (!response.ok) throw new Error("Failed to fetch data");
             const result = await response.json();
             setReportData(result);
@@ -120,7 +121,8 @@ const EventsReports = () => {
     // fetch events from backend
     useEffect(() => {
         console.log("Fetching events")
-        fetch("http://localhost:4000/api/all-events")
+        const API_URL = process.env.REACT_APP_API_URL;
+        fetch(`${API_URL}/api/all-events`)
           .then(response => {
             console.log("Response status:", response.status); // Check response status
     

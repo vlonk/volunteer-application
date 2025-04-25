@@ -36,7 +36,8 @@ const Signup = () => {
       }
 
       // If everything is valid, simulate form submission
-      const response = await fetch('http://localhost:4000/api/auth/signup', {
+      const API_URL = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${API_URL}/api/auth/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
