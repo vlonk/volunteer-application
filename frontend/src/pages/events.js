@@ -59,7 +59,8 @@ const ExpandBox = ({ title, content, loggedIn }) => {
             console.log("Sending notification with body:", requestBody);  // Log request body
     
             try {
-                const response = await fetch('http://localhost:4000/api/notification/create', {
+                const API_URL = process.env.REACT_APP_API_URL;
+                const response = await fetch(`${API_URL}/api/notification/create`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -112,10 +113,11 @@ const Events = () => {
     // fetching events based on the listing choice
     useEffect(() => {
         const fetchEvents = async () => {
+            const API_URL = process.env.REACT_APP_API_URL;
             const endpoint = 
                 listing === "matching"
-                ? `http://localhost:4000/api/matching-events/${userId}`
-                : "http://localhost:4000/api/all-events";
+                ? `${API_URL}/api/matching-events/${userId}`
+                : `${API_URL}/api/all-events`;
 
             try {
                 const response = await fetch(endpoint);

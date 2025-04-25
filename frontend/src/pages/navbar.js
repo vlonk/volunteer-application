@@ -26,7 +26,8 @@ const NavBar = () => {
     const fetchNotifications = async () => {
       if (isLoggedIn && userId) {
         try {
-          const response = await fetch(`http://localhost:4000/api/user/${userId}/notifications`);
+          const API_URL = process.env.REACT_APP_API_URL;
+          const response = await fetch(`${API_URL}/api/user/${userId}/notifications`);
           const data = await response.json();
           if (Array.isArray(data)) {
             setNotifications(data);
@@ -68,7 +69,8 @@ const NavBar = () => {
 
   const handleDeleteNotification = async (notificationId) => {
     try {
-      await fetch(`http://localhost:4000/api/notification/${notificationId}`, { method: "DELETE" });
+      const API_URL = process.env.REACT_APP_API_URL;
+      await fetch(`${API_URL}/api/notification/${notificationId}`, { method: "DELETE" });
       setNotifications(prev => prev.filter(n => n.notificationid !== notificationId));
     } catch (error) {
       console.error("Error deleting notification:", error);

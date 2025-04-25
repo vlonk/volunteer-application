@@ -555,7 +555,8 @@ const EventsManagement = () => {
   // fetch events from backend
   useEffect(() => {
     console.log("Fetching events")
-    fetch("http://localhost:4000/api/all-events")
+    const API_URL = process.env.REACT_APP_API_URL;
+    fetch(`${API_URL}/api/all-events`)
       .then(response => {
         console.log("Response status:", response.status); // Check response status
 
@@ -582,7 +583,8 @@ const EventsManagement = () => {
 
     // fetch users from backend, we need to get their name and skills for the volunteer matching
     useEffect(() => {
-      fetch("http://localhost:4000/api/profiles")
+      const API_URL = process.env.REACT_APP_API_URL;
+      fetch(`${API_URL}/api/profiles`)
         .then(response => response.json())
         .then(data => {
           console.log("Fetched users:", data); // checking data struct
@@ -605,8 +607,8 @@ const EventsManagement = () => {
       const fetchMatchingEvents = async () => {
         try {
           console.log("User ID to send: ", selectedUser.id); // Log the user ID being sent
-    
-          const response = await fetch(`http://localhost:4000/api/matching-events/${selectedUser.id}`);
+          const API_URL = process.env.REACT_APP_API_URL;
+          const response = await fetch(`${API_URL}/api/matching-events/${selectedUser.id}`);
     
           if (!response.ok) {
             throw new Error(`Error: ${response.status}`);
@@ -629,7 +631,8 @@ const EventsManagement = () => {
     // fetching history to find match with user
     useEffect(() => {
       if (selectedUser) { 
-        fetch(`http://localhost:4000/api/user/${selectedUser.id}/events`)
+        const API_URL = process.env.REACT_APP_API_URL;
+        fetch(`${API_URL}/api/user/${selectedUser.id}/events`)
           .then(response => {
             if (!response.ok) {
               throw new Error("Failed to fetch event history");
@@ -645,7 +648,8 @@ const EventsManagement = () => {
 
   const handleCreateEvent = (newEvent) => {
     delete newEvent.id;
-    fetch("http://localhost:4000/api/events", {
+    const API_URL = process.env.REACT_APP_API_URL;
+    fetch(`${API_URL}/api/events`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -666,7 +670,8 @@ const EventsManagement = () => {
 
   const handleEditEvent = async (updatedEvent) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/events/${updatedEvent._id}`, { // fetching event based on given id
+      const API_URL = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${API_URL}/api/events/${updatedEvent._id}`, { // fetching event based on given id
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedEvent),
@@ -684,7 +689,8 @@ const EventsManagement = () => {
   // function to delete event via backend
   const handleDeleteEvent = (id) => {
     console.log("Event to be deleted: ", id)
-    fetch(`http://localhost:4000/api/events/${id}`, {
+    const API_URL = process.env.REACT_APP_API_URL;
+    fetch(`${API_URL}/api/events/${id}`, {
       method: "DELETE",
     })
       .then(response => {
@@ -726,7 +732,8 @@ const EventsManagement = () => {
     console.log("event history: ", updatedHistory);
   
     // updating user's event history
-    fetch(`http://localhost:4000/api/user/${selectedUser.id}/events`, {
+    const API_URL = process.env.REACT_APP_API_URL;
+    fetch(`${API_URL}/api/user/${selectedUser.id}/events`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -748,7 +755,8 @@ const EventsManagement = () => {
 
 
     // updating the event to track the volunteer
-    fetch(`http://localhost:4000/api/events/${selectedEvent._id}`)  // first using a GET for the current volunteer list
+    
+    fetch(`${API_URL}api/events/${selectedEvent._id}`)  // first using a GET for the current volunteer list
     .then((response) => {
     if (!response.ok) {
       throw new Error("Failed to fetch event data");
@@ -767,7 +775,8 @@ const EventsManagement = () => {
     ];
 
     // then sending the updated volunteer list back to the server using PUT
-    return fetch(`http://localhost:4000/api/events/${selectedEvent._id}`, {
+    const API_URL = process.env.REACT_APP_API_URL;
+    return fetch(`${API_URL}/api/events/${selectedEvent._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

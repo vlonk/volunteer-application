@@ -8,7 +8,8 @@ const History = () => {
     const [eventHistory, setEventHistory] = useState([]);
 
     useEffect(() => {
-      fetch(`http://localhost:4000/api/user/${id}/events`) 
+        const API_URL = process.env.REACT_APP_API_URL;
+        fetch(`${API_URL}/api/user/${id}/events`) 
         .then((response) => response.json())
         .then((data) => {
           console.log("Fetched event history:", data);
