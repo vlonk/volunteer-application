@@ -5,6 +5,7 @@ import html2canvas from "html2canvas";
 
 function Reports() {
   const [reportData, setReportData] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     const fetchReportData = async () => {
@@ -22,20 +23,17 @@ function Reports() {
   }, []);
 
   const downloadCSV = () => {
-    const headers = ["User ID", "Name", "Event Name", "Status"];
+    const headers = ["Event Name", "Status"];
     let rows = [];
 
-    reportData.forEach(user => {
+    const data = selectedUser ? [selectedUser] : reportData;
+
+    data.forEach(user => {
       if (user.events.length === 0) {
-        rows.push([user.userId, user.name, "—", "—"]);
+        rows.push(["—", "—"]);
       } else {
-        user.events.forEach((event, idx) => {
-          rows.push([
-            idx === 0 ? user.userId : "", // only first row gets the userId
-            idx === 0 ? user.name : "",   // only first row gets the name
-            event.name,
-            event.status
-          ]);
+        user.events.forEach(event => {
+          rows.push([event.name, event.status]);
         });
       }
     });
@@ -60,7 +58,7 @@ function Reports() {
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
-      const imgWidth = 210; // A4 width in mm
+      const imgWidth = 210;
       const pageHeight = 297;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       let heightLeft = imgHeight;
@@ -69,7 +67,6 @@ function Reports() {
       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
 
-      // if content spans multiple pages
       while (heightLeft > 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
@@ -84,31 +81,43 @@ function Reports() {
   return (
     <div className="container">
       <h2>Volunteer Participation Report</h2>
+
+      <div className="dropdown mb-3">
+        <label>Select a user:</label>
+        <select
+          onChange={(e) => {
+            const selected = reportData.find(user => user.userId === e.target.value);
+            setSelectedUser(selected);
+          }}
+        >
+          <option value="">-- All Users --</option>
+          {reportData.map(user => (
+            <option key={user.userId} value={user.userId}>
+              {user.name} ({user.userId})
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="table-box">
         <table className="table table-bordered" id="report-to-pdf">
           <thead>
             <tr>
-              <th>User ID</th>
-              <th>Name</th>
               <th>Event Name</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {reportData.map((user, userIndex) => (
+            {(selectedUser ? [selectedUser] : reportData).map((user, userIndex) => (
               user.events.length > 0 ? (
                 user.events.map((event, eventIndex) => (
                   <tr key={`${userIndex}-${eventIndex}`}>
-                    <td>{eventIndex === 0 ? user.userId : ""}</td>
-                    <td>{eventIndex === 0 ? user.name : ""}</td>
                     <td>{event.name}</td>
                     <td>{event.status}</td>
                   </tr>
                 ))
               ) : (
                 <tr key={`empty-${userIndex}`}>
-                  <td>{user.userId}</td>
-                  <td>{user.name}</td>
                   <td>—</td>
                   <td>—</td>
                 </tr>
@@ -117,6 +126,7 @@ function Reports() {
           </tbody>
         </table>
       </div>
+
       <button className="btn btn-primary" onClick={downloadCSV}>
         Download as CSV
       </button>
