@@ -703,129 +703,124 @@ const EventsManagement = () => {
       .catch(error => console.error("Error deleting event:", error));
   };
 
-  const confirmVolunteer = async () => {  // converted to async function to use the await from the notifications at the end
+  const confirmVolunteer = async () => {  
     if (!selectedUser || !selectedEvent) {
-      alert("Please select a user and event.");
-      return;
+        alert("Please select a user and event.");
+        return;
     }
     console.log("Selected event: ", selectedEvent);
     console.log("Selected user: ", selectedUser);
-  
 
-    const previousHistory = Array.isArray(history[`history_${selectedUser.id}`])  // ensures a good array
-    ? history[`history_${selectedUser.id}`]
-    : [];
+    const previousHistory = Array.isArray(history[`history_${selectedUser.id}`]) 
+        ? history[`history_${selectedUser.id}`]
+        : [];
 
     const updatedHistory = [
-    ...previousHistory,
-      {
-        eventId: selectedEvent._id,
-        name: selectedEvent.title,
-        date: new Date().toISOString(),  // this was date attended, only changed for it to work in schema
-        location: selectedEvent.location,
-        description: selectedEvent.description,
-        // urgency: selectedEvent.urgency, marked this out for now was not in history schema
-        skills: selectedEvent.selectedSkills, //renamed to category for schema
-        status: "Pending",
-      },
+        ...previousHistory,
+        {
+            eventId: selectedEvent._id,
+            name: selectedEvent.title,
+            date: new Date().toISOString(),  
+            location: selectedEvent.location,
+            description: selectedEvent.description,
+            skills: selectedEvent.selectedSkills,
+            status: "Pending",
+        },
     ];
     console.log("event history: ", updatedHistory);
-  
-    // updating user's event history
+
     const API_URL = process.env.REACT_APP_API_URL;
-    fetch(`${API_URL}/api/user/${selectedUser.id}/events`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedHistory),
-    })
-      .then((response) => response.json())
-      .then((updatedUserHistory) => {
+
+    // Updating user's event history
+    try {
+        const response = await fetch(`${API_URL}/api/user/${selectedUser.id}/events`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedHistory),
+        });
+        
+        const updatedUserHistory = await response.json();
         console.log("User's history updated:", updatedUserHistory);
         setHistory((prevHistory) => ({
-          ...prevHistory,
-          [`history_${selectedUser.id}`]: updatedUserHistory,
+            ...prevHistory,
+            [`history_${selectedUser.id}`]: updatedUserHistory,
         }));
-      })
-      .catch((error) => {
-        console.error("Error updating user history:", error);
-      });
-  
-
-
-    // updating the event to track the volunteer
-    fetch(`${API_URL}api/events/${selectedEvent._id}`)  // first using a GET for the current volunteer list
-    .then((response) => {
-    if (!response.ok) {
-      throw new Error("Failed to fetch event data");
-    }
-    return response.json();
-    })
-    .then((eventData) => {
-    // appending the new volunteer to the existing list
-    const updatedVolunteers = [
-      ...eventData.volunteersList,
-      {
-        id: selectedUser.id,
-        name: selectedUser.name,
-        assignment: selectedAssignment
-      }
-    ];
-
-    // then sending the updated volunteer list back to the server using PUT
-    const API_URL = process.env.REACT_APP_API_URL;
-    return fetch(`${API_URL}/api/events/${selectedEvent._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        volunteersList: updatedVolunteers
-      }),
-    });
-    })
-    .then((response) => response.json())
-    .then((updatedEvent) => {
-    console.log("Event updated:", updatedEvent);
-    alert("Volunteer confirmed!");
-    })
-    .catch((error) => {
-    console.error("Error updating event:", error);
-    });
-
-    // sending notification to user that they are in the event
-    // Generate notificationId - make sure it's a string, e.g., unique identifier or use a random ID
-    const notificationId = `notif-${new Date().getTime()}`;  // Using timestamp for uniqueness
-    const message = `Your participation in the event ${selectedEvent.title} is pending. Make sure to check the details!`;
-    const timestamp = new Date();  // Timestamp when the notification was created
-    const status = "Unread";  // Status of the notification
-
-    // Request body
-    const requestBody = {
-      notificationid: notificationId,  // Unique notification ID (string)
-      eventid: selectedEvent._id,  // Event ID (example here, adjust as necessary)
-      userid: selectedUser.id,  // using the id of the selected user here, code made not mongo
-      message: message,  // Notification message
-      status: status,  // Status of the notification
-      timestamp: timestamp,  // Timestamp when the notification was created
-    };
-    console.log("Sending notification with body:", requestBody);  // Log request body
-    try {
-      const response = await fetch(`${API_URL}/api/notification/create`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody),
-      });
-
-    const data = await response.json();
-    console.log('Notification sent:', data);
     } catch (error) {
-      console.error('Error creating notification:', error);
+        console.error("Error updating user history:", error);
     }
-  }    
+
+    // Updating the event to track the volunteer
+    try {
+        const eventResponse = await fetch(`${API_URL}/api/events/${selectedEvent._id}`);
+        if (!eventResponse.ok) {
+            throw new Error("Failed to fetch event data");
+        }
+
+        const eventData = await eventResponse.json();
+        const updatedVolunteers = [
+            ...eventData.volunteersList,
+            {
+                id: selectedUser.id,
+                name: selectedUser.name,
+                assignment: selectedAssignment,
+            },
+        ];
+
+        const eventUpdateResponse = await fetch(`${API_URL}/api/events/${selectedEvent._id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                volunteersList: updatedVolunteers,
+            }),
+        });
+
+        const updatedEvent = await eventUpdateResponse.json();
+        console.log("Event updated:", updatedEvent);
+        alert("Volunteer confirmed!");
+    } catch (error) {
+        console.error("Error updating event:", error);
+    }
+
+    // Sending notification to user that they are in the event with assigned role
+    if (selectedAssignment) {
+        const notificationId = `notif-${new Date().getTime()}`;  // Unique ID using timestamp
+        const message = `You have been assigned the role of "${selectedAssignment}" for the event "${selectedEvent.title}". Please check the event details.`;
+        const timestamp = new Date();
+        const status = "Unread";
+
+        const requestBody = {
+            notificationid: notificationId,
+            eventid: selectedEvent._id,
+            userid: selectedUser.id,
+            message: message,
+            status: status,
+            timestamp: timestamp,
+        };
+
+        console.log("Sending notification with body:", requestBody);
+
+        try {
+            const notificationResponse = await fetch(`${API_URL}/api/notification/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            });
+
+            const notificationData = await notificationResponse.json();
+            console.log('Notification sent:', notificationData);
+        } catch (error) {
+            console.error('Error creating notification:', error);
+        }
+    } else {
+        console.warn("No assignment was selected. Notification not sent.");
+    }
+};
   
   return (
     <div className = "central-container">
