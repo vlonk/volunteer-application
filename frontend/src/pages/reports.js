@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "../styles/report.css";
 
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
 function Reports() {
   const [reportData, setReportData] = useState([]);
 
@@ -52,11 +55,37 @@ function Reports() {
     document.body.removeChild(link);
   };
 
+  const downloadPDF = () => {
+    const input = document.getElementById("report-to-pdf");
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 297;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      // if content spans multiple pages
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save("volunteer_event_report.pdf");
+    });
+  };
+
   return (
     <div className="container">
       <h2>Volunteer Participation Report</h2>
       <div className="table-box">
-        <table className="table table-bordered">
+        <table className="table table-bordered" id="report-to-pdf">
           <thead>
             <tr>
               <th>User ID</th>
@@ -90,6 +119,9 @@ function Reports() {
       </div>
       <button className="btn btn-primary" onClick={downloadCSV}>
         Download as CSV
+      </button>
+      <button className="btn btn-secondary" onClick={downloadPDF}>
+        Download as PDF
       </button>
     </div>
   );

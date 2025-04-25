@@ -67,3 +67,28 @@
     background-color: #1e7e34; /* Even darker green on click */
   }
   
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    display: inline-block;
+    margin-left: 10px;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a6268; 
+  }
+  
+  .btn-secondary:focus {
+    outline: none;
+  }
+  
+  .btn-secondary:active {
+    background-color: #545b62;
+  }
