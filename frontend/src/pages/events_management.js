@@ -703,7 +703,7 @@ const EventsManagement = () => {
       .catch(error => console.error("Error deleting event:", error));
   };
 
-  const confirmVolunteer = () => {
+  const confirmVolunteer = async () => {  // converted to async function to use the await from the notifications at the end
     if (!selectedUser || !selectedEvent) {
       alert("Please select a user and event.");
       return;
@@ -755,15 +755,14 @@ const EventsManagement = () => {
 
 
     // updating the event to track the volunteer
-    
     fetch(`${API_URL}api/events/${selectedEvent._id}`)  // first using a GET for the current volunteer list
     .then((response) => {
     if (!response.ok) {
       throw new Error("Failed to fetch event data");
     }
     return response.json();
-  })
-  .then((eventData) => {
+    })
+    .then((eventData) => {
     // appending the new volunteer to the existing list
     const updatedVolunteers = [
       ...eventData.volunteersList,
@@ -785,17 +784,48 @@ const EventsManagement = () => {
         volunteersList: updatedVolunteers
       }),
     });
-  })
-  .then((response) => response.json())
-  .then((updatedEvent) => {
+    })
+    .then((response) => response.json())
+    .then((updatedEvent) => {
     console.log("Event updated:", updatedEvent);
     alert("Volunteer confirmed!");
-  })
-  .catch((error) => {
+    })
+    .catch((error) => {
     console.error("Error updating event:", error);
-  });
+    });
 
-    }    
+    // sending notification to user that they are in the event
+    // Generate notificationId - make sure it's a string, e.g., unique identifier or use a random ID
+    const notificationId = `notif-${new Date().getTime()}`;  // Using timestamp for uniqueness
+    const message = `Your participation in the event ${selectedEvent.title} is pending. Make sure to check the details!`;
+    const timestamp = new Date();  // Timestamp when the notification was created
+    const status = "Unread";  // Status of the notification
+
+    // Request body
+    const requestBody = {
+      notificationid: notificationId,  // Unique notification ID (string)
+      eventid: selectedEvent._id,  // Event ID (example here, adjust as necessary)
+      userid: selectedUser.id,  // using the id of the selected user here, code made not mongo
+      message: message,  // Notification message
+      status: status,  // Status of the notification
+      timestamp: timestamp,  // Timestamp when the notification was created
+    };
+    console.log("Sending notification with body:", requestBody);  // Log request body
+    try {
+      const response = await fetch(`${API_URL}/api/notification/create`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+      });
+
+    const data = await response.json();
+    console.log('Notification sent:', data);
+    } catch (error) {
+      console.error('Error creating notification:', error);
+    }
+  }    
   
   return (
     <div className = "central-container">
